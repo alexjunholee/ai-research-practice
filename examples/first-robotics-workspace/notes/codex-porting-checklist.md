@@ -36,7 +36,7 @@ find . -maxdepth 4 \( -name 'CLAUDE.md' -o -path './.claude/*' -o -path './.curs
 - Public/private boundary: publish sanitized notes only
 - Source-of-truth read order: AGENTS, memory, first-day checklist, target note, named artifacts
 - Stage pipeline: resume, choose one loop, run stage-local check, update ledger
-- Allowed commands: read files, inspect JSON, run documented smoke checks
+- Allowed commands: read files, inspect JSON, run documented verification checks
 - Forbidden commands: delete datasets, publish raw logs, infer result quality from filenames
 - Evidence gate: current evidence permits, forbids, and promotion requires
 - Durable corrections: store repeated wrong assumptions in project memory
@@ -51,7 +51,7 @@ find . -maxdepth 4 \( -name 'CLAUDE.md' -o -path './.claude/*' -o -path './.curs
 | `/paper-map` | connect a paper to code and experiments | fill `paper-code-experiment-map.md` |
 | `/claim-check` | stop unsupported manuscript claims | fill `claim-evidence-map.md` |
 | plugin install command | install a local UI extension | keep as private setup note, not public guide content |
-| CI/workflow command | run repeatable verification | keep as documented smoke command if it exists |
+| CI/workflow command | run repeatable verification | keep as documented verification command if it exists |
 
 ## Research Gates To Add
 

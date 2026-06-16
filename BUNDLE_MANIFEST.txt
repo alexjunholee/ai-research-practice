@@ -1,11 +1,8 @@
 .nojekyll
-DEPLOY.md
 EXAMPLE_WORKSPACE.md
 PATH.md
-PUBLISH.md
 QUICKSTART.md
 README.md
-ROADMAP.md
 SOURCES.md
 TERMS.md
 chapter_01_start_here.md
@@ -39,7 +36,6 @@ templates/first-day-workspace-checklist.md
 templates/paper-code-experiment-map.md
 templates/paper-reading-note.md
 templates/project-memory.template.json
-templates/publication-browser-signoff.md
 templates/replay-case.md
 templates/result-provenance-tuple.md
 templates/stage-local-debugging.md

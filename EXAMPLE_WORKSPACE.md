@@ -1,4 +1,4 @@
-# 예시 작업장 — 연구 상태가 파일로 남는 모습
+# 부록 C — 예시 작업장
 
 `examples/first-robotics-workspace/`는 quickstart를 따라 만든 작은 공개 예시다.
 실제 연구 파일, 개인 경로, 원 대화는 들어 있지 않다. 새 사용자는 이 예시를
