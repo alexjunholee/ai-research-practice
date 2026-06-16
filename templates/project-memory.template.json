@@ -1,0 +1,39 @@
+{
+  "project": "",
+  "workspace_path": "",
+  "current_truth": "",
+  "source_of_truth": {
+    "project_rules": "AGENTS.md",
+    "workspace_start": "README.md",
+    "current_memory": "project-memory.json",
+    "first_day_checklist": "notes/first-day-workspace-checklist.md",
+    "weekly_ledger": "notes/weekly-research-ledger.md",
+    "artifact_root": "artifacts/"
+  },
+  "tool_surface_map": [
+    {
+      "research_scene": "",
+      "tool_surface": "",
+      "first_gate": ""
+    }
+  ],
+  "current_evidence": {
+    "permits": [],
+    "forbids": [],
+    "promotion_requires": []
+  },
+  "first_research_loop": {
+    "target": "",
+    "target_note": "",
+    "supporting_note": "",
+    "expected_artifact": "",
+    "no_second_loop": true
+  },
+  "durable_constraints": [],
+  "known_artifacts": [],
+  "experiment_protocols": [],
+  "claim_boundaries": [],
+  "replay_cases": [],
+  "next_smallest_actions": [],
+  "last_updated": "YYYY-MM-DD"
+}

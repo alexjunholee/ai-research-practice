@@ -1,0 +1,89 @@
+{
+  "project": "example-localization-workspace",
+  "current_truth": "First-day sanitized workspace for a robotics/CV AI harness. No private data is included.",
+  "source_of_truth": {
+    "project_rules": "AGENTS.md",
+    "workspace_start": "README.md",
+    "current_memory": "project-memory.json",
+    "first_day_checklist": "notes/first-day-workspace-checklist.md",
+    "weekly_ledger": "notes/weekly-research-ledger.md",
+    "artifact_root": "artifacts/"
+  },
+  "tool_surface_map": [
+    {
+      "research_scene": "connect one localization paper to code and experiment protocol",
+      "tool_surface": "coding agent plus terminal for source inspection only after AGENTS.md and memory are read",
+      "first_gate": "paper-code-experiment map names central claim, candidate code paths, missing protocol fields"
+    },
+    {
+      "research_scene": "interpret experiment number",
+      "tool_surface": "experiment operator role",
+      "first_gate": "dataset, split, metric script, baseline, command, and artifact are recorded"
+    }
+  ],
+  "current_evidence": {
+    "permits": [
+      "The workspace can open a first AI-assisted paper/code/experiment pass.",
+      "The first AI prompt can ask for one target note and one expected artifact."
+    ],
+    "forbids": [
+      "No method performance claim is allowed.",
+      "No reviewer defense claim is allowed.",
+      "No dataset comparison is allowed until split, metric script, baseline, command, and artifact are recorded."
+    ],
+    "promotion_requires": [
+      "Fill notes/paper-code-experiment-map.md with central claim, method assumption, candidate code path, and missing experiment protocol fields.",
+      "Fill notes/experiment-contract.md with dataset, split, metric, baseline, command, and artifact.",
+      "Update notes/weekly-research-ledger.md with blocked claim and next smallest action."
+    ]
+  },
+  "first_research_loop": {
+    "target": "connect one localization paper's central claim to code path candidates and missing experiment protocol fields",
+    "target_note": "notes/paper-code-experiment-map.md",
+    "supporting_note": "notes/experiment-contract.md",
+    "expected_artifact": "filled sections in notes/paper-code-experiment-map.md",
+    "no_second_loop": true
+  },
+  "durable_constraints": [
+    "Do not infer experiment success from a command finishing.",
+    "Do not compare retrieval numbers unless query/database direction and positive rule are known.",
+    "Treat prior summaries as orientation, not evidence."
+  ],
+  "known_artifacts": [
+    {
+      "name": "first-day-workspace-checklist",
+      "path": "notes/first-day-workspace-checklist.md",
+      "status": "filled"
+    },
+    {
+      "name": "codex-porting-checklist",
+      "path": "notes/codex-porting-checklist.md",
+      "status": "filled"
+    },
+    {
+      "name": "paper-code-experiment-map",
+      "path": "notes/paper-code-experiment-map.md",
+      "status": "draft"
+    },
+    {
+      "name": "experiment-contract",
+      "path": "notes/experiment-contract.md",
+      "status": "needs artifact"
+    }
+  ],
+  "experiment_protocols": [],
+  "claim_boundaries": [
+    {
+      "claim": "The workspace is ready for a first AI-assisted paper/code/experiment pass.",
+      "allowed": true,
+      "blocked_extension": "No method performance claim is allowed yet."
+    }
+  ],
+  "replay_cases": [],
+  "next_smallest_actions": [
+    "Read AGENTS.md, project-memory.json, first-day checklist, weekly ledger, and the first-session prompt.",
+    "Inspect the evaluation script and dataset split file, then fill notes/paper-code-experiment-map.md before opening any second research loop.",
+    "Update current_evidence and claim_boundaries after the first artifact is produced."
+  ],
+  "last_updated": "2026-06-16"
+}
