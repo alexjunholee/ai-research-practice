@@ -1,112 +1,52 @@
-# Ch.7 — 원고와 rebuttal에서 AI는 claim을 고친다
+# Ch.7 — 원고에서 먼저 고칠 것은 문장이 아니다
 
-원고 작업에서 AI가 가장 쉽게 하는 일은 문장을 매끄럽게 만드는 것이다. 그
-일은 마지막에 필요하다. 먼저 필요한 것은 claim 수리다. reviewer가 공격하는
-지점은 대개 주장 권한이다.
+심사위원이 "comparison이 unfair하다"고 썼다. AI에게 바로 붙이면 공손한 문장이
+먼저 나온다. 지적해 주셔서 감사합니다. 설명이 부족했습니다. 수정하겠습니다.
+문장은 부드럽다. 하지만 심사위원이 보고 있는 것은 주장 권한이다.
 
-```text
-claim
--> evidence
--> assumption
--> limitation
--> reviewer risk
--> revised wording
-```
+원고 작업에서 AI가 가장 쉽게 하는 일은 문장을 매끄럽게 만드는 것이다. 그 일은
+마지막에 필요하다. 먼저 볼 것은 주장이다. 이 문단이 독자에게 믿게 하려는 말은
+무엇인가. 그 말을 지탱하는 표, 그림, 정리, ablation은 무엇인가. 어떤 dataset,
+sensor, metric, runtime 조건에 기대고 있는가. 어디까지 말할 수 있고,
+어디서부터 심사위원이 잡을 수 있는가.
 
-이 순서가 바뀌면 문장은 좋아지고 논문은 약해진다.
+## 형용사는 늦게 온다
 
-## Claim inventory
+AI는 "더 설득력 있게"라는 요청을 받으면 문장을 키운다. robust, general,
+significant 같은 단어가 들어간다. 때로는 citation을 더 붙여 novelty를 세운다.
+그러나 형용사는 근거를 쉽게 넘어선다. 관련 논문을 더 붙였다고 실험 경계가
+닫히는 것도 아니다.
 
-원고 한 절을 고칠 때 AI에게 먼저 시킬 일은 claim inventory다.
+좋은 원고 세션은 주장 장부부터 만들었다. 중심 주장, 근거, 가정, 범위, 심사
+위험, 허용되는 표현을 나누었다. 그 뒤에 문장을 고쳤다. 무너진 세션은 매끄러운
+문단을 먼저 만들었고, 열린 주장을 그 문장 속에 숨겼다.
 
-| 항목 | 질문 |
-|---|---|
-| Central claim | 이 문단이 독자에게 믿게 하려는 말은 무엇인가 |
-| Evidence | 그 말을 지탱하는 artifact, table, figure, theorem, ablation은 무엇인가 |
-| Assumption | 어떤 dataset, sensor, metric, runtime 조건에 기대는가 |
-| Scope | 어느 조건까지만 말할 수 있는가 |
-| Risk | reviewer가 어디를 공격할 수 있는가 |
-| Wording | 허용되는 표현과 금지되는 표현은 무엇인가 |
+## 심사 압박을 행동으로 바꾼다
 
-이 표가 없으면 AI는 stronger adjective를 넣는다. "robust", "general",
-"significant" 같은 단어는 evidence가 올린 뒤에만 쓴다.
+unfair comparison이라는 말이 들어오면 네 갈래가 보인다. baseline 조건이
+다른가. dataset split이 어긋났는가. metric 정의가 다르게 쓰였는가.
+구현 상태가 실제 비교 조건을 바꾸는가. 새 실험이 필요하면 실험으로
+분리한다. 설명 부족이면 방법 설명으로 분리한다. 실제 한계이면 범위를 줄인다.
 
-## Reviewer pressure를 action으로 바꾼다
+AI는 이 분해를 잘 도울 수 있다. 심사 의견을 공격받은 주장과 빠진 근거로 나누고,
+가능한 대응을 실험, 설명, 인정, 한계로 갈라 준다. 다만 그 구분이 실제 표와 그림,
+코드 경로, 실행 산출물에 닿아야 한다. 닿지 않으면 답변서는 공손한 추측이 된다.
 
-좋은 rebuttal 초안은 공손한 문장으로 시작하지 않는다. reviewer pressure를
-작업 단위로 바꾼다.
+## 문장 수리는 경계가 닫힌 뒤에 한다
 
-```text
-reviewer pressure:
-claim at risk:
-missing evidence:
-possible response:
-required edit:
-remaining limitation:
-```
+그림 설명과 본문 주장이 어긋날 때, notation이 절마다 다르게 쓰일 때, 한
+문단 안에서 중심 주장과 보조 근거가 뒤섞일 때 AI는 좋은 편집자다.
+하지만 그 편집은 구조가 맞은 뒤에 힘을 얻는다. 주장과 근거가 어긋난 상태에서
+문체만 좋아지면 논문은 오히려 약해진다.
 
-예를 들어 reviewer가 "comparison이 unfair하다"고 했다면 바로 "We thank the
-reviewer"를 쓰지 않는다. 먼저 baseline protocol, dataset split, metric
-definition, implementation status를 확인한다. 새 실험이 필요하면 실험으로
-분리한다. 설명 부족이면 method clarification으로 분리한다. 실제 limitation이면
-scope를 줄인다.
+답변서 문장도 순서가 있다. 먼저 인정할 부분을 좁게 인정한다. 그다음 같은
+조건에서 새로 본 근거나 추가 분석을 말한다. 어디를 고쳤는지 section과
+table로 가리킨다. 마지막에 아직 주장하지 않는 범위를 남긴다.
 
-## AI가 잘하는 원고 일
+예를 들어 이전 원고가 evaluation boundary를 분명히 쓰지 못했다면, 답변은 그
+사실을 인정하는 데서 시작한다. 이어서 같은 sequence split과 metric script로
+baseline을 다시 맞췄다고 말한다. Section 4.3과 Table 2를 고쳤다면 그곳을 가리킨다.
+cross-dataset generalization은 주장하지 않는다고 닫는다.
 
-AI는 다음 일을 잘한다.
-
-- reviewer comment를 claim risk로 분해한다.
-- 한 절 안에서 claim hierarchy를 정리한다.
-- figure caption과 본문 claim을 맞춘다.
-- 용어와 notation의 불일치를 찾는다.
-- rebuttal 문장을 concession, evidence, revision, limitation으로 나눈다.
-
-이 일들은 모두 구조 작업이다. 문체 작업은 구조가 맞은 뒤에 들어간다.
-
-## AI가 자주 실패하는 원고 일
-
-실패는 대체로 네 가지다.
-
-| 실패 | 증상 | 하네스 gate |
-|---|---|---|
-| Overclaim | 실험보다 넓은 contribution을 쓴다 | allowed wording / forbidden wording |
-| Citation patching | 관련 논문을 더 붙여 novelty를 만든다 | repaired assumption / prior-work contrast |
-| Polish first | 문장은 좋아졌지만 reviewer 질문이 남는다 | claim/evidence map |
-| Metric blur | 다른 protocol의 숫자를 한 표정으로 말한다 | experiment contract |
-
-AI는 "더 설득력 있게"라는 요청을 받으면 문장을 키운다. 연구 하네스는 "어떤
-증거가 있으면 어디까지 커질 수 있는가"를 먼저 묻는다.
-
-## 로그에서 갈린 지점
-
-| 장면 | 좋게 끝난 세션 | 무너진 세션 | 이유 |
-|---|---|---|---|
-| Reviewer comment | pressure를 claim at risk와 missing evidence로 바꿨다 | 공손한 문장부터 만들었다 | reviewer risk는 예의보다 주장 권한에서 줄어든다 |
-| 원고 polish | claim inventory 뒤에 문장을 고쳤다 | fluent paragraph를 먼저 만들었다 | 매끈한 문장은 열린 claim을 가릴 수 있다 |
-| Citation 보강 | prior work와 assumption 차이를 분리했다 | 관련 논문을 더 붙여 novelty를 만들었다 | citation은 근거를 보태지만 실험 경계를 대신 닫지 못한다 |
-| Scope 조정 | allowed wording과 forbidden wording을 나눴다 | robust, general, significant 같은 단어를 먼저 넣었다 | 형용사는 evidence tier보다 넓어지기 쉽다 |
-
-## Rebuttal sentence pattern
-
-rebuttal 문장은 네 조각으로 충분하다.
-
-```text
-concession:
-evidence or new analysis:
-manuscript revision:
-remaining boundary:
-```
-
-예시는 이런 모양이다.
-
-```text
-We agree that the previous wording did not make the evaluation boundary clear.
-We now report the result under the same sequence split and metric script as the
-baseline. Section 4.3 and Table 2 have been revised to state this protocol
-explicitly. The claim is limited to this setting and we do not claim
-cross-dataset generalization.
-```
-
-공손함은 필요하다. 그러나 공손함만으로 reviewer risk가 줄지는 않는다.
-rebuttal은 claim/evidence ledger를 reviewer에게 보이는 문장으로 바꾸는
-작업이다.
+공손함은 필요하다. 그러나 공손함만으로 심사 위험은 줄지 않는다. 위험은
+주장과 근거의 경계가 바뀔 때 줄어든다.

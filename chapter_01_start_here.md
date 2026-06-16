@@ -1,116 +1,70 @@
-# Ch.1 — 로보틱스 연구에서 AI는 왜 자주 틀리는가
+# Ch.1 — AI의 답은 싸고, 연구자의 행동은 비싸다
 
-AI는 후보를 만든다. 이상한 로그 한 줄을 주면 가능한 원인이 늘어난다. 논문
-abstract를 주면 관련 연구와 약점 후보가 붙는다. 코드 조각을 주면 고칠 수
-있는 위치가 여럿 나온다. 이 능력은 연구자에게 실제로 유용하다. 혼자라면
-놓쳤을 가지가 대화 몇 번 만에 생긴다.
+새벽 한 시에 `eval.csv`를 다시 열면 숫자를 읽기도 전에 떠오르는 것들이 있다. 어제
+돌린 명령, 중간에 바꾼 설정, 빠진 시퀀스, 심사위원이 물고 늘어질 표의 빈칸.
+같은 파일을 AI에게 주면 문장은 먼저 도착한다. 기준 방법을 이긴 것 같습니다.
+다음 실험은 이쪽이 맞겠습니다. 논문에서는 이렇게 쓰면 됩니다. 틀린 말이 아닐
+수도 있다. 다만 아직 사람이 손을 대기 전의 말이다.
 
-문제는 그 다음이다. 연구자는 후보 중 하나를 행동으로 바꿔야 한다. bag을
-다시 돌릴지, CUDA 환경을 건드릴지, baseline을 하나 더 세울지, 원고의 claim을
-줄일지 정해야 한다. 그 선택에는 시간이 든다. GPU queue, 실험 마감,
-깨지기 쉬운 launch file, reviewer에게 보낼 표가 걸린다.
+연구자의 손은 늦게 움직인다. bag을 다시 돌리면 밤이 간다. CUDA 환경을 건드리면
+멀쩡하던 컨테이너가 깨질 수 있다. 원고의 주장을 줄이면 결과 표 하나가
+사라진다. AI가 만든 문장에는 비용이 거의 없지만, 그 문장을 따라 움직이는
+사람에게는 시간이 붙고 책임이 붙는다.
 
-AI가 만든 후보는 싸다. 사람의 행동은 비싸다.
+로보틱스 연구에서 AI가 그럴듯하게 틀리는 이유는 대개 이 간격에 있다. AI는 말을
+늘리는 쪽에 강하다. 이상한 로그 한 줄을 주면 원인 후보가 늘고, 논문 초록을
+주면 관련 연구와 약점 후보가 붙는다. 코드 조각을 주면 고칠 수 있는 자리를
+여럿 가리킨다. 혼자라면 못 봤을 가지가 생긴다. [March](https://doi.org/10.1287/orsc.2.1.71)가
+말한 탐색과 활용의 긴장이 여기서 다시 나타난다. 새 가지를 더 보는 일은
+탐색이고, 그중 하나를 붙잡고 하루를 쓰는 일은 활용이다.
 
-로보틱스 연구에서 AI가 자주 미끄러지는 이유는 여기서 시작한다. AI는 가능한
-말을 빠르게 늘린다. 연구는 어느 순간 그 말을 센서, 코드, dataset, metric,
-원고 문장으로 내려야 한다. [March](https://doi.org/10.1287/orsc.2.1.71)가
-말한 exploration과 exploitation의 긴장이 연구실 책상 위에서 반복된다.
-search, variation, experimentation은 AI와 잘 맞는다. refinement, selection,
-implementation, execution은 사람이 비용을 낸다.
+카메라 토픽이 보이지 않는 ROS2 노드를 보자. AI는 QoS를 의심하고, namespace를
+의심하고, `use_sim_time`을 의심한다. Docker 안에서 `/dev/video0` 권한이 빠졌을
+수 있고, launch 파일이 다른 파라미터를 덮었을 수도 있다. 다 그럴듯하다. 그러나
+그중 하나를 확인하려면 사람이 정해야 한다. `ros2 topic info --verbose`를 먼저
+볼지, 컨테이너 권한을 다시 줄지, bag replay를 멈추고 clock을 볼지. 원인 목록은
+도움이 되면서 동시에 짐이 된다.
 
-LLM은 멀리 있는 연상을 잘 끌어온다. [Chen & Ding
-2023](https://arxiv.org/abs/2310.11158)은 LLM이 divergent association 과제에서
-높은 점수를 낼 수 있음을 보였다. 그러나 멀리 뻗은 연상이 곧 쓸모 있는
-연구 판단은 아니다. [Nakajima et al.
-2026](https://arxiv.org/abs/2601.20546)은 novelty와 contextual
-appropriateness를 따로 보아야 한다고 지적했다. 로보틱스에서 맥락은 말보다
-물체에 붙어 있다. sensor time, frame convention, calibration, container
-권한, dataset split, metric script가 그 맥락이다.
+논문과 원고에서도 같은 일이 반복된다. "이 방법은 더 robust합니다"라는 문장은
+쉽게 나온다. 그러나 그 말이 EuRoC의 어느 시퀀스에서, 어떤 alignment와 어떤
+평가 스크립트를 거쳐 나왔는지 닫히지 않으면 원고 문장이 되지 못한다. "심사위원
+질문에는 이렇게 답하면 됩니다"라는 답도 마찬가지다. 질문의 예의보다 먼저 봐야
+할 것은 공격받은 주장, 빠진 근거, 줄여야 할 범위다.
 
-AI는 연구자를 넓힐 수도 있고, 좁힐 수도 있다. [Wadinambiarachchi et al.
-2024](https://arxiv.org/abs/2403.11164)는 생성 AI 예시가 ideation을 돕는 동시에
-초기 예시에 고착을 만들 수 있음을 보였다. [Doshi & Hauser
-2024](https://arxiv.org/abs/2312.00506)는 개인의 결과는 좋아졌지만 결과물
-사이의 유사성이 커질 수 있음을 보고했다. 도움의 방향은 도구 자체보다
-사용 장면에서 갈린다. 후보가 늘어도 판단이 깊어지지 않으면 넓어진 것이
-아니다. 문장이 매끈해져도 claim이 잠기지 않으면 나아진 것이 아니다.
+AI가 멀리 있는 연상을 잘 끌어온다는 연구는 이미 여럿 나와 있다. [Chen과
+Ding](https://arxiv.org/abs/2310.11158)은 LLM이 divergent association 과제에서
+높은 점수를 낼 수 있음을 보였다. 그 힘은 실제로 쓸모가 있다. 다만 로보틱스
+연구에서는 연상이 곧 판단이 되지 않는다. 센서 시간, frame 관례, calibration,
+컨테이너 권한, 데이터셋 분할, 평가 스크립트가 그 사이에 끼어든다. 말로는 비슷한
+후보라도 실험실에서는 서로 다른 비용을 갖는다.
 
-사람의 선택에는 확률표 바깥의 층이 있다. Simon의 bounded rationality는
-사람이 제한된 정보와 시간 안에서 행동한다는 점을 설명한다. Kahneman과
-Tversky의 prospect theory는 손실 프레임과 기준점이 위험 판단을 바꾼다는
-언어를 준다. [Loewenstein et al.
-2001](https://doi.org/10.1037/0033-2909.127.2.267)의 *Risk as Feelings*는
-위험 판단에 즉각적인 감정이 들어온다는 점을 보탠다. 지금 고치면 하루를
-잃을 수 있다는 감각, 간신히 돌아가는 pipeline을 건드릴 때의 불안, 비어
-있는 rebuttal 표가 만드는 압박이 행동을 바꾼다.
+사람의 판단에는 숫자 바깥의 감각도 들어간다. 지금 고치면 하루를 잃을 수 있다는
+감각, 간신히 돌아가는 파이프라인을 건드릴 때의 불안, 비어 있는 답변서 표가 주는
+압박. [Loewenstein et al.](https://doi.org/10.1037/0033-2909.127.2.267)이 말한
+위험의 감정은 연구실에서도 낯설지 않다. 계산은 머리로 하지만, 실행 버튼은 손이
+누른다.
 
-카메라 토픽이 보이지 않는 ROS2 노드를 AI에게 던지면 답은 빠르게 나온다.
-QoS가 맞지 않을 수 있다. namespace가 다를 수 있다. `use_sim_time`이 켜져
-있을 수 있다. Docker 안에서 `/dev/video0` 권한이 빠졌을 수 있다. launch
-파일이 다른 파라미터를 덮었을 수 있다.
+AI에게 답을 받기 전에, 그 답이 어디까지 내려갈 수 있는지 물어야 한다. 어느
+파일을 봐야 하는가. 어느 명령이 그 말을 확인하는가. 어느 표가 같은 조건에서
+나온 것인가. 어느 문장은 아직 원고에 들어가면 위험한가. 좋은 세션은 이
+질문들로 좁아졌다. 파일을 열었고, 명령 출력을 다시 보았고, 데이터셋과 평가식을
+잠갔다. 원고 문장은 근거가 닫힌 뒤에 고쳤다.
 
-다섯 가지 모두 그럴듯하다. 그중 하나가 실제 원인일 수도 있다. 그러나
-연구자는 그 자리에서 하나를 골라 행동해야 한다. `ros2 topic info
---verbose`를 먼저 볼 것인지, container 권한을 다시 줄 것인지, bag replay를
-멈추고 clock을 확인할 것인지 정해야 한다. 이 순간 긴 원인 목록은 도움과
-부담을 함께 만든다.
+무너진 세션은 반대로 움직였다. 요약을 현재 상태로 믿었고, 숫자 하나를 성능
+개선으로 올렸고, 심사위원 문장을 문체 문제로만 다뤘다. AI가 나빠서만 생긴
+일은 아니다. 사람이 무엇을 증거로 삼을지 정하지 않으면, AI는 가장 자연스러운
+문장을 먼저 만든다.
 
-Polanyi, Suchman, Hutchins, Weick의 오래된 논점이 이 장면에서 살아난다.
-좋은 로보틱스 연구자는 prompt에 다 적히지 않는 상태를 안다. 어떤 bag은
-timestamp가 수상하고, 어떤 USB hub는 오래 돌리면 끊기며, 어떤 reviewer는
-metric 방향을 집요하게 본다. Suchman식으로 말하면 plan은 행동을 완전히
-결정하는 script가 아니다. 상황 안에서 고쳐 쓰는 resource에 가깝다.
+| 장면 | 잘 굴러간 경우 | 헛돈 경우 |
+|---|---|---|
+| ROS2/Docker/CUDA 디버깅 | stage를 좁히고 명령 출력을 봤다 | 처음부터 원인을 단정했다 |
+| SLAM/VPR 결과 해석 | 데이터셋, 분할, 평가식을 먼저 잠갔다 | 숫자만 보고 주장을 만들었다 |
+| 논문 읽기 | 논문, 코드, 실험을 같이 봤다 | 초록 요약으로 새로움을 판단했다 |
+| 원고/답변서 | 주장과 근거와 심사 위험을 나눴다 | 문장만 매끄럽게 만들었다 |
+| 긴 프로젝트 재개 | 규칙, 상태 파일, 산출물을 다시 읽었다 | 이전 요약을 현재 상태로 믿었다 |
 
-연구 상태는 사람과 artifact 사이에 흩어져 있다. shell history, bag file,
-plot, commit diff, issue thread, calibration note가 함께 현재 상태를 만든다.
-AI의 첫 일은 이 흩어진 상태를 대신 판단하는 것이 아니라, 지금 가능한
-행동을 말로 붙이고 그 말을 다음 확인으로 되돌리는 것이다.
+하네스라는 말을 여기서는 작게 쓴다. AI가 낸 말을 연구자의 행동 앞에 세워 보는
+습관이다. 그 말은 지금 무엇을 건드리는가. 어떤 증거가 그 말을 허락하는가. 실행
+뒤에는 무엇을 남길 것인가.
 
-하네스가 필요한 이유가 여기에 있다. 하네스는 발산한 후보를 연구 행동으로
-바꾸기 전에 증거 상태와 위험을 붙이는 장치다.
-
-```text
-candidate branches
--> evidence state
--> smallest risky action
--> artifact check
--> claim / ledger / replay update
-```
-
-## 로그에서 반복된 모양
-
-로컬 연구 대화 분석에서 많이 나온 요청은 일반적인 생산성 질문이 아니었다.
-구현과 디버깅, reviewer response, 원고 수정, 실험 결과 해석, build와 test,
-문헌 positioning이 반복됐다. 도메인은 SLAM, VIO, localization, robotics
-general, paper publication에 집중됐다.
-
-성공한 대화는 대체로 좁았다. 원 파일을 읽고, 명령 출력을 확인하고, dataset
-protocol을 잠그고, 원고 claim을 evidence에 묶었다. 실패한 대화는 넓었다.
-파일명만 보고 구현 상태를 추정하고, compact summary를 원 자료처럼 믿고,
-metric 방향을 확인하기 전에 성능을 해석하고, reviewer 문장을 문장 polish
-문제로만 다뤘다.
-
-| 반복 패턴 | 잘되는 경우 | 잘 안되는 경우 | 이유 |
-|---|---|---|---|
-| ROS2/Docker/CUDA 디버깅 | stage를 좁히고 command outcome을 본다 | 처음부터 root cause를 단정한다 | 물리적 실행 상태는 prompt에 들어 있지 않다 |
-| SLAM/VPR 결과 해석 | dataset, split, direction, metric을 잠근다 | 숫자만 보고 claim을 만든다 | 같은 숫자도 protocol이 다르면 뜻이 바뀐다 |
-| 논문 읽기 | paper, code, experiment를 함께 본다 | abstract 요약으로 novelty를 판단한다 | 연구 기여는 구현과 평가에서 검증한다 |
-| 원고/rebuttal | claim, evidence, reviewer risk를 나눈다 | 문장만 매끄럽게 만든다 | reviewer는 문체보다 주장 권한을 본다 |
-| 긴 프로젝트 재개 | AGENTS, status, artifact를 다시 읽는다 | 이전 요약을 현재 상태로 착각한다 | memory는 orientation이지 proof가 아니다 |
-
-## 첫 규칙
-
-AI에게 바로 답을 요구하지 않는다. 먼저 현재 행동이 어느 위험을 건드리는지
-말하게 한다.
-
-```text
-object under truth control:
-current evidence permits:
-current evidence forbids:
-smallest next action:
-verification:
-```
-
-이 다섯 줄이 있으면 AI의 발산은 작업 후보로 좁아진다. 이 다섯 줄이 없으면
-AI의 발산은 drift로 흐른다.
+AI는 말을 늘린다. 연구자는 그중 하나를 현실에 묶는다.

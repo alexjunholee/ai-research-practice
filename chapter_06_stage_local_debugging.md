@@ -1,121 +1,70 @@
-# Ch.6 — 디버깅은 stage-local로 자른다
+# Ch.6 — 디버깅은 한 단계에서만 시작한다
 
-로보틱스 디버깅에서 "왜 안 되지?"는 너무 큰 질문이다. AI는 이 질문을 받으면
-가능한 원인을 많이 만든다. driver, QoS, tf2, calibration, CUDA, dependency,
-dataset path, metric script가 한꺼번에 나온다. 후보가 많아질수록 사람의
-행동 비용은 커진다.
+ROS2 노드가 카메라 이미지를 받지 못한다. `ros2 topic list`에는 topic이 보인다.
+callback은 움직이지 않는다. 이 상태에서 "왜 안 되지?"라고 물으면 AI는 후보를
+많이 만든다. QoS, namespace, remap, executor, simulated time, Docker network,
+device permission이 한꺼번에 나온다.
 
-하네스는 원인을 바로 맞히려 하지 않는다. stage를 먼저 자른다.
+그 목록은 쓸모가 있다. 동시에 위험하다. 후보가 많아질수록 사람이 할 행동도
+많아진다. 컨테이너를 다시 띄울지, launch 파일을 고칠지, clock부터 볼지, bag replay를
+멈출지 정해야 한다. 디버깅에서 비용을 쓰는 지점은 다음 행동이다.
 
-```text
-data
--> preprocessing
--> representation
--> matching / retrieval
--> geometry / estimation
--> optimization
--> confidence / rejection
--> evaluation
--> runtime environment
-```
+## 단계를 먼저 자른다
 
-AI가 할 일은 각 stage의 후보 failure와 확인 명령을 붙이는 것이다. 사람은
-가장 작은 위험의 action을 고른다.
+하네스는 원인을 바로 맞히려 들지 않는다. 먼저 단계를 자른다. 데이터, 전처리,
+표현, 매칭이나 검색, 기하, 최적화, 신뢰도 판단, 평가, 실행 환경. 어디에서 신호가
+사라졌는지부터 본다.
 
-## Stage table
+AI가 할 일은 각 단계에 가능한 실패와 확인 명령을 붙이는 것이다. 사람은 그중
+가장 작은 위험의 행동을 고른다. 같은 한 줄 명령이라도 어떤 것은 상태만 읽고,
+어떤 것은 환경을 바꾸고, 어떤 것은 긴 실험을 다시 돌린다.
 
-| Stage | 흔한 failure | 먼저 볼 artifact |
-|---|---|---|
-| Data | 파일 누락, timestamp 불일치, bag clock | file count, metadata, first/last stamp |
-| Preprocessing | resize, undistort, normalization 차이 | config, cached sample, transform log |
-| Representation | feature space 혼동, projection head 사용 오류 | tensor shape, checkpoint key, feature dump |
-| Retrieval/matching | query/database 방향, top-k, ratio test | index stats, match visualization |
-| Geometry | wrong intrinsics, frame convention, PnP outlier | calibration, reprojection error |
-| Optimization | residual scaling, bad initialization | loss curve, solver status |
-| Confidence | threshold, rejection rule, fallback path | accepted/rejected count |
-| Evaluation | ground truth frame, metric script, sequence filter | eval config, alignment log |
-| Runtime | Docker device, CUDA, ROS2 QoS, permission | command output, topic info, container args |
+## 좋은 요청은 좁다
 
-이 표는 처음 볼 곳을 정하는 index다.
+넓은 요청은 대개 이런 모양이다.
 
-## 좋은 AI 디버깅 요청
+> 이거 왜 안 되는지 봐줘.
 
-나쁜 요청은 넓다.
+이 문장은 AI에게 원인을 맞히라고 한다. 좋은 요청은 원인을 맞히기 전에 현재
+통제하려는 물건과 관찰된 신호를 준다. 예를 들어 camera image subscriber가 대상이고,
+`/camera/image_raw` publisher는 보이지만 callback이 호출되지 않는다고 말한다.
+그다음 가장 위험이 낮은 확인 세 가지를 순서대로 달라고 한다. 명령 출력이 나오기
+전까지 원인을 확정하지 말라고 붙인다.
 
-```text
-이거 왜 안 되는지 봐줘.
-```
+이렇게 주면 AI는 바로 결론을 쓰기 어렵다. 대신 QoS compatibility, namespace와
+remap, callback executor, simulated time, container network 같은 후보를 check
+단위로 나눈다. 좋은 디버깅 세션은 말을 늘리는 대신 확인 지점을 줄인다.
 
-좋은 요청은 stage와 증거를 준다.
+## 도구 실패와 방법 실패
 
-```text
-Stage-local debug.
-Object under truth control: camera image subscriber.
-Observed artifact: ros2 topic list shows /camera/image_raw, node receives none.
-Current evidence: publisher exists; subscriber callback not triggered.
-Find the next three checks, ordered by lowest risk.
-Do not claim root cause until a command output proves it.
-```
+명령이 실패했다고 방법이 틀린 것은 아니다. `pip install` 실패, CUDA driver
+mismatch, 빠진 Docker volume, 다른 dataset path는 연구 방법을 검토하기 전에 닫아야
+할 층에 있다.
+반대로 명령이 성공해도 metric script가 다른 ground-truth frame을 읽었을 수 있다.
 
-이렇게 주면 AI는 바로 root cause를 쓰기 어렵다. 대신 QoS compatibility,
-namespace/remap, callback executor, simulated time, container network 같은
-후보를 check 단위로 나눈다.
+도구 실패, 실행 환경 실패, 데이터 실패, 방법 실패, 평가 실패, 주장 실패를 나누면
+다음 행동이 달라진다. AI가 이 층을 섞으면 "고쳐졌다"는
+말이 너무 빨리 나온다. 환경 경계가 닫히기 전에는 방법의 한계를 말하지 않는다.
+평가 경계가 닫히기 전에는 성능 개선을 말하지 않는다.
 
-## Tool failure와 method failure를 나눈다
+## 산출물이 남아야 한다
 
-명령 실패는 먼저 tool, runtime, data failure로 분리한다. `pip install` 실패,
-CUDA driver mismatch, 빠진 Docker volume, 다른 dataset path는 method failure
-전 단계에 있다. 반대로 명령이 성공해도 metric script가 다른 ground truth
-frame을 읽었을 수 있다.
+디버깅 한 번은 작은 흔적을 남겨야 한다. 어느 단계를 봤는지, 기대한 신호와
+관찰된 신호가 무엇인지, 후보 원인이 무엇이었는지, 어떤 명령을 실행했는지,
+결과가 다음 경계를 어떻게 바꿨는지. 이 흔적이 없으면 다음 AI 세션은 같은 추측을
+새 말로 반복한다.
 
-```text
-tool failure:
-runtime failure:
-data failure:
-method failure:
-evaluation failure:
-claim failure:
-```
+VPR 성능이 갑자기 떨어졌을 때 model architecture부터 바꾸면 비용이 커진다.
+질의와 데이터베이스 split, cached feature version, normalization, index order,
+positive radius, metric script를 먼저 자른다. 각 확인은 하나의 산출물을 남겨야
+한다. 산출물이 없으면 그 행동은 기억 속에서만 일어난다.
 
-각 failure class가 다르면 다음 action도 다르다. AI가 이 층을 섞으면
-"고쳐졌다"는 말이 너무 빨리 나온다.
+## 멈추는 규칙
 
-## Stage-local loop
+AI는 계속 후보를 낼 수 있다. 연구자는 멈추는 규칙을 가져야 한다. 같은 단계에서
+두 번 연속 증거가 없으면 단계를 바꾼다. 명령 실패가 반복되면 환경 문제로
+분리한다. 결과가 좋아졌더라도 실험 조건이 바뀌었으면 성능 주장을 보류한다. 원인을
+닫기 전에 우회책을 썼다면 장부에 빚으로 남긴다.
 
-디버깅 turn은 다음 모양을 갖는다.
-
-```text
-stage:
-expected signal:
-observed signal:
-candidate causes:
-lowest-risk check:
-command:
-result:
-next boundary:
-```
-
-예를 들어 VPR 성능이 갑자기 떨어졌다면 model을 바로 의심하지 않는다.
-query/database split, cached feature version, normalization, index order,
-positive radius, metric script를 먼저 자른다. 각 check는 하나의 artifact를
-남겨야 한다. artifact가 없으면 다음 AI 세션은 같은 추측을 반복한다.
-
-## 로그에서 갈린 지점
-
-| 장면 | 좋게 끝난 세션 | 무너진 세션 | 이유 |
-|---|---|---|---|
-| 첫 진단 | stage, observed signal, lowest-risk check를 정했다 | plausible cause 목록을 root cause처럼 읽었다 | 후보를 많이 만드는 일과 행동을 고르는 일은 비용 구조가 다르다 |
-| Command failure | tool, runtime, data failure를 먼저 분리했다 | 설치 실패를 method 한계처럼 설명했다 | 실행 실패는 연구 결과가 되기 전에 환경 경계를 통과해야 한다 |
-| 성능 하락 | split, cache, normalization, metric script를 stage별로 확인했다 | model architecture를 바로 바꿨다 | 큰 수정은 작은 artifact가 닫힌 뒤에야 위험을 감당할 수 있다 |
-| Stop rule | evidence가 없는 stage를 접고 ledger에 debt를 남겼다 | 같은 추측을 새 표현으로 반복했다 | 멈추는 규칙이 없으면 AI의 발산이 디버깅 시간을 먹는다 |
-
-## 언제 멈출 것인가
-
-디버깅은 무한히 이어질 수 있다. 그래서 stop rule이 필요하다.
-
-- 같은 stage에서 두 번 연속 evidence가 없으면 stage를 바꾼다.
-- command failure를 세 번 반복하면 환경 문제로 분리한다.
-- 결과가 좋아졌더라도 protocol이 바뀌었으면 성능 claim을 보류한다.
-- root cause를 찾기 전에 workaround를 썼다면 ledger에 debt로 남긴다.
-
-AI는 계속 후보를 낼 수 있다. 연구자는 멈추는 규칙을 가져야 한다.
+디버깅은 원인을 한 번에 맞히는 일이 아니다. 행동 하나가 다음 질문을 좁히게 만드는
+일이다.
