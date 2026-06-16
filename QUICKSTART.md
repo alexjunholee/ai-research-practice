@@ -1,10 +1,10 @@
-# 빠른 시작 — 첫날 연구 작업장을 만든다
+# 부록 A — 작업장을 만들 때 필요한 파일
 
-전체 가이드를 읽기 전에 이 순서로 시작한다. 첫 목표는 새 AI 세션이 같은
-상태에서 출발하고, 같은 경계를 지키고, 같은 검증 기준으로 행동하게 만드는
-것이다.
+이 부록은 본문을 읽은 뒤 작업장에 옮길 파일을 정리한다. 이 문서가 가이드의
+출발점은 아니다. 먼저 AI가 잘하는 일과 못하는 일, 사람의 연구 판단이
+감당하는 위험, 하네스가 고정하는 경계를 이해해야 한다.
 
-## 0. 도구 역할을 먼저 나눈다
+## 도구 역할을 먼저 나눈다
 
 처음 고를 것은 모델명이 아니다. 어떤 연구 상태를 어떤 tool surface에 맡길지
 먼저 정한다.
@@ -21,7 +21,7 @@
 같은 AI 제품이 여러 역할을 할 수 있다. 그러나 한 turn 안에서 역할이 바뀌면
 evidence gate도 다시 선언한다.
 
-## 1. 작업장을 나눈다
+## 작업장을 나눈다
 
 처음에는 단순하게 둔다.
 
@@ -41,7 +41,7 @@ workspace/
 먼저 정한다. 코드 이력, raw data, 실험 artifact, 비공개 메모를 한 덩어리로
 섞지 않는다.
 
-첫날에는 공개 번들에서 다음 파일을 먼저 복사한다.
+작업장을 처음 만들 때는 공개 번들에서 다음 파일을 먼저 복사한다.
 
 | 공개 번들 | 새 작업장 |
 |---|---|
@@ -127,14 +127,14 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 `project-memory.json`에는 다섯 묶음이 있어야 한다. `source_of_truth`는 AI가
 다시 읽을 파일을 가리키고, `tool_surface_map`은 연구 장면별 도구 역할을
 나눈다. `current_evidence`는 허용되는 말과 금지되는 말을 분리한다.
-`first_research_loop`는 첫날 열 루프 하나만 고정하고, `next_smallest_actions`는
+`first_research_loop`는 처음 열 루프 하나만 고정하고, `next_smallest_actions`는
 다음 세션이 바로 집을 행동을 남긴다.
 
 그다음 `notes/first-ai-session-prompt.md`의 `Prompt To Send` 블록에서 빈칸을
 채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 이 파일이 첫 AI
 세션의 실제 입력이다.
 
-## 2. AGENTS.md를 만든다
+## AGENTS.md를 만든다
 
 [`templates/workspace-readme.md`](templates/workspace-readme.md)를 `README.md`로
 복사하고, 프로젝트 이름과 repo, dataset, artifact 위치만 채운다. 그다음
@@ -153,10 +153,10 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 규칙의 의미다. assumption을 드러내라, 작게 고쳐라, 성공 기준을 검증 가능하게
 만들어라 같은 규칙은 Codex에서도 그대로 쓴다.
 
-## 3. 첫날 체크리스트를 채운다
+## 첫 상태 체크리스트를 채운다
 
 [`templates/first-day-workspace-checklist.md`](templates/first-day-workspace-checklist.md)는
-새 환경의 source of truth를 정한다.
+현재 연구 상태의 source of truth를 정한다.
 
 ```text
 project goal:
@@ -171,7 +171,7 @@ durable corrections:
 이 표가 비어 있으면 AI는 현재 상태를 복원하지 못한다. README만 읽고는
 실험 protocol, reviewer risk, dataset convention을 알 수 없다.
 
-## 4. 첫 AI 요청을 좁힌다
+## 첫 AI 요청을 좁힌다
 
 첫 요청은 [`templates/first-ai-session-prompt.md`](templates/first-ai-session-prompt.md)를
 채워서 보낸다. 가장 작은 형태는 이렇다.
@@ -192,9 +192,9 @@ available.
 첫 메시지는 `artifacts/first-ai-session-message.txt`처럼 artifact로 남겨 두면
 다음 세션에서 같은 읽기 순서를 되살릴 수 있다.
 
-## 5. 첫 연구 루프를 하나만 고른다
+## 연구 루프를 하나만 고른다
 
-첫날에는 하나만 고른다.
+처음에는 하나만 고른다.
 
 | 상황 | 시작 템플릿 |
 |---|---|
@@ -204,11 +204,11 @@ available.
 | 에러를 좁힌다 | [`stage-local-debugging.md`](templates/stage-local-debugging.md) |
 | 원고 문장을 고친다 | [`claim-evidence-map.md`](templates/claim-evidence-map.md) |
 
-한 번에 여러 루프를 열면 AI는 다시 넓어진다. 첫날에는 작은 성공 하나가 더
+한 번에 여러 루프를 열면 AI는 다시 넓어진다. 시작 지점에서는 작은 성공 하나가 더
 중요하다. 예를 들어 "논문 요약"보다 "이 논문의 central claim, active code
 path 후보, experiment protocol 빈칸을 분리하라"가 낫다.
 
-## 6. 결과를 ledger에 남긴다
+## 결과를 ledger에 남긴다
 
 작업이 끝나면 `project-memory.template.json`이나
 `weekly-research-ledger.md`에 세 줄을 남긴다.

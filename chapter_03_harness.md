@@ -1,102 +1,93 @@
-# Ch.3 — 로그 분석은 성공 조건과 실패 조건을 나눈다
+# Ch.3 — 하네스는 발산을 수렴시킨다
 
-하네스는 AI가 연구 상태를 바꿀 때 거치는 검문소다. 무엇을 읽었는지, 어떤
-행동을 해도 되는지, 어떤 검증이 끝났는지, 어떤 주장을 아직 하면 안 되는지
-남긴다.
+AI에게 실패 로그를 주면 원인이 늘어난다. 논문 초고를 주면 고칠 문장이
+늘어난다. reviewer comment를 주면 반박 전략이 늘어난다. 늘어나는 것 자체는
+문제가 아니다. 연구자는 혼자서는 보지 못한 가지를 보게 된다.
 
-로컬 대화 분석에서 가장 두드러진 요청은 구현과 디버깅이었다. 그다음으로
-reviewer response, 원고 수정, 실험 결과 해석, build/test 검증, 문헌
-positioning이 반복됐다. 실패 신호는 네 방향으로 모였다. 문장이 너무
-얕거나, 이미 준 맥락을 놓치거나, 엄밀성이 부족하거나, argument보다 polish를
-먼저 했다.
+문제는 늘어난 가지가 모두 같은 무게로 보이는 순간에 생긴다. QoS 문제,
+namespace 문제, Docker 권한 문제, dataset split 문제, metric script 문제,
+원고 claim 문제는 모두 문장으로는 비슷한 길이다. 그러나 연구에서 각 문장은
+다른 비용을 가진다. 어떤 문장은 명령 한 줄로 확인되고, 어떤 문장은 실험
+하루를 요구하며, 어떤 문장은 원고의 contribution을 낮춘다.
 
-이 결과는 하나의 결론으로 모인다. AI는 연구자의 일을 대신하는 사람이
-되기 전에 연구 상태 전이를 다뤄야 한다.
+하네스는 이 비용 차이를 보이게 하는 장치다. AI가 만든 후보를 바로 답으로
+받지 않고, 현재 증거가 어디까지 허용하는지, 다음 행동이 무엇을 건드리는지,
+그 행동 뒤에 어떤 artifact가 남아야 하는지를 묻는다.
 
-```text
-surface request
--> object under truth control
--> current evidence
--> permitted action
--> verification
--> claim / ledger / replay update
-```
+## 좋은 세션은 먼저 좁아진다
 
-## 잘되는 조건
+로컬 대화 분석에서 잘 끝난 세션은 대부분 좁아졌다. 설명을 듣자마자 결론을
+내리지 않고, 파일과 로그와 표를 먼저 보았다. 실험 숫자를 해석하기 전에
+dataset, split, query/database direction, metric script를 잠갔다. 원고 문장을
+고치기 전에 그 문장이 어떤 evidence에 기대는지 확인했다.
 
-### Artifact-first
+무너진 세션은 반대 방향으로 갔다. 파일명만 보고 구현 상태를 확정했고,
+로그 일부를 전체 run의 원인처럼 다뤘고, 숫자 하나를 method improvement로
+올렸다. reviewer comment는 문장 polish 문제로 축소됐다. AI가 못해서만 생긴
+실패가 아니다. 사람이 무엇을 증거로 삼을지 정하지 않았을 때 AI는 가장
+그럴듯한 문장을 먼저 만든다.
 
-좋은 세션은 설명을 듣자마자 결론을 내리지 않는다. 파일, 로그, 표, figure,
-command output, raw config를 먼저 본다. 논문도 마찬가지다. abstract 요약보다
-method section, experiment table, code path, issue discussion이 더 강한
-증거가 되는 경우가 많다.
-
-### Protocol-locked
-
-실험 숫자는 protocol 밖에서 의미가 없다.
+하네스가 묻는 질문은 길지 않다.
 
 ```text
-dataset -> split -> query/database direction -> metric -> baseline -> artifact
+무엇이 지금 truth control 아래 있는가.
+현재 증거가 허용하는 말은 무엇인가.
+현재 증거가 금지하는 말은 무엇인가.
+다음 행동은 어떤 비용을 갖는가.
+그 행동 뒤에 무엇을 확인해야 하는가.
 ```
 
-이 체인이 닫히면 AI는 비교를 말할 수 있다. 하나라도 비면 AI는 관찰만 말할
-수 있다.
-
-### Stage-local
-
-디버깅은 data loading, timestamp, transform, retrieval, matching, PnP,
-optimizer, evaluation, runtime 중 어느 stage가 깨졌는지 좁히는 일이다. AI는
-후보를 빠르게 나열할 수 있다. 하네스는 그 후보를 stage와 command로 묶는다.
-
-### Claim-calibrated
-
-원고 수정은 어떤 문장이 어떤 artifact에 기대는지, reviewer가 어느 claim을
-공격하는지, 어떤 evidence가 남아 있는지부터 본다. claim이 좁아지면 문장도
-좁아진다.
-
-### Correction-to-constraint
-
-사용자가 "그게 아니다"라고 말한 내용은 다음 turn의 기억으로만 남기면
-다시 실패한다. durable constraint로 바뀌어야 한다.
-
-```text
-wrong assumption
--> corrected fact
--> affected workflow
--> future gate
--> replay case
-```
-
-## 잘 안되는 조건
-
-| 실패 패턴 | 겉모습 | 실제 문제 |
-|---|---|---|
-| filename inference | 파일명만 보고 구현 완료처럼 말한다 | code presence와 active method가 다르다 |
-| partial read finality | 일부 로그를 전체 run처럼 해석한다 | 샘플과 전체 artifact가 분리되지 않았다 |
-| metric overclaim | 숫자 하나로 method 개선을 말한다 | protocol과 comparison target이 없다 |
-| memory-as-truth | 이전 요약을 현재 상태로 쓴다 | 2차 자료를 primary evidence로 승격했다 |
-| tool failure attribution | 명령 실패를 연구 결과처럼 설명한다 | execution failure와 method failure가 섞였다 |
-| prose-before-argument | 원고 문장을 먼저 다듬는다 | claim/evidence 구조가 아직 열려 있다 |
+이 다섯 줄은 AI를 느리게 만들기 위한 장치가 아니다. 오히려 빠르게 만든다.
+묻지 않아도 될 후보를 일찍 버리고, 지금 확인할 수 있는 작은 행동으로
+내려가기 때문이다.
 
 ## Evidence gate
 
-evidence gate는 현재 증거가 허용하는 말과 금지하는 말을 나눈다.
+증거는 한 층씩 올라간다. 파일 목록은 후보를 말할 수 있고, command output은
+그 실행의 결과를 말할 수 있다. protocol이 닫힌 뒤에야 비교를 말할 수 있고,
+claim/evidence map이 닫힌 뒤에야 원고 문장을 말할 수 있다.
 
 | Evidence | 허용되는 말 | 금지되는 말 |
 |---|---|---|
 | 파일 목록 | 후보 artifact가 있다 | 결과가 검증됐다 |
 | 로그 일부 | 특정 warning이 보인다 | 전체 run의 원인이 확정됐다 |
 | 명령 실행 | 그 명령의 outcome | paper claim이 닫혔다 |
-| protocol 확인 | 같은 조건 내 비교 | 다른 논문과 일반 성능 비교 |
+| protocol 확인 | 같은 조건 안의 비교 | 다른 조건과 일반 성능 비교 |
 | claim/evidence map | 원고 문장 후보 | reviewer 방어 완료 |
 
-이 표가 하네스의 중심이다. AI가 대답하기 전에 이 표의 어느 줄에 서 있는지
-정해야 한다.
+AI가 자주 틀리는 자리는 이 층을 건너뛰는 곳이다. orientation을 claim처럼
+쓰고, execution을 method improvement처럼 쓰고, observation을 전체 run의
+원인처럼 말한다. 하네스는 그 건너뜀을 막는다.
 
-## Replay
+## 연구 장면마다 닫히는 문이 다르다
 
-같은 실패가 세 번 반복되면 replay가 필요하다. replay case는
-작은 시험이다.
+논문 읽기에서는 central claim, active code path, experiment protocol이 닫혀야
+한다. 코드 읽기에서는 실제 호출되는 함수와 dead code가 갈라져야 한다.
+실험에서는 dataset, split, metric, baseline, artifact가 한 묶음으로 닫혀야
+한다. 원고에서는 allowed wording과 blocked wording이 나뉘어야 한다.
+
+같은 AI 도구를 쓰더라도 장면이 바뀌면 닫아야 할 문이 바뀐다. chat model이
+논문 요약을 도울 수 있고, coding agent가 repo를 읽을 수 있으며, browser가
+외부 repo를 찾을 수 있다. 그러나 도구 표면이 증거 계층을 대신하지는 않는다.
+
+좋은 하네스는 도구 이름을 늘리지 않는다. 장면마다 어떤 문을 닫아야 하는지
+적는다.
+
+```text
+paper -> claim / assumption / code path / experiment
+runtime -> stage / command / output / next failure
+experiment -> dataset / split / metric / baseline / artifact
+manuscript -> claim / evidence / reviewer risk / allowed wording
+```
+
+## Replay는 같은 실패를 미래의 문턱으로 바꾼다
+
+한 번 틀린 것은 correction이다. 두세 번 반복되면 gate가 되어야 한다. 같은
+숫자를 보고 또 overclaim을 만들고, 같은 Docker 에러를 보고 또 driver 문제로
+몰고 가고, 같은 reviewer comment를 보고 또 문장 polish부터 시작한다면
+메모만으로는 부족하다.
+
+replay case는 작은 시험이다. 다음 AI 세션이 같은 실패 앞에서 멈추는지 본다.
 
 ```text
 trigger:
@@ -107,8 +98,13 @@ correct behavior:
 durable constraint:
 ```
 
-예를 들어 VPR 결과에서 `R@1`이 나왔다고 하자. bad behavior는 exact-frame
-retrieval과 radius-based retrieval을 섞어 성능을 비교하는 것이다. required
+예를 들어 VPR 결과에서 `R@1` 숫자가 나왔다고 하자. 나쁜 행동은 exact-frame
+retrieval과 radius-based retrieval을 섞어 성능을 비교하는 것이다. 필요한
 gate는 query/database direction, radius threshold, feature space, evaluation
-script를 확인하는 일이다. 다음 AI는 이 replay를 통과해야 같은 숫자에 대해
-말할 수 있다.
+script를 확인하는 일이다. 다음 AI는 이 gate를 통과해야 같은 숫자에 대해 말할
+수 있다.
+
+하네스는 연구자의 판단을 대신하지 않는다. 대신 판단이 어디서 일어나야
+하는지 표시한다. AI가 후보를 늘리는 일과 사람이 위험을 감당하는 일 사이에
+놓인 표시다. 이 표시가 있으면 AI는 도구가 된다. 표시가 없으면 AI는 그럴듯한
+문장으로 연구 상태를 덮는다.
