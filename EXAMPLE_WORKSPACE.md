@@ -1,8 +1,8 @@
-# 부록 C — 예시 작업장
+# 부록 C — 예시 workspace
 
 `examples/first-robotics-workspace/`는 quickstart를 따라 만든 작은 공개 예시다.
 실제 연구 파일, 개인 경로, 원 대화는 들어 있지 않다. 새 사용자는 이 예시를
-보고 자기 workspace에 맞게 이름과 경로를 바꾸어 쓴다. 핵심은 순서가 아니라
+보고 자기 workspace에 맞게 이름과 경로를 바꾸어 쓴다. 이 예시가 보여주는 것은
 AI가 다시 읽을 수 있는 연구 상태의 표면이다.
 
 ## 파일 구조

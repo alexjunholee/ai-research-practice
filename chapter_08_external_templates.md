@@ -1,52 +1,49 @@
-# Ch.8 — 별 많은 저장소에서 절반을 버린다
+# Ch.8 — Agent repo를 읽는 순서
 
-별 수가 많은 agent 저장소를 열면 마음이 빨라진다. 누군가 이미 정리해 둔 규칙, skill,
-prompt, 작업 흐름이 보인다. 그대로 가져오면 연구실의 AI 사용도 정리될 것 같다. 새 도구를
-설치할 때의 감각과 비슷하다. 파일이 늘고, 규칙이 생기고, 진척이 있는 것처럼 보인다.
+대화 기록을 분류하면 앞줄에 같은 일이 반복해서 나온다. 구현 디버깅, reviewer response,
+원고 수정, 실험 결과 해석. AI는 여기서 많은 일을 했다. 코드를 따라가고, 로그를 찾고,
+LaTeX 문단을 고치고, 심사 의견을 실험·설명·한계로 나누었다. 읽을 파일과 판단 기준이
+분명할 때는 속도도 빨랐다.
 
+깨진 자리도 일정했다. 파일 이름을 현재 상태로 믿었다. 요약을 원문처럼 다뤘다. partial
+trajectory, build pass, plot 생성 같은 좁은 성공을 전체 성공처럼 말했다. 숫자가 좋아졌을
+때는 dataset split, frame, metric script, failure policy를 늦게 물었다. 코드에 어떤 factor가
+있다는 사실을 optimizer가 그 factor를 쓰고 있다는 증거처럼 다룬 적도 있었다. 심사위원이
+비교 조건을 물었는데 답변서 문장만 공손해진 경우도 있었다.
+
+이 기록을 먼저 봐야 외부 agent repo의 자리가 보인다.
 [`multica-ai/andrej-karpathy-skills`](https://github.com/multica-ai/andrej-karpathy-skills)는
-가정을 드러내고, 작게 고치고, 요청한 줄만 만지고, 성공 기준을 검증 가능하게 두라는 식의
-규칙을 앞세운다. 코딩 agent가 옆 코드를 건드리거나 잘못된 가정을 밀고 갈 때 도움이 되는
-규칙들이다. 도구가 바뀌어도 이런 습관은 남는다. 다만 SLAM metric이나 답변서의 비교
-조건은 이 규칙만으로 정리되지 않는다.
+코딩 agent에게 필요한 기본 습관을 잘라 놓았다. 가정을 드러내기, 작게 고치기, 요청한 범위
+밖의 파일을 건드리지 않기, 성공 기준을 확인하기. 이 규칙들은 AI가 엉뚱한 파일을 고치거나,
+실패한 명령을 성공한 작업처럼 말하는 일을 줄인다.
+
+그 규칙은 주로 코드 변경의 층위에 놓인다. 로보틱스 실험에서는 같은 줄의 코드보다 먼저 묶을
+조건이 있다. 어느 sequence로 돌렸는지, query와 database의 방향이 무엇인지, ground truth
+frame이 무엇인지, metric script가 지난번과 같은지. 이 항목들이 비어 있으면 코드 수정이 잘
+끝나도 숫자는 아직 paper claim이 되지 않는다.
 
 [`datawhalechina/hello-agents`](https://github.com/datawhalechina/hello-agents)는 agent를
-처음 배우는 사람이 개념에서 실습으로 넘어가게 만든다. framework, memory, tool use,
-evaluation 같은 말을 큰 지도 안에 놓는다. 그 지도는 쓸모가 있다. 연구실의 bag,
-calibration, dataset split, metric script, failed run은 따로 올려놓아야 한다.
+처음 공부할 때 필요한 개념을 넓게 모아 둔다. agent framework, memory, tool use, evaluation을
+한 자리에서 훑을 수 있다. LangGraph, CrewAI, AutoGen, OpenAI Agents SDK도 각각 오래 도는
+workflow, role 분리, tool handoff, tracing 같은 문제를 다룬다. 이런 자료를 읽으면 agent를
+어떻게 굴릴지 먼저 보인다.
 
-`awesome-ai-agents`나 `awesome-llm-agents` 같은 목록도 쓸 곳이 있다. 생태계를 훑고,
-어떤 framework가 오래 움직이는지 보는 데 좋다. LangGraph에서는 오래 도는 stateful
-workflow와 human-in-the-loop가 먼저 보이고, CrewAI에서는 role과 flow를 나누는 방식이
-눈에 들어온다. OpenAI Agents SDK는 agents, tools, handoffs, guardrails, sessions,
-tracing, MCP를 작은 primitive로 나누어 둔다. 여기까지는 도구의 풍경이다.
+로보틱스 연구 대화에서 자주 돌아온 질문은 더 좁았다. 이 숫자가 같은 조건에서 나온 숫자인가.
+이 코드는 실제 실행 경로에 들어가는가. 이 figure가 원고의 어느 claim을 받치는가. 이 요약은
+원문을 대신할 수 있는가. 이 질문들 앞에서는 framework 이름보다 experiment contract,
+implementation status, result provenance, claim calibration이 먼저 온다.
 
 [`alexjunholee/robotics-research-agent`](https://github.com/alexjunholee/robotics-research-agent)는
-그 풍경 옆에 놓인 물건치고는 훨씬 작다. 연구 하네스에서 잘라낸 작은 공개 조각에 가깝다.
-가져올 것은 user reaction prior다. 답을 내기 직전에 "이 답변을 보면 사용자가
-무엇을 다시 지적할까"를 묻는다. 지적이 보이면 다음 행동, 증거 경계, 구현 표면을 먼저
-고친다. 여기서는 그 부분만 템플릿으로 가져온다.
+그중 한 조각을 공개 repo로 떼어 놓았다. user reaction prior다. 답을 내기 전에 이전에 자주
+반려된 형태를 먼저 본다. 너무 얕은가. 파일을 읽지 않았는가. 증거보다 큰 말을 했는가.
+실행해야 할 때 계획만 말하고 있는가. 걸리는 항목이 있으면 문장을 덧붙이지 않고 다음 행동을
+바꾼다.
 
-로보틱스 연구실 책상에는 그 풍경 옆에 다른 물건이 더 놓인다. 데이터셋의 출처, 결과
-숫자의 주소, SLAM/VIO/VPR 평가 조건, 코드가 있다는 사실과 실제 방법으로 쓰였다는 사실의
-차이, 심사 압박, 공개와 비공개 경계. 이 물건들이 빠지면 agent는 일을 많이 한다. 사람이
-뒤에서 그 일이 어떤 주장을 만들 수 있는지 다시 치워야 한다.
+외부 repo에서 가져올 것은 두 갈래다. 하나는 agent가 파일을 고치고 명령을 실행할 때 쓰는
+일반 규칙이다. 다른 하나는 로보틱스 연구가 요구하는 증거 규칙이다. 일반 규칙은 좋은 repo가
+이미 많이 다룬다. 증거 규칙은 직접 쌓인 대화 기록에서 더 선명하게 나왔다.
 
-다른 도구에서 쓰던 규칙을 옮길 때도 같은 방식으로 본다. 예전 파일에는 저장소의 행동
-원칙이 들어 있고, skill 폴더에는 반복 절차가 들어 있다. slash command에는 사람이 자주
-부르던 작업 단위가 남아 있고, 편집기 규칙에는 그 편집기 안에서만 살던 관습이 섞인다.
-도구 설정에는 실제 호출 경계와 인증 정보 경계가 같이 들어 있을 수 있다.
-
-옮길 때는 이름보다 행동을 먼저 본다. "작게 고쳐라"는 작업 원칙으로 남는다. "성공 기준을
-검증 가능하게 두라"는 실행 뒤 산출물을 남기는 습관으로 남는다. 특정 명령 한 줄은 새
-도구에서 쓸 수 있는 script, template, 읽기 순서로 바뀐다. 다음 세션이 같은 행동을 반복할
-수 있으면 이식된 것이다.
-
-템플릿은 늦게 붙인다. 많이 복사하면 운영체제가 생기는 것처럼 보이지만, 빈 문서는 유지비가
-된다. 논문을 읽었는데 코드와 실험이 흩어져 있을 때 paper-code-experiment map을 만든다.
-숫자가 나왔는데 주소가 흐릴 때 result provenance를 붙인다. 같은 실수가 반복될 때 replay
-case를 남긴다. 답변 직전에 같은 지적이 예상되면 user-reaction-prior를 건다. 문서가
-앞서가고 연구가 뒤따르는 순서는 오래가지 않는다.
-
-유명한 저장소는 좋은 재료다. 연구실 책상 위에 올라오면 절반은 버려야 한다. 도구의 규칙은
-남기고, 도구의 허세는 버린다. 그 뒤에야 AI 사용법이 연구의 물건 앞에 붙는다.
+논문을 읽었는데 코드와 실험이 흩어져 있으면 paper-code-experiment map이 필요했다. 숫자가
+나왔는데 조건이 흐리면 result provenance가 필요했다. 같은 실수가 반복되면 replay case가
+필요했다. 답변 직전에 같은 지적이 예상되면 user-reaction-prior가 필요했다. 이름은 작지만,
+실제 연구 대화에서는 이 작은 항목들이 자주 일을 멈춰 세웠다.

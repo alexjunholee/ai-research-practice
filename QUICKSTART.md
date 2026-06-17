@@ -1,8 +1,8 @@
-# 부록 B — 작업장을 만들 때 필요한 파일
+# 부록 B — 빠른 시작 파일
 
-이 부록은 본문을 읽은 뒤 작업장에 옮길 파일을 정리한다. 이 문서가 가이드의
+이 부록은 본문을 읽은 뒤 새 연구 workspace에 옮길 파일을 정리한다. 이 문서가 가이드의
 출발점은 아니다. 먼저 AI가 잘하는 일과 못하는 일, 사람의 연구 판단이
-감당하는 위험, 하네스가 고정하는 경계를 이해해야 한다.
+감당하는 위험, 하네스가 고정하는 경계를 이해한 뒤에 시작한다.
 
 ## 도구 역할을 먼저 나눈다
 
@@ -21,7 +21,7 @@
 같은 AI 제품이 여러 역할을 할 수 있다. 그러나 한 turn 안에서 역할이 바뀌면
 evidence gate도 다시 선언한다.
 
-## 작업장을 나눈다
+## Workspace를 나눈다
 
 처음에는 단순하게 둔다.
 
@@ -41,9 +41,9 @@ workspace/
 먼저 정한다. 코드 이력, raw data, 실험 artifact, 비공개 메모를 한 덩어리로
 섞지 않는다.
 
-작업장을 처음 만들 때는 공개 번들에서 다음 파일을 먼저 복사한다.
+새 workspace를 처음 만들 때는 공개 번들에서 다음 파일을 먼저 복사한다.
 
-| 공개 번들 | 새 작업장 |
+| 공개 번들 | 새 workspace |
 |---|---|
 | [`templates/workspace-readme.md`](templates/workspace-readme.md) | `README.md` |
 | [`templates/AGENTS.template.md`](templates/AGENTS.template.md) | `AGENTS.md` |
@@ -52,7 +52,7 @@ workspace/
 | 필요한 research loop template | `notes/` |
 
 번들을 내려받아 풀어 둔 상태라면 다음처럼 시작할 수 있다. `GUIDE`는 이 가이드
-bundle의 루트, `WORKSPACE`는 새 연구 작업장 위치다.
+bundle의 루트, `WORKSPACE`는 새 연구 workspace 위치다.
 
 ```bash
 GUIDE="$PWD"
@@ -89,7 +89,7 @@ Copy-Item "$Guide\templates\experiment-contract.md" "$Workspace\notes\"
 Copy-Item "$Guide\templates\weekly-research-ledger.md" "$Workspace\notes\"
 ```
 
-복사 직후에는 작업장 루트에서 첫 실행 전 확인을 한다. POSIX shell에서는
+복사 직후에는 workspace 루트에서 첫 실행 전 확인을 한다. POSIX shell에서는
 다음 항목만 통과하면 첫 AI 세션을 열 수 있다.
 
 ```bash
@@ -134,7 +134,7 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 이 파일이 첫 AI
 세션의 실제 입력이다.
 
-## AGENTS.md를 만든다
+## AGENTS.md 작성
 
 [`templates/workspace-readme.md`](templates/workspace-readme.md)를 `README.md`로
 복사하고, 프로젝트 이름과 repo, dataset, artifact 위치만 채운다. 그다음
@@ -205,8 +205,8 @@ available.
 | 원고 문장을 고친다 | [`claim-evidence-map.md`](templates/claim-evidence-map.md) |
 
 한 번에 여러 루프를 열면 AI는 다시 넓어진다. 시작 지점에서는 작은 성공 하나가 더
-중요하다. 예를 들어 "논문 요약"보다 "이 논문의 central claim, active code
-path 후보, experiment protocol 빈칸을 분리하라"가 낫다.
+나은 출발점이 된다. 예를 들어 "논문 요약"보다 "이 논문의 central claim, active code
+path 후보, experiment protocol 빈칸을 분리하라"가 더 좁다.
 
 ## 결과를 ledger에 남긴다
 

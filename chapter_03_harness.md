@@ -1,42 +1,37 @@
-# Ch.3 — 후보를 손에 잡히는 일로 낮추기
+# Ch.3 — 하네스는 답을 행동으로 내린다
 
-실패 로그를 붙이면 대화창은 부지런해진다. ROS2 callback이 조용하면 QoS, namespace,
-remap, executor, simulated time, Docker network가 나온다. VPR 숫자가 갑자기 떨어지면
-split, feature cache, normalization, index order, positive radius가 나온다. 답이 없던
-화면에 길이 생긴다.
+실패 로그를 붙이면 원인 이름이 빨리 나온다. ROS2 callback이 조용하면 QoS, namespace,
+remap, executor, simulated time, Docker network가 나열된다. VPR 숫자가 떨어지면 split,
+feature cache, normalization, index order, positive radius가 나온다. 이 목록은 유용하다.
+혼자라면 늦게 떠올렸을 후보가 한 번에 올라온다.
 
-화면 위의 길은 모두 같은 굵기로 보인다. 실험실에서는 그렇지 않다. 하나는 상태만 읽는
-명령이고, 하나는 컨테이너를 다시 띄우는 일이다. 하나는 하루짜리 실험을 다시 시작하게
-만들고, 하나는 논문의 주장을 낮춘다. 후보 목록은 아직 손동작이 아니다. 그 목록을 어디까지
-내릴지가 남아 있다.
+목록과 행동 사이에는 거리가 있다. `ros2 topic info --verbose`를 보는 일은 상태 읽기다.
+container 권한을 고치는 일은 환경 변경이다. bag replay를 다시 돌리면 시간과 산출물이 같이
+움직인다. 원고에서 “robust”를 지우는 일은 reviewer에게 내놓을 claim 범위를 바꾼다. 같은
+“확인”이라는 말 안에 읽기, 수정, 실행, 주장 변경이 섞인다.
 
-여기서 자주 무너진다. 원인 이름이 그럴듯해서 먼저 건드리고, 눈에 띄는 warning을 전체
-실패의 원인으로 올리고, `R@1` 하나가 좋아졌다고 방법이 좋아졌다는 문장을 만든다. 대화창은
-후보를 만들었을 뿐인데, 사람의 손이 그 후보를 결론처럼 다룬다.
+하네스는 이 섞임을 줄이는 이름이다. 거창한 시스템보다 먼저 세 칸을 둔다. 지금 본 것.
+이제 바꿀 것. 바꾼 뒤 남길 것. 여기에 한 칸을 더 붙인다. 지금 증거로 말할 수 있는 claim과
+아직 말하지 않을 claim.
 
-종이 한 장을 펼치면 이 차이가 보이기 시작한다. 먼저 지금 본 것을 적는다. topic 목록인지,
-명령 출력인지, 표 한 칸인지, reviewer 문장인지. 그다음 이제 건드릴 것을 적는다. 코드를
-바꿀지, 환경을 바꿀지, 평가 스크립트를 다시 돌릴지, 원고 문장을 줄일지. 마지막으로
-하고 나서 남길 것을 적는다. command, config, output path, 실패한 sequence, 고친 문장.
+대화 기록에서 반복된 실패는 이 칸들이 빠질 때 나왔다. 눈에 띄는 warning을 전체 실패의
+원인으로 올렸다. `R@1` 하나가 좋아지자 방법이 좋아졌다는 문장이 먼저 나왔다. build가
+통과하자 runtime 상태까지 닫힌 것처럼 말했다. 한 process가 끝났는데 같은 log를 다른
+process도 쓰고 있었다. 이 경우 AI의 설명이 틀렸다기보다, 행동 단위가 정해지지 않았다.
 
-`ros2 topic info --verbose`는 상태를 읽는 일이다. 아직 환경을 바꾸지 않는다. Docker
-권한을 고치는 순간부터는 이야기가 달라진다. bag replay를 다시 돌리면 시간과 산출물이
-같이 움직인다. 같은 "확인"이라는 말 안에서도 손이 닿는 범위가 다르다. 하네스는 그
-차이를 종이에 보이게 만든다.
+반대로 잘 풀린 세션은 작은 행동으로 내려갔다. topic이 보이는지 읽는다. subscriber가
+받는지 본다. clock과 namespace를 확인한다. 그다음에 launch file을 고친다. VPR에서는 먼저
+query/database 방향과 cache version을 확인한다. 그다음에 feature extractor나 model
+architecture를 건드린다. 원고에서는 공격받은 claim을 적고, 그 claim을 받치는 표와 그림을
+확인한 뒤 문장을 바꾼다.
 
-논문 숫자에서도 같은 받침이 오래 버틴다. 지금 본 것이 `R@1` 하나인지, 같은 split의
-baseline인지, 실패 sequence까지 포함한 표인지 먼저 적는다. 이제 건드릴 것이 평가
-스크립트인지 feature cache인지 원고 문장인지 나눈다. 하고 나서 남길 것은 명령, config,
-산출물 경로, 제외한 sequence다. 이 네 가지가 없으면 다음 대화는 다시 좋은 숫자만 보고
-시작한다.
+하네스는 AI의 발산을 지우지 않는다. 발산은 남겨 둔다. 다만 후보가 곧 원인으로 올라가고,
+local success가 system success로 올라가고, generated summary가 source truth로 올라가는
+순간을 막는다. 좋은 하네스는 답을 줄이기보다 답이 연구 행동으로 내려갈 때 통과할 문턱을
+만든다.
 
-몇 번 반복해서 틀린 자리는 더 오래 남긴다. 같은 Docker 에러를 보고 또 driver를
-의심했다면, 다음에는 권한과 volume부터 보라는 문장을 남긴다. 같은 `R@1`을 보고 또
-exact-frame retrieval과 radius-based retrieval을 섞었다면, 숫자 옆에 평가 기준을 박아
-둔다. 같은 reviewer 의견을 보고 또 문장만 고쳤다면, 답변서 앞에 공격받은 주장과 빠진
-근거를 먼저 놓는다.
-
-하네스라는 이름은 이 종이 한 장에 붙여도 된다. 모델이 갑자기 똑똑해지는 일은 없다.
-대신 사람의 손이 조금 느려진다. 답이 맞을 수도 있다. 그래도 곧장 실행 버튼을 누르지
-않는다. 지금 본 것, 이제 건드릴 것, 하고 나서 남길 것. 세 칸을 채운 뒤에야 후보는
-행동이 된다.
+한 번 틀린 자리는 기록으로 남긴다. 같은 Docker 에러에서 driver를 반복해서 의심했다면
+다음에는 권한과 volume을 먼저 보는 rule이 남는다. exact-frame retrieval과 radius-based
+retrieval을 섞었다면 metric 이름 옆에 positive definition을 붙인다. reviewer comment를
+문체 문제로만 처리했다면 답변서 앞에 claim/evidence 칸을 둔다. 반복된 실수는 조언보다
+gate로 남을 때 오래 간다.

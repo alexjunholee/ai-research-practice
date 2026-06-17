@@ -1,42 +1,39 @@
-# Ch.5 — 0.42에는 주소가 없다
+# Ch.5 — 숫자 하나에는 조건이 붙는다
 
-결과 폴더에 `0.42`가 남아 있다. 처음 보면 좋은 숫자다. 대화창도 그렇게 읽기 쉽다.
-"개선된 것 같습니다." 그런데 `0.42`는 아직 말이 짧다. ATE인지 RPE인지, meter인지
-degree인지, monocular scale을 맞춘 뒤의 값인지, 실패 sequence를 뺐는지 알 수 없다.
-숫자는 칸 안에 있지만, 결과는 아직 도착하지 않았다.
+결과 폴더에 `0.42`가 남아 있다. ATE일 수도 있고 RPE일 수도 있다. meter일 수도 있고
+degree일 수도 있다. monocular scale을 맞춘 뒤의 값인지, 실패 sequence를 뺀 평균인지,
+alignment policy가 지난번과 같은지도 아직 모른다. 숫자만 보고는 논문 문장을 만들 수 없다.
 
-VPR의 `R@1`도 같은 방식으로 사람을 속인다. exact-frame retrieval에서 나온 값인지,
-25m radius 안의 retrieval인지, query가 camera이고 database가 LiDAR인지 그 반대인지에
-따라 같은 이름의 숫자가 다른 말을 한다. 숫자와 문장은 서로 가깝게 붙고 싶어 한다.
-그 사이에 실험 조건을 끼워 넣는 일은 사람 몫이다.
+VPR의 `R@1`도 마찬가지다. exact-frame retrieval에서 나온 값인지, 25m radius 안의 retrieval인지,
+query가 camera이고 database가 LiDAR인지 그 반대인지에 따라 의미가 바뀐다. backbone feature,
+projection head output, teacher feature, student feature, fine-tuned feature가 같은 이름의
+표 안에 들어가면 비교가 쉬워 보인다. 실제로는 다른 실험이다.
 
-숫자 옆에는 주소가 붙어야 한다. 데이터셋, split이나 sequence, sensor와 modality, query와
-database의 방향, ground truth, metric, threshold나 alignment, baseline, command, config,
-산출물 경로, 실패 조건. 길어 보이는 이 항목들이 숫자의 주소다. 주소가 없으면 숫자는
-기억 속의 인상으로 남는다.
+대화 기록에서 사용자는 좋은 숫자보다 먼저 protocol을 요구했다. sequence 방향, yaw formula,
+ground-truth frame, accepted-only metric, all-query metric, threshold definition, full-bag
+coverage가 계속 문제로 돌아왔다. 숫자가 괜찮아 보여도 protocol이 열려 있으면 claim은
+기다렸다. 이 점이 AI가 가장 자주 서두른 자리이기도 했다.
 
-SLAM과 VIO에서는 trajectory를 무엇과 맞췄는지가 앞에 온다. KITTI, EuRoC, TUM,
-Newer College는 sequence convention부터 다르다. monocular, stereo, RGB-D, LiDAR, IMU
-조합마다 scale과 frame 문제가 달라진다. timestamp sync, dropped frame, bag clock도
-숫자의 뜻을 바꾼다. plot에서 drift가 줄어 보인다는 말만으로는 방법의 성능을 아직
-말하지 못한다.
+숫자 옆에 붙는 항목은 길다. dataset, split, sequence, sensor, modality, query/database
+방향, ground truth, frame, alignment, metric, threshold, baseline, command, config, output
+path, timeout, failure policy. 형식 때문에 길어진 목록이 아니다. 하나만 바뀌어도 같은 숫자가
+다른 claim을 만든다.
 
-VPR과 cross-modal retrieval에서는 방향과 표현이 자주 미끄러진다. query modality,
-database modality, positive definition, radius rule, feature extractor, projection head,
-normalization, R@K나 mAP가 함께 움직인다. backbone feature인지 projection head 출력인지,
-teacher feature인지 student feature인지, fine-tuning 뒤 feature인지 pre-trained
-feature인지에 따라 숫자는 다른 얼굴을 한다.
+SLAM과 VIO에서는 coverage가 먼저 걸린다. trajectory가 어디서 끊겼는지, pose count가 몇 개인지,
+timestamp span이 전체 bag을 덮는지, tracking lost를 어떻게 처리했는지 확인한다. censored
+trajectory에서 낮은 error가 나와도 full-run success와 함께 놓을 수 없다. Sim(3) alignment로
+metric이 계산됐다고 해서 물리적으로 말이 되는 trajectory가 되지는 않는다.
 
-좋아졌다는 말은 늦게 온다. 먼저 쓸 수 있는 문장은 작다. "EuRoC MH_01-05에서 같은
-alignment와 같은 metric script를 쓴 baseline 대비 ATE median이 줄었다." 이 문장은
-덜 멋있지만 버틴다. 멋진 문장은 표가 움직이기 전에 달려 나가고, 작게 쓴 문장은 다시
-열어도 덜 흔들린다.
+VPR과 cross-modal retrieval에서는 방향과 positive definition이 앞에 온다. camera-to-LiDAR인지,
+LiDAR-to-camera인지, radius rule이 무엇인지, query count가 몇 개인지, invalid query를 어떻게
+처리했는지 확인한다. model이 좋아졌다는 말은 이 조건들이 고정된 뒤에야 나온다.
 
-실패도 결과에 들어간다. timeout, OOM, sensor dropout, tracking lost, missing sequence,
-metric script failure, invalid ground truth를 빼고 성공한 숫자만 보면 안정성은 쉽게
-부풀어 오른다. 로보틱스 연구에서 실패 분포는 부록 잡음으로 빠지지 않는다. 어느 조건에서
-약해지는지, 어떤 sequence를 제외했는지, 어떤 sensor 조합에서 무너졌는지가 주장 안으로
-들어온다.
+그래서 먼저 쓸 수 있는 문장은 대체로 좁다. “EuRoC MH_01-05에서 같은 alignment와 같은
+metric script를 쓴 baseline 대비 ATE median이 줄었다.” 이 문장은 화려하지 않다. 그래도
+다음날 다시 열었을 때 덜 흔들린다. “성능이 향상되었다”는 문장은 조건이 붙기 전까지 너무
+넓다.
 
-숫자는 혼자 논문으로 올라가지 못한다. 주소가 붙고, 같은 조건의 비교가 붙고, 실패한 줄이
-같이 붙은 뒤에야 문장이 된다.
+실패한 줄도 결과에 들어간다. timeout, OOM, sensor dropout, tracking lost, missing sequence,
+metric script failure, invalid ground truth를 빼고 성공 숫자만 남기면 안정성이 부풀어 오른다.
+로보틱스 연구에서 실패 분포는 부록 잡음으로 밀리지 않는다. 어느 조건에서 약해지는지가
+방법의 일부다.

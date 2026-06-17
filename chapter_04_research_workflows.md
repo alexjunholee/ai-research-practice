@@ -1,35 +1,33 @@
-# Ch.4 — 초록 다음에는 YAML이 있다
+# Ch.4 — 논문은 코드 경로까지 읽힌다
 
-ORB-SLAM3 논문을 읽고 나면 머릿속에는 잘 정리된 줄거리가 남는다. feature가 있고, map이
-있고, loop closing이 있고, inertial initialization이 있다. 초록은 모든 것이 한 줄로
-이어진 것처럼 보이게 만든다. 다음날 저장소를 열면 그 줄은 느슨해진다. 어떤 YAML이
-실제 예제에서 불리는지, 논문에 있던 ablation이 공개 코드에도 남아 있는지, 설정에만
-남은 옵션이 실행 경로까지 내려가는지 다시 보게 된다.
+ORB-SLAM3 논문을 읽으면 줄거리는 빠르게 잡힌다. feature, map, loop closing, inertial
+initialization이 한 흐름으로 보인다. AI도 이 요약을 잘한다. 기존 방법의 어느 압박을 풀었는지,
+어떤 모듈이 새로 들어갔는지, 저장소에서 어느 파일부터 열 만한지 빠르게 정리한다.
 
-FAST-LIO2도 비슷하다. ikd-tree, deskew, IMU propagation, residual update라는 말은
-요약하기 쉽다. EuRoC나 KITTI 예제를 다시 돌리려는 순간에는 다른 물건들이 나온다. 센서
-시간을 어떻게 맞췄는지, trajectory를 어느 frame 기준으로 저장했는지, 실패한 sequence를
-논문 표에서 어떻게 처리했는지. 이름을 안다고 실험이 돌아가지는 않는다.
+논문 요약에서 실행 경로로 내려가면 일이 달라진다. 어떤 YAML이 실제 예제에서 불리는지,
+논문에 나온 ablation이 공개 코드에도 남아 있는지, 설정 파일의 옵션이 optimizer까지
+도달하는지 확인할 차례가 온다. 공개 저장소에는 논문 당시 코드, camera-ready 뒤 수정,
+issue 답변용 임시 패치, 이제 불리지 않는 예제 스크립트가 함께 남는다.
 
-대화창은 첫 입구에서 꽤 유용하다. 논문이 어떤 압박을 풀려고 했는지, 기존 방법의 어느
-부분을 바꿨는지, 저장소에서 어느 파일부터 열 만한지 빨리 찾아 준다. 그다음부터는 속도가
-줄어야 한다. 찾은 파일이 실제로 호출되는 파일인지, 공개 코드가 논문 결과를 만든 경로와
-같은지, 평가 스크립트가 논문 표와 같은 가정을 쓰는지는 파일을 열어야 보인다.
+FAST-LIO2도 같은 식으로 읽힌다. ikd-tree, deskew, IMU propagation, residual update라는
+이름만 알면 설명은 가능하다. 재현은 다른 문제다. EuRoC나 KITTI 예제를 다시 돌릴 때는
+sensor time, trajectory frame, sequence exclusion, evaluation script가 앞에 나온다. method
+이름을 아는 것과 같은 조건에서 숫자를 얻는 일은 이어져 있지만 붙어 있지 않다.
 
-초록은 약속처럼 읽힌다. 그 약속이 지켜졌는지는 방법과 실험 조건이 말한다. 학회명, 인용
-수, GitHub 별 수는 읽을 순서를 정하는 데 도움을 준다. 그래도 그 논문이 내 실험에서
-무엇을 말하게 해 주는지는 따로 봐야 한다. 최고 성능이라는 말도 같은 dataset, 같은 split,
-같은 metric이 보이기 전에는 원고 문장이 되지 못한다.
+대화 기록에서 자주 드러난 구분이 있다. 코드에 존재하는 것과 실제로 쓰이는 것은 다르다.
+factor가 source에 있을 수 있다. config key도 있을 수 있다. documentation에는 planned
+feature로 적혀 있을 수 있다. 그래도 optimizer가 그 factor를 소비하지 않으면 paper method의
+근거가 되지 않는다. 그래서 implementation audit에는 active, disabled, configured-unused,
+planned-only, tested-failed, dead 같은 이름이 필요했다.
 
-공개 저장소에는 여러 시간이 섞여 있다. 논문 작성 당시의 코드, camera-ready 뒤에 고친
-코드, issue 답변을 위해 임시로 넣은 코드, 더 이상 불리지 않는 예제 스크립트가 한 폴더에
-남는다. 죽은 코드가 살아 있는 구현처럼 보이는 일은 흔하다. 대화창이 찾아 준 함수 이름은
-출발점이지 결론이 아니다.
+AI는 이 작업의 앞부분에서 강하다. repo를 훑고, function 이름을 찾고, issue thread를 모으고,
+paper와 code의 후보 연결을 만든다. 그다음 질문은 더 엄격해진다. 이 함수가 실제로 호출되는가.
+이 config가 runtime에 읽히는가. 이 script가 논문 표의 숫자를 만든 script인가. issue에서
+바뀐 convention이 현재 branch에도 들어왔는가.
 
-이슈 글타래는 때로 논문보다 솔직하다. ORB-SLAM3, LIO-SAM, FAST-LIO2, COLMAP 같은
-저장소의 issue에는 본문에 들어가지 못한 말이 남는다. 빌드 실패, 데이터셋 관례, 의존성
-버전, 센서별 버그가 그 안에 있다. 전부 읽을 필요는 없다. 실행 방법을 바꾸는 issue,
-평가 조건을 바꾸는 issue, 원고의 한계를 바꾸는 issue가 남으면 된다.
+논문 한 편을 내 연구에 붙일 때는 code path, experiment path, claim path가 함께 간다.
+paper-code-experiment map은 이 세 줄을 한 장에 놓는다. 논문이 무엇을 주장했고, 공개 코드가
+무엇을 실제로 돌리며, 내가 어느 조건에서 비교할 수 있는지.
 
-논문 한 편을 제대로 읽고 나면 같은 초록을 다시 요약하지 않는다. 다음 대화는 코드 경로와
-실험 조건에서 시작한다. 저장소 안의 YAML과 명령과 표가 다음 질문을 정한다.
+다음 질문은 초록에서 나오지 않는다. 대개 YAML, 실행 명령, issue, 실패한 sequence, table
+caption에서 나온다.
