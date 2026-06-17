@@ -1,14 +1,77 @@
-# Ch.1 — 하네스가 다루는 연구 상태
+# Ch.1 — AI 출력과 연구 상태
 
-## 목적
+## 개념
 
-하네스가 무엇을 통제하는지 먼저 정한다. 하네스는 AI가 만든 후보가 연구 상태를 어떻게 바꾸는지
-묻는다. prompt, tool 목록, 문장 스타일은 그 통제를 돕는 요소다. 주 대상은 연구 상태가 바뀌는
-지점과 그 지점을 닫는 증거다.
+AI가 내는 것은 연구 결과가 아니라 후보 산출물이다. 원인 후보, 읽을 파일 후보, 실험 조건 후보,
+원고 문장 후보가 나온다. 이 후보들은 빠르게 늘어난다. 그 자체로는 repo, runtime, dataset,
+metric, paper claim을 바꾸지 않는다.
 
-## 기본 전이
+연구 상태는 다른 곳에 있다. 어떤 파일을 읽었는지, 어떤 command를 실행했는지, 어떤 artifact가
+남았는지, 그 artifact로 어떤 claim을 말할 수 있는지가 연구 상태다. 로보틱스/CV 연구에서 AI를
+쓸 때 첫 구분은 여기서 시작한다.
 
-하네스는 모든 입력을 아래 흐름 안에 둔다.
+```text
+AI output = candidate
+research action = state transition
+evidence = artifact that closes the transition
+claim = statement allowed by that evidence
+```
+
+## AI가 잘하는 일
+
+AI는 후보 공간을 넓히는 일에 강하다. 이미 보이는 텍스트, 코드, log, 논문 문장, reviewer comment를
+빠르게 읽고 다음에 볼 지점을 제안한다.
+
+| 잘하는 일 | 연구에서의 쓰임 |
+|---|---|
+| 후보 생성 | 에러 원인, 수정 방향, 실험 조건을 여러 갈래로 뽑는다 |
+| 탐색 보조 | 파일, 함수, config, figure, table 위치를 좁힌다 |
+| 구조화 | 긴 log나 comment를 stage, claim, evidence, action으로 나눈다 |
+| 초안 작성 | rebuttal, README, template, command 설명의 첫 형태를 만든다 |
+| 비교 정리 | 여러 repo, paper, 실험 조건의 차이를 표로 놓는다 |
+
+이 일들은 비용이 낮다. 틀린 후보가 섞여도 바로 실행하지 않으면 연구 상태는 아직 바뀌지 않는다.
+
+## AI가 못하는 일
+
+AI는 후보를 만든 뒤 그 후보가 실제 연구 상태와 맞는지 자동으로 보증하지 못한다. 현재 process가
+살아 있는지, config가 runtime에서 읽혔는지, metric script가 같은 protocol을 썼는지, reviewer가
+공격한 claim이 정말 닫혔는지는 artifact를 봐야 한다.
+
+| 못하는 일 | 왜 문제가 되는가 |
+|---|---|
+| 보지 않은 현재 상태 확정 | 파일명, memory, 요약만으로 최신 repo나 runtime을 단정한다 |
+| 코드 존재와 실행 사용 구분 | source에 있는 module을 active method로 착각한다 |
+| 숫자와 claim의 거리 조절 | metric 하나를 방법 개선이나 generalization claim으로 올린다 |
+| 실패 단계 분리 | retrieval, geometry, optimization, evaluation 실패를 한 원인으로 합친다 |
+| 위험 부담 | 시간, compute, reviewer trust, 원고 claim scope를 사람이 감당한다 |
+
+그래서 AI 출력은 바로 행동이 되면 안 된다. 후보가 실행으로 넘어가는 순간부터 비용이 생기고,
+연구 상태가 바뀐다.
+
+## 구조적 이유
+
+차이는 지능의 크기보다 작업 구조에서 나온다. AI는 context 안에서 가능한 다음 후보를 만든다.
+로보틱스/CV 연구는 context 밖의 상태를 바꾼다. Docker container, ROS2 topic, CUDA process,
+dataset split, calibration file, metric script, TeX table은 실제 파일과 실행 결과로 닫힌다.
+
+AI가 강한 공간은 텍스트와 구조다. 연구자가 닫아야 하는 공간은 실행과 증거다. 이 둘을 섞으면
+다음 오류가 반복된다.
+
+| 섞인 것 | 반복되는 오류 |
+|---|---|
+| 후보와 원인 | 그럴듯한 설명을 root cause로 쓴다 |
+| 코드와 방법 | 구현되어 있는 코드를 논문 방법으로 쓴다 |
+| 숫자와 주장 | protocol이 다른 숫자를 성능 claim으로 쓴다 |
+| 문장과 답변 | reviewer가 요구한 실험 없이 rebuttal 문장만 고친다 |
+| 요약과 증거 | handoff나 memory를 source of truth로 쓴다 |
+
+하네스는 이 섞임을 막기 위한 절차다.
+
+## 하네스가 다루는 것
+
+하네스는 AI가 만든 후보가 어떤 연구 상태를 바꾸는지 묻는다. prompt, tool 목록, 문장 스타일은
+보조 요소다. 주 대상은 연구 상태가 바뀌는 지점과 그 지점을 닫는 증거다.
 
 ```text
 surface request
@@ -38,9 +101,9 @@ world
 -> reviewer risk
 ```
 
-예를 들어 SLAM metric을 다시 계산하는 일은 `experiment / metric` 전이에 해당한다. 그러나 frame convention이
-바뀌면 `state representation`까지 영향을 준다. 논문 문장을 고치는 일은 `paper claim` 전이지만,
-method를 실제보다 강하게 쓰면 `method` 전이를 몰래 바꾼 셈이 된다.
+예를 들어 SLAM metric을 다시 계산하는 일은 `experiment / metric` 전이에 해당한다. 그러나 frame
+convention이 바뀌면 `state representation`까지 영향을 준다. 논문 문장을 고치는 일은 `paper claim`
+전이지만, method를 실제보다 강하게 쓰면 `method` 전이를 몰래 바꾼 셈이 된다.
 
 ## Object under truth control
 
@@ -69,12 +132,3 @@ method를 실제보다 강하게 쓰면 `method` 전이를 몰래 바꾼 셈이 
 틀리면 result table과 paper claim이 무효가 된다. launch file을 바꾸는 행동이 틀리면 runtime
 state와 이후 로그 해석이 무효가 된다. reviewer 답변 문장을 바꾸는 행동이 틀리면 reviewer risk가
 커진다.
-
-## 하네스가 필요한 이유
-
-AI는 후보를 빠르게 만든다. 로보틱스 연구에서는 후보 하나를 실행하는 순간 코드, 데이터, 실행 로그,
-metric, 원고 claim이 같이 움직인다. 하네스는 후보를 실행으로 옮기기 전에 전이 대상, 증거 등급,
-허용 claim, 남길 기록을 정한다.
-
-나머지 장은 같은 구조를 적용한다. 상태를 복원하고, evidence gate를 닫고, 작은 action을 실행하고,
-artifact로 claim을 제한한다.
