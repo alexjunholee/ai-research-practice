@@ -1,6 +1,6 @@
 # [PROJECT_NAME] Research Workspace
 
-이 파일은 새 로보틱스/CV 연구 작업장의 첫 화면이다. 프로젝트 이름, 주요
+이 파일은 새 로보틱스/CV 연구 프로젝트의 첫 화면이다. 프로젝트 이름, 주요
 repo, dataset 위치, 첫 AI 세션 경계만 채운 뒤 시작한다.
 
 ## Start Here
