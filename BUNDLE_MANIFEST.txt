@@ -5,6 +5,7 @@ QUICKSTART.md
 README.md
 SOURCES.md
 TERMS.md
+chapter_00_intro.md
 chapter_01_start_here.md
 chapter_02_environment.md
 chapter_03_harness.md
