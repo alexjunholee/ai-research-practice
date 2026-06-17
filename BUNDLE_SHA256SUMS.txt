@@ -2,7 +2,7 @@ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855           0  .n
 a103516d819f2076d3fcb0e1e2a17369c54dd6d254f955af43d0e7b9f938ec80        2966  EXAMPLE_WORKSPACE.md
 458911ef429ffc778a1c7fbdf27f7491b252f077db797d279cf36790bf6a5aac        3486  PATH.md
 47aabad9ef904cd0e999a200bd0b5981045569e3090cb1578545c5bdef6469e3        9544  QUICKSTART.md
-462ee97989b8bbf5378c3ca59fc62f67046c3b58b5b6643ab3fdcf667fd83475        1455  README.md
+4bb0923d367b746dd2413e5b5fcd212aa43aa45e85782ae36c45650e9179dcb2        1856  README.md
 6dfd7f4efd07a16813190c6d706ea289547ede0c9bf2ff2df3d21cfdfabcb63d        3548  SOURCES.md
 a6f7aadd2fed875e22947330a8235744f3144335e5909de975c9b803833c271a        6329  TERMS.md
 50e3beca9598cd54975f03d932d8fda874435c2f8c03988d27ac6583c51463c1        2468  chapter_01_start_here.md
@@ -24,7 +24,7 @@ ff8be68cd3d77103f10aeb30378531900a5bec2fb538a50aebb18a053b8829d3        1636  ex
 c45d0c57e9e9d0b04f59bbfab3ab57eeab4891316a7556605985d96eaf5f804b        1843  examples/first-robotics-workspace/notes/stage-local-debugging.md
 ff01e29abc15394a2f0371481460863edb0f39e4ccfeafe191a8dc2f1e026883         986  examples/first-robotics-workspace/notes/weekly-research-ledger.md
 b04dbc281bd894f761cdafd2a127c4a2489793bf371f5fe9e020048a12d12bfd        3759  examples/first-robotics-workspace/project-memory.json
-646fa6503f1b2c71e81939183bc363f45157bf5097de03f6b21e284b8dce2cd7       33155  guide.html
+e54a3b8532ea4fd1b4b71b4ea6075262b5b1256ef1dd715356411ef675d68d91       33863  guide.html
 0967ed487d25ec97d9dd436c2f105afe7dd195a605d2f1dc3d400b88ce98357d         310  index.html
 66e45c50030ac1abc3fda0acc9905cbad2fecd649c3a000c712e959726e1f6c4        2527  templates/AGENTS.template.md
 05e32b658413fecc14e17cd2968bcfe7df00412841f5436f2fafa6ebcaf66780         511  templates/claim-evidence-map.md
