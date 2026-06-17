@@ -5,6 +5,15 @@
 실험 숫자가 어떤 조건에서 나온 값인지 기록한다. 조건이 닫히지 않은 숫자는 원고 claim으로 쓰지
 않는다.
 
+## 근거
+
+SLAM benchmark와 VPR tutorial 문헌은 같은 말을 다른 방식으로 한다. 숫자는 dataset, split, frame,
+alignment, query/database direction, positive rule, baseline과 함께 정의된다. ATE, RPE, Recall@K,
+precision-recall은 이름만 같아도 protocol이 다르면 다른 물체다.
+
+그래서 experiment contract는 행정 서류가 아니다. 숫자가 어떤 세계에서 나온 값인지 붙이는 장치다.
+이 장치가 없으면 낮은 RMSE나 높은 Recall@1도 원고 claim으로 올라갈 수 없다.
+
 ## 최소 protocol
 
 ```text

@@ -68,6 +68,20 @@ AI가 강한 공간은 텍스트와 구조다. 연구자가 닫아야 하는 공
 
 하네스는 이 섞임을 막기 위한 절차다.
 
+## 이론적 근거
+
+이 구분은 작업 이론과 human factors에 기대어 있다. Suchman의 situated action은 plan과 실제 행동의
+거리를 다룬다. 연구에서도 prompt나 plan은 아직 행동이 아니다. `ros2 topic info`, CSV, TeX diff,
+rebuttal table 같은 물체가 붙어야 행동이 된다.
+
+Hutchins의 distributed cognition은 판단이 사람 머리 안에만 있지 않다고 본다. 연구실의 판단도
+repo, launch file, dataset, terminal output, paper table, 기억 노트에 흩어져 있다. AI가 대화창 안에서
+그럴듯한 연결을 만들 수 있어도, 흩어진 물체를 다시 묶어야 연구 상태가 닫힌다.
+
+human factors 쪽의 automation 연구는 자동화가 일을 없애기보다 monitoring과 rare intervention을
+남긴다고 본다. AI도 같다. 후보 작성은 쉬워지지만, 어느 후보를 실행할지, 어떤 숫자를 claim으로
+올릴지, reviewer에게 어디까지 말할지는 연구자가 닫는다.
+
 ## 하네스가 다루는 것
 
 하네스는 AI가 만든 후보가 어떤 연구 상태를 바꾸는지 묻는다. prompt, tool 목록, 문장 스타일은

@@ -4,6 +4,15 @@
 
 공개 agent repo에서 가져올 항목과 로보틱스 연구에 맞게 추가해야 할 항목을 분리한다.
 
+## 근거
+
+일반 agent repo는 tool use, role 분리, 작은 수정, 실패 보고에 강하다. 그러나 로보틱스/CV 연구는
+dataset, calibration, frame, metric, reviewer risk를 같이 다룬다. 외부 repo의 규칙을 그대로 가져오면
+coding discipline은 얻어도 experiment contract는 비어 있을 수 있다.
+
+이식은 도구 이름을 옮기는 일이 아니다. 어떤 실패를 줄일지 정하고, 그 실패를 막는 gate만 남기는
+일이다.
+
 ## 참고할 repo 유형
 
 | 유형 | 예 | 가져올 것 |

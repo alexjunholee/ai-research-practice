@@ -4,6 +4,15 @@
 
 원인 이름을 맞히기 전에 pipeline의 어느 단계에서 신호가 끊겼는지 확인한다.
 
+## 근거
+
+복잡한 로보틱스 pipeline은 한 번에 고장나지 않는다. data loading, representation, matching,
+geometry, optimization, evaluation이 서로 다른 실패를 낸다. human factors에서 말하는 상황 인식도
+먼저 현재 신호를 보고, 그 신호가 어느 단계의 의미인지 나눈 뒤, 다음 행동을 고른다.
+
+AI는 plausible root cause를 빨리 만든다. 그 속도가 도움이 될 때도 있지만, stage가 닫히기 전의
+root cause는 대부분 후보일 뿐이다.
+
 ## 기본 순서
 
 ```text

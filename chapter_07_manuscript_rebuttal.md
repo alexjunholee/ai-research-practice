@@ -5,6 +5,14 @@
 AI가 만든 매끄러운 문장을 바로 쓰지 않는다. reviewer가 공격한 claim, 그 claim을 받치는 evidence,
 수정해야 할 원고 위치를 먼저 분리한다.
 
+## 근거
+
+Toulmin의 argument model은 claim, grounds, warrant, backing, rebuttal을 나눈다. 논문 답변도 같은
+구조를 갖는다. reviewer가 묻는 것은 보통 문장 취향이 아니라 claim을 떠받치는 grounds와 warrant다.
+
+그래서 rebuttal 초안은 공손한 문장보다 claim/evidence map에서 시작한다. evidence가 없으면 새 실험,
+재계산, claim 축소 중 하나가 먼저다.
+
 ## 기본 표
 
 | 항목 | 내용 |

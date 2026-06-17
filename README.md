@@ -29,9 +29,10 @@ evidence gate, 가장 작은 허용 action, 실행 뒤 artifact, allowed claim, 
 - [Ch.7: 원고와 rebuttal의 claim/evidence 점검](chapter_07_manuscript_rebuttal.md)
 - [Ch.8: 외부 agent repo 이식 기준](chapter_08_external_templates.md)
 
-부록과 템플릿은 본문을 읽은 뒤 필요한 것만 가져가면 된다.
+부록은 파일 목록이 아니라 상황별 도구 상자다. 지금 막힌 일에 맞춰 하나만 연다.
 
-- [빠른 시작 파일](QUICKSTART.md)
-- [용어 경계](TERMS.md)
-- [예시 workspace](EXAMPLE_WORKSPACE.md)
-- [운영 흐름](PATH.md)
+- 논문을 코드와 실험으로 읽을 때: [paper-code-experiment-map](templates/paper-code-experiment-map.md)
+- 실험 숫자를 원고에 올릴 때: [experiment-contract](templates/experiment-contract.md)
+- runtime 문제를 좁힐 때: [stage-local-debugging](templates/stage-local-debugging.md)
+- reviewer 답변을 쓸 때: [claim-evidence-map](templates/claim-evidence-map.md)
+- workspace를 처음 만들 때만: [빠른 시작 파일](QUICKSTART.md)

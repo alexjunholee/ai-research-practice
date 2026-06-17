@@ -5,6 +5,16 @@
 논문 요약을 실제 실행 경로와 연결한다. 논문에 적힌 method, 공개 코드, 내가 돌릴 실험을 분리해서
 확인한다.
 
+## 근거
+
+논문 method는 주장이고, 공개 코드는 구현물이며, runtime은 별도의 상태다. computational
+reproducibility 논의가 반복해서 가리키는 지점도 여기에 있다. 논문에 적힌 component가 repo에 있어도
+그 component가 config를 통해 실행되고 결과 artifact에 영향을 줬는지는 따로 확인해야 한다.
+
+그래서 이 장은 paper claim, code path, runtime path, experiment command를 한 줄로 합치지 않는다.
+논문을 잘 읽는다는 말은 abstract를 요약하는 것이 아니라, claim이 어떤 코드와 실험 조건에 기대는지
+찾는다는 뜻이다.
+
 ## 필요한 산출물
 
 ```text

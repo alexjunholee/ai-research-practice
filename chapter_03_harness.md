@@ -5,6 +5,15 @@
 한 번의 AI 작업을 research-state transition으로 처리하는 절차를 정한다. 목적은 실행, claim,
 evidence, memory를 같은 층위에 놓지 않는 데 있다.
 
+## 근거
+
+ReAct와 Toolformer 계열 연구는 language model이 reasoning과 tool action을 섞을 때 더 강해질 수
+있음을 보였다. 그러나 tool을 호출했다는 사실과 연구 claim이 닫혔다는 사실은 다르다. `git diff`,
+`ros2` 출력, metric CSV, PDF build 결과가 어떤 claim을 허용하는지 따로 정해야 한다.
+
+Bainbridge가 지적한 automation의 역설도 여기서 반복된다. 자동화가 쉬운 일을 대신하면 사람은
+더 높은 수준의 감시와 개입을 맡는다. turn packet은 그 감시 부담을 줄이기 위한 최소 양식이다.
+
 ## Turn packet
 
 비중 있는 작업은 아래 항목을 가진다.
