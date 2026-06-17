@@ -1,71 +1,88 @@
-# Ch.3 — 하네스 구조
+# Ch.3 — 하네스 턴 절차
 
 ## 목적
 
-하네스는 AI 답변을 연구 행동으로 옮길 때 쓰는 운영 구조다. 목적은 자동화가 아니라 경계
-관리다. 어떤 증거를 봤고, 무엇을 바꾸며, 실행 뒤 어디까지 말할 수 있는지 기록한다.
+한 번의 AI 작업을 research-state transition으로 처리하는 절차를 정한다. 목적은 실행, claim,
+evidence, memory를 같은 층위에 놓지 않는 데 있다.
 
-## 기본 구조
+## Turn packet
+
+비중 있는 작업은 아래 항목을 가진다.
 
 ```text
-state:
-evidence:
-candidate actions:
-selected action:
-expected artifact:
-allowed claim:
-blocked claim:
-ledger update:
+object_under_truth_control:
+typed_action:
+mode:
+higher_order_dimension:
+chain_link:
+source_of_truth:
+evidence_gate:
+selected_action:
+expected_artifact:
+allowed_claim:
+blocked_claim:
+ledger_or_replay_update:
 ```
 
-## 각 항목의 의미
+## Typed action
 
-| 항목 | 의미 |
+자주 쓰는 action은 다음과 같다.
+
+| action | 적용 상황 |
 |---|---|
-| state | 현재 repo, 실험, 원고, reviewer 상태 |
-| evidence | 실제로 읽은 파일이나 실행 출력 |
-| candidate actions | AI가 제안한 원인, 수정, 실험 후보 |
-| selected action | 지금 실제로 할 하나의 행동 |
-| expected artifact | 행동 뒤 남아야 할 파일, 로그, 표, diff |
-| allowed claim | 현재 증거로 말할 수 있는 범위 |
-| blocked claim | 아직 말하면 안 되는 범위 |
-| ledger update | 다음 세션에서 반복을 막기 위한 기록 |
+| workspace_context_reconstruction | 이전 작업 상태를 이어야 할 때 |
+| implementation_debug_loop | 코드, runtime, Docker, ROS2 문제가 있을 때 |
+| experiment_design | 실험 조건을 새로 정할 때 |
+| result_interpretation | 숫자와 표를 해석할 때 |
+| paper_experiment_contract | 논문 claim에 실험을 연결할 때 |
+| manuscript_argument_repair | 원고 claim과 evidence를 고칠 때 |
+| reviewer_response | 심사 의견에 답할 때 |
+| literature_positioning | 관련 연구와 novelty를 정리할 때 |
 
-## 하네스가 막는 오류
+## Mode
 
-- warning 한 줄을 전체 실패 원인으로 올리는 것
-- `R@1` 증가를 곧바로 방법 개선으로 쓰는 것
-- build 성공을 runtime 성공으로 쓰는 것
-- generated summary를 source truth로 쓰는 것
-- reviewer comment를 paragraph polish 문제로만 처리하는 것
+mode를 먼저 정한다.
 
-## 좋은 실행 단위
-
-실행 단위는 작아야 한다.
-
-- topic이 보이는지 확인한다.
-- subscriber가 받는지 확인한다.
-- clock과 namespace를 확인한다.
-- 그다음 launch file을 수정한다.
-
-VPR에서는 다음 순서를 우선한다.
-
-- query/database 방향
-- cached feature version
-- normalization
-- index order
-- positive radius
-- metric script
-
-model architecture 수정은 위 항목이 닫힌 뒤에 한다.
-
-## 반복 실패 기록
-
-같은 실패가 반복되면 조언으로 남기지 않고 gate로 남긴다.
-
-| 반복 실패 | 다음 gate |
+| mode | 허용되는 행동 |
 |---|---|
-| Docker error에서 driver만 의심 | device 권한, volume, user group 확인 |
-| retrieval metric 혼동 | metric 이름 옆에 positive definition 기록 |
-| reviewer comment를 문체 문제로 처리 | 답변서 앞에 claim/evidence 표 작성 |
-| summary를 원문처럼 사용 | 원본 artifact 확인 전 claim 금지 |
+| read-only | 파일 읽기와 분석만 허용 |
+| proposal-only | 구조나 계획 제안만 허용 |
+| run-allowed | 명령 실행 허용, 파일 수정은 별도 확인 |
+| edit-allowed | 파일 수정 허용 |
+| execution-requested | 실행과 결과 확인까지 요구 |
+
+mode가 없으면 AI가 읽기 요청에서 편집을 하거나, 실행 요청에서 계획만 내놓는 일이 생긴다.
+
+## Smallest permitted action
+
+가장 작은 행동은 evidence boundary를 넘지 않고 연구 상태를 한 단계만 바꾸는 행동이다.
+
+예시:
+
+- runtime failure: stale process 정리 후 reproduction command 하나
+- paper edit: 문장 수정 전 claim/evidence 표 작성
+- result interpretation: best number 선택 전 metric protocol 확인
+- code archaeology: 파일 요약 전 active code path 확인
+
+## Narrowest proven outcome
+
+마지막 보고는 좁게 쓴다.
+
+| 잘못된 완료 보고 | 좁은 완료 보고 |
+|---|---|
+| 시스템을 고쳤다 | command X 뒤 warning signature Y가 사라졌다 |
+| 성능이 좋아졌다 | protocol P에서 metric M이 baseline B보다 낮아졌다 |
+| 논문 답변이 준비됐다 | Table 2 조건과 response scope를 맞췄다 |
+| repo를 이해했다 | source of truth 파일 A/B/C와 open claim D를 확인했다 |
+
+## Ledger / replay update
+
+반복되는 실패는 설명으로 남기지 않는다. 다음 세션에서 같은 실패를 막는 형태로 남긴다.
+
+| 반복 실패 | 남길 것 |
+|---|---|
+| summary를 source처럼 사용 | source 확인 전 claim 금지 rule |
+| 코드 존재를 active method로 착각 | implementation status label |
+| metric 조건 혼동 | experiment contract |
+| reviewer comment를 문장 문제로 처리 | claim/evidence table |
+| 사용자 반려 패턴 반복 | user reaction prior |

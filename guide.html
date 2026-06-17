@@ -168,27 +168,28 @@
   <header id="topbar"><a href="#로보틱스-연구자를-위한-ai-활용법">로보틱스 연구자를 위한 AI 활용법</a></header>
   <nav id="sidebar" aria-label="문서 목차">
     <a href="#로보틱스-연구자를-위한-ai-활용법">처음</a>
-<a class="chapter-link" href="#ch-1-ai-출력과-실행-경계">Ch.1 — AI 출력과 실행 경계</a>
+<a class="chapter-link" href="#ch-1-하네스가-다루는-연구-상태">Ch.1 — 하네스가 다루는 연구 상태</a>
 <a class="section-link" href="#목적">목적</a>
-<a class="section-link" href="#적용-상황">적용 상황</a>
-<a class="section-link" href="#ai가-잘하는-일">AI가 잘하는 일</a>
-<a class="section-link" href="#자주-생기는-실패">자주 생기는 실패</a>
-<a class="section-link" href="#실행-전-확인">실행 전 확인</a>
-<a class="section-link" href="#완료-기준">완료 기준</a>
-<a class="chapter-link" href="#ch-2-연구-상태-복원">Ch.2 — 연구 상태 복원</a>
+<a class="section-link" href="#기본-전이">기본 전이</a>
+<a class="section-link" href="#robotics-cv-chain">Robotics/CV chain</a>
+<a class="section-link" href="#object-under-truth-control">Object under truth control</a>
+<a class="section-link" href="#시작-질문">시작 질문</a>
+<a class="section-link" href="#하네스가-필요한-이유">하네스가 필요한 이유</a>
+<a class="chapter-link" href="#ch-2-증거-흐름과-상태-복원">Ch.2 — 증거 흐름과 상태 복원</a>
 <a class="section-link" href="#목적-2">목적</a>
-<a class="section-link" href="#연구-상태를-이루는-항목">연구 상태를 이루는 항목</a>
 <a class="section-link" href="#증거-등급">증거 등급</a>
+<a class="section-link" href="#상태-복원-대상">상태 복원 대상</a>
 <a class="section-link" href="#복원-절차">복원 절차</a>
+<a class="section-link" href="#evidence-gate">Evidence gate</a>
 <a class="section-link" href="#공개-비공개-경계">공개/비공개 경계</a>
-<a class="section-link" href="#claude-자료를-codex로-옮길-때">Claude 자료를 Codex로 옮길 때</a>
-<a class="chapter-link" href="#ch-3-하네스-구조">Ch.3 — 하네스 구조</a>
+<a class="chapter-link" href="#ch-3-하네스-턴-절차">Ch.3 — 하네스 턴 절차</a>
 <a class="section-link" href="#목적-3">목적</a>
-<a class="section-link" href="#기본-구조">기본 구조</a>
-<a class="section-link" href="#각-항목의-의미">각 항목의 의미</a>
-<a class="section-link" href="#하네스가-막는-오류">하네스가 막는 오류</a>
-<a class="section-link" href="#좋은-실행-단위">좋은 실행 단위</a>
-<a class="section-link" href="#반복-실패-기록">반복 실패 기록</a>
+<a class="section-link" href="#turn-packet">Turn packet</a>
+<a class="section-link" href="#typed-action">Typed action</a>
+<a class="section-link" href="#mode">Mode</a>
+<a class="section-link" href="#smallest-permitted-action">Smallest permitted action</a>
+<a class="section-link" href="#narrowest-proven-outcome">Narrowest proven outcome</a>
+<a class="section-link" href="#ledger-replay-update">Ledger / replay update</a>
 <a class="chapter-link" href="#ch-4-논문-코드-실험-매핑">Ch.4 — 논문, 코드, 실험 매핑</a>
 <a class="section-link" href="#목적-4">목적</a>
 <a class="section-link" href="#필요한-산출물">필요한 산출물</a>
@@ -214,7 +215,7 @@
 <a class="section-link" href="#목적-7">목적</a>
 <a class="section-link" href="#기본-표">기본 표</a>
 <a class="section-link" href="#처리-순서">처리 순서</a>
-<a class="section-link" href="#자주-생기는-실패-2">자주 생기는 실패</a>
+<a class="section-link" href="#자주-생기는-실패">자주 생기는 실패</a>
 <a class="section-link" href="#답변서-문장-기준">답변서 문장 기준</a>
 <a class="chapter-link" href="#ch-8-외부-agent-repo-이식-기준">Ch.8 — 외부 agent repo 이식 기준</a>
 <a class="section-link" href="#목적-8">목적</a>
@@ -234,108 +235,72 @@
     <article id="content">
       <h1 id="로보틱스-연구자를-위한-ai-활용법">로보틱스 연구자를 위한 AI 활용법</h1>
 <blockquote><p>AI 출력은 후보로 두고, 실행과 claim은 증거로 닫는다.</p></blockquote>
-<p>AI agent를 로보틱스/CV 연구에 쓰면 초반 효율은 바로 올라간다. 에러 로그에서 가능한 원인이 나오고, 논문에서 확인할 코드 경로가 나오며, reviewer comment에서 필요한 실험과 수정 위치가 정리된다. 이 단계의 출력은 좋은 출발점이다.</p>
-<p>그 출력은 아직 연구 결과가 아니다. ROS2 launch를 고치고, bag을 다시 돌리고, metric script를 확인하고, 원고 claim을 바꾸는 순간 연구 상태가 바뀐다. 이 문서는 그 경계에서 쓸 기준을 정리한다. 후보, 실행, artifact, claim을 분리하고, 각 장은 그 분리를 코드 읽기, 실험, 디버깅, rebuttal, 외부 agent repo 이식에 적용한다.</p>
-<h1 id="ch-1-ai-출력과-실행-경계">Ch.1 — AI 출력과 실행 경계</h1>
+<p>AI를 로보틱스/CV 연구에 붙이면 산출물은 빨리 늘어난다. 에러 로그의 원인 후보, 논문에서 확인할 코드 경로, 실험 조건 초안, reviewer 답변 초안이 나온다. 이 산출물들은 아직 연구 결과가 아니다. 각 후보가 어떤 연구 상태를 바꾸는지 확인해야 한다.</p>
+<p>하네스는 이 확인을 절차로 고정한다. 모든 요청을 research-state transition으로 바꾸고, 현재 상태, evidence gate, 가장 작은 허용 action, 실행 뒤 artifact, allowed claim, ledger/replay update를 정한다. 이 문서는 그 개념 구조에서 시작해 코드 읽기, 실험, 디버깅, rebuttal, 외부 agent repo 이식으로 내려간다.</p>
+<h1 id="ch-1-하네스가-다루는-연구-상태">Ch.1 — 하네스가 다루는 연구 상태</h1>
 <h2 id="목적">목적</h2>
-<p>AI가 낸 답을 연구 행동으로 옮기기 전에 확인할 경계를 정한다. AI 출력은 후보이고, 연구 상태를 바꾸는 일은 실행이다. 후보를 실행으로 옮길 때는 대상 파일, 명령, 산출물, claim 범위를 먼저 정한다.</p>
-<h2 id="적용-상황">적용 상황</h2>
-<ul>
-<li>ROS2, Docker, CUDA, dataset path 문제를 디버깅할 때</li>
-<li>논문 코드에서 실제 실행 경로를 찾을 때</li>
-<li>실험 숫자를 원고 문장으로 옮길 때</li>
-<li>reviewer comment에 답변할 때</li>
-<li>이전 대화 요약을 이어서 작업할 때</li>
-</ul>
-<h2 id="ai가-잘하는-일">AI가 잘하는 일</h2>
-<ul>
-<li>로그에서 가능한 원인 후보를 빠르게 나열한다.</li>
-<li>읽을 파일, 명령, 설정 후보를 좁힌다.</li>
-<li>reviewer comment를 실험, 설명, 한계 항목으로 분류한다.</li>
-<li>긴 대화나 문서를 다음에 볼 항목으로 요약한다.</li>
-</ul>
-<h2 id="자주-생기는-실패">자주 생기는 실패</h2>
+<p>하네스가 무엇을 통제하는지 먼저 정한다. 하네스는 AI가 만든 후보가 연구 상태를 어떻게 바꾸는지 묻는다. prompt, tool 목록, 문장 스타일은 그 통제를 돕는 요소다. 주 대상은 연구 상태가 바뀌는 지점과 그 지점을 닫는 증거다.</p>
+<h2 id="기본-전이">기본 전이</h2>
+<p>하네스는 모든 입력을 아래 흐름 안에 둔다.</p>
+<pre><code class="language-text">surface request
+-&gt; current research state
+-&gt; candidate transition
+-&gt; smallest permitted action
+-&gt; artifact
+-&gt; allowed claim
+-&gt; ledger or replay update</code></pre>
+<p>표면 요청이 &quot;이 코드 고쳐줘&quot;여도 실제 전이는 다를 수 있다. runtime state를 바꾸는 일일 수 있고, experiment protocol을 바꾸는 일일 수 있으며, paper claim을 바꾸는 일일 수도 있다. 전이를 잘못 잡으면 결과가 국소적으로 맞아도 연구 상태는 틀어진다.</p>
+<h2 id="robotics-cv-chain">Robotics/CV chain</h2>
+<p>로보틱스/CV 연구에서는 입력을 다음 chain 안에 놓는다.</p>
+<pre><code class="language-text">world
+-&gt; observation model
+-&gt; state representation
+-&gt; method
+-&gt; experiment / metric
+-&gt; paper claim
+-&gt; reviewer risk</code></pre>
+<p>예를 들어 SLAM metric을 다시 계산하는 일은 <code>experiment / metric</code> 전이에 해당한다. 그러나 frame convention이 바뀌면 <code>state representation</code>까지 영향을 준다. 논문 문장을 고치는 일은 <code>paper claim</code> 전이지만, method를 실제보다 강하게 쓰면 <code>method</code> 전이를 몰래 바꾼 셈이 된다.</p>
+<h2 id="object-under-truth-control">Object under truth control</h2>
+<p>작업 전에는 truth control 대상 하나를 정한다.</p>
 <table>
 <thead><tr>
-<th>실패</th>
-<th>설명</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>후보를 원인으로 취급</td>
-<td>QoS, namespace, Docker 권한 같은 후보가 확인 없이 원인이 된다.</td>
-</tr>
-<tr>
-<td>요약을 원문으로 취급</td>
-<td>compact summary나 handoff note가 source file을 대신한다.</td>
-</tr>
-<tr>
-<td>좁은 성공을 전체 성공으로 취급</td>
-<td>build pass, 일부 trajectory, plot 생성이 runtime 또는 실험 성공으로 올라간다.</td>
-</tr>
-<tr>
-<td>숫자를 claim으로 취급</td>
-<td>split, frame, metric script 확인 없이 성능 문장이 나온다.</td>
-</tr>
-<tr>
-<td>코드 존재를 실행 증거로 취급</td>
-<td>source에 factor나 config key가 있어도 runtime에서 쓰이지 않을 수 있다.</td>
-</tr>
-</tbody></table>
-<h2 id="실행-전-확인">실행 전 확인</h2>
-<p>AI 답변을 받은 뒤 바로 파일을 고치지 않는다. 먼저 아래 네 항목을 적는다.</p>
-<pre><code class="language-text">observed evidence:
-candidate action:
-expected artifact:
-allowed claim after action:</code></pre>
-<p>예를 들어 subscriber callback이 비어 있으면 <code>observed evidence</code>는 topic list와 QoS 출력이다. <code>candidate action</code>은 launch 수정이나 QoS 변경이다. <code>expected artifact</code>는 수정 뒤의 callback log 또는 메시지 수신 기록이다. 이 기록이 없으면 수정 후에도 무엇이 달라졌는지 말하기 어렵다.</p>
-<h2 id="완료-기준">완료 기준</h2>
-<p>AI가 원인을 말한 것만으로 완료를 말하지 않는다. 완료 여부는 실행 뒤에 남은 artifact로 판단한다.</p>
-<ul>
-<li>어떤 파일을 읽었는가</li>
-<li>어떤 파일을 바꾸었는가</li>
-<li>어떤 명령을 실행했는가</li>
-<li>어떤 output path가 생겼는가</li>
-<li>어떤 claim을 말할 수 있고, 어떤 claim은 아직 말할 수 없는가</li>
-</ul>
-<h1 id="ch-2-연구-상태-복원">Ch.2 — 연구 상태 복원</h1>
-<h2 id="목적-2">목적</h2>
-<p>이전 대화나 오래된 작업을 이어서 할 때 현재 연구 상태를 복원한다. 복원의 목표는 요약문 작성이 아니다. 다음 행동이 의존할 source of truth를 정하는 것이다.</p>
-<h2 id="연구-상태를-이루는-항목">연구 상태를 이루는 항목</h2>
-<p>로보틱스/CV 연구 상태는 여러 파일과 artifact에 분산된다.</p>
-<table>
-<thead><tr>
-<th>항목</th>
+<th>대상</th>
 <th>예</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>코드 상태</td>
-<td>branch, commit, modified file, launch file, config</td>
+<td>runtime state</td>
+<td>ROS2 node, Docker container, CUDA process, bag replay</td>
 </tr>
 <tr>
-<td>실행 상태</td>
-<td>command, workdir, container, device 권한, environment variable</td>
+<td>implementation state</td>
+<td>active code path, config consumption, disabled module</td>
 </tr>
 <tr>
-<td>데이터 상태</td>
-<td>dataset version, split, sequence, calibration, bag</td>
+<td>experiment state</td>
+<td>dataset, split, metric script, output path</td>
 </tr>
 <tr>
-<td>결과 상태</td>
-<td>result table, metric output, plot, failed run</td>
+<td>manuscript state</td>
+<td>claim, figure, table, paragraph, reviewer response</td>
 </tr>
 <tr>
-<td>원고 상태</td>
-<td>TeX diff, figure source, claim/evidence map, reviewer memo</td>
-</tr>
-<tr>
-<td>기억 상태</td>
-<td>project memory, handoff note, previous summary</td>
+<td>memory state</td>
+<td>project memory, handoff note, user correction</td>
 </tr>
 </tbody></table>
+<p>한 turn에서 여러 대상을 건드릴 수는 있다. 그래도 주 대상은 하나로 둔다. 주 대상이 없으면 AI는 파일 수정, 설명, 원고 문장, 실험 claim을 같은 층위에서 섞는다.</p>
+<h2 id="시작-질문">시작 질문</h2>
+<p>하네스는 매번 같은 질문으로 시작한다.</p>
+<pre><code class="language-text">이 행동이 틀리면 어떤 연구 상태가 무효가 되는가?</code></pre>
+<p>이 질문에 답해야 action mode와 evidence gate가 정해진다. 예를 들어 metric script를 바꾸는 행동이 틀리면 result table과 paper claim이 무효가 된다. launch file을 바꾸는 행동이 틀리면 runtime state와 이후 로그 해석이 무효가 된다. reviewer 답변 문장을 바꾸는 행동이 틀리면 reviewer risk가 커진다.</p>
+<h2 id="하네스가-필요한-이유">하네스가 필요한 이유</h2>
+<p>AI는 후보를 빠르게 만든다. 로보틱스 연구에서는 후보 하나를 실행하는 순간 코드, 데이터, 실행 로그, metric, 원고 claim이 같이 움직인다. 하네스는 후보를 실행으로 옮기기 전에 전이 대상, 증거 등급, 허용 claim, 남길 기록을 정한다.</p>
+<p>나머지 장은 같은 구조를 적용한다. 상태를 복원하고, evidence gate를 닫고, 작은 action을 실행하고, artifact로 claim을 제한한다.</p>
+<h1 id="ch-2-증거-흐름과-상태-복원">Ch.2 — 증거 흐름과 상태 복원</h1>
+<h2 id="목적-2">목적</h2>
+<p>연구 상태를 복원할 때 어떤 증거를 어느 무게로 사용할지 정한다. 요약, memory, 파일명, 검색 결과는 방향을 잡는 데 도움이 되지만 source truth를 대신하지 않는다.</p>
 <h2 id="증거-등급">증거 등급</h2>
-<p>모든 항목을 같은 무게로 다루지 않는다.</p>
 <table>
 <thead><tr>
 <th>등급</th>
@@ -344,148 +309,233 @@ allowed claim after action:</code></pre>
 </tr></thead>
 <tbody>
 <tr>
-<td>원본 파일</td>
-<td>source code, config, TeX, CSV</td>
-<td>파일 안에서 관찰한 내용</td>
+<td>raw artifact</td>
+<td>source code, config, TeX, CSV, log</td>
+<td>파일 안에서 직접 확인한 내용</td>
 </tr>
 <tr>
-<td>실행 출력</td>
-<td>command output, log, generated artifact</td>
+<td>execution output</td>
+<td>command output, generated artifact, metric result</td>
 <td>해당 실행의 결과</td>
 </tr>
 <tr>
-<td>요약</td>
+<td>protocol-bound result</td>
+<td>dataset, split, metric, baseline이 닫힌 결과</td>
+<td>같은 protocol 안의 비교</td>
+</tr>
+<tr>
+<td>generated summary</td>
 <td>handoff, compact summary, memory note</td>
 <td>다음에 확인할 위치</td>
 </tr>
 <tr>
-<td>추론</td>
-<td>AI explanation, suspected cause</td>
+<td>assistant inference</td>
+<td>원인 추정, 구조 해석, 요약 판단</td>
 <td>확인해야 할 후보</td>
+</tr>
+</tbody></table>
+<p>증거 등급은 claim의 상한을 정한다. summary는 source 위치를 알려 줄 수 있다. summary만으로 paper claim을 닫을 수는 없다. execution output은 해당 실행의 결과를 말할 수 있다. 그러나 dataset, split, metric이 닫히기 전에는 방법 개선 claim으로 올라가지 않는다.</p>
+<h2 id="상태-복원-대상">상태 복원 대상</h2>
+<p>로보틱스/CV 연구 상태는 여러 artifact에 분산된다.</p>
+<table>
+<thead><tr>
+<th>상태</th>
+<th>확인할 항목</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>repo state</td>
+<td>branch, commit, modified file, build artifact</td>
+</tr>
+<tr>
+<td>runtime state</td>
+<td>process, container, device, environment, output path</td>
+</tr>
+<tr>
+<td>data state</td>
+<td>dataset version, split, sequence, calibration</td>
+</tr>
+<tr>
+<td>result state</td>
+<td>metric output, plot, table, failed run</td>
+</tr>
+<tr>
+<td>manuscript state</td>
+<td>TeX diff, figure source, claim/evidence map</td>
+</tr>
+<tr>
+<td>memory state</td>
+<td>project memory, handoff, durable correction</td>
 </tr>
 </tbody></table>
 <h2 id="복원-절차">복원 절차</h2>
 <ol>
-<li>repo의 현재 파일 상태를 본다.</li>
-<li>README, AGENTS, project memory가 있으면 먼저 읽는다.</li>
-<li>최근 결과 폴더와 실행 로그를 확인한다.</li>
+<li>현재 repo와 공개/비공개 경계를 확인한다.</li>
+<li>project memory나 handoff가 있으면 orientation으로 읽는다.</li>
+<li>source of truth 파일을 찾는다.</li>
+<li>실행 결과가 필요한 경우 command와 output path를 확인한다.</li>
 <li>원고 작업이면 claim이 걸린 table, figure, paragraph를 찾는다.</li>
-<li>요약과 원본이 충돌하면 원본을 우선한다.</li>
-<li>다음 행동 하나만 정한다.</li>
+<li>summary와 source가 충돌하면 source를 우선한다.</li>
+<li>다음 action 하나만 정한다.</li>
 </ol>
+<h2 id="evidence-gate">Evidence gate</h2>
+<p>작업 전에는 다음 네 줄을 둔다.</p>
+<pre><code class="language-text">current evidence permits:
+current evidence forbids:
+promotion requires:
+quarantine if:</code></pre>
+<p>예를 들어 <code>final_results.csv</code>가 있어도 command와 config가 없으면 현재 evidence는 숫자의 존재만 허용한다. 방법 개선 claim은 금지한다. promotion에는 dataset, split, metric script, baseline 확인이 필요하다. 파일명이 최신처럼 보이지만 생성 시각이나 command가 맞지 않으면 quarantine한다.</p>
 <h2 id="공개-비공개-경계">공개/비공개 경계</h2>
-<p>공개 문서에는 raw transcript, 개인 경로, reviewer 원문, 미공개 숫자, 인증 정보가 들어가면 안 된다. 공개할 수 있는 것은 반복된 실패 구조, 일반화된 운영 규칙, sanitized template이다.</p>
-<h2 id="claude-자료를-codex로-옮길-때">Claude 자료를 Codex로 옮길 때</h2>
-<p>옮길 것은 수행자 이름이 아니라 행동 규칙이다.</p>
-<ul>
-<li>처음 읽을 파일의 순서</li>
-<li>수정 가능한 범위</li>
-<li>실행 전에 밝혀야 할 가정</li>
-<li>완료를 말할 수 있는 증거</li>
-<li>공개 문서에 남기면 안 되는 항목</li>
-</ul>
-<p>특정 slash command, permission allowlist, UI 전제는 그대로 옮기지 않는다.</p>
-<h1 id="ch-3-하네스-구조">Ch.3 — 하네스 구조</h1>
+<p>공개 문서에는 개인 대화 원문, 개인 경로, reviewer 원문, 미공개 숫자, 인증 정보가 들어가면 안 된다. 공개할 수 있는 것은 일반화된 실패 구조, 운영 규칙, 공개용 template이다.</p>
+<h1 id="ch-3-하네스-턴-절차">Ch.3 — 하네스 턴 절차</h1>
 <h2 id="목적-3">목적</h2>
-<p>하네스는 AI 답변을 연구 행동으로 옮길 때 쓰는 운영 구조다. 목적은 자동화가 아니라 경계 관리다. 어떤 증거를 봤고, 무엇을 바꾸며, 실행 뒤 어디까지 말할 수 있는지 기록한다.</p>
-<h2 id="기본-구조">기본 구조</h2>
-<pre><code class="language-text">state:
-evidence:
-candidate actions:
-selected action:
-expected artifact:
-allowed claim:
-blocked claim:
-ledger update:</code></pre>
-<h2 id="각-항목의-의미">각 항목의 의미</h2>
+<p>한 번의 AI 작업을 research-state transition으로 처리하는 절차를 정한다. 목적은 실행, claim, evidence, memory를 같은 층위에 놓지 않는 데 있다.</p>
+<h2 id="turn-packet">Turn packet</h2>
+<p>비중 있는 작업은 아래 항목을 가진다.</p>
+<pre><code class="language-text">object_under_truth_control:
+typed_action:
+mode:
+higher_order_dimension:
+chain_link:
+source_of_truth:
+evidence_gate:
+selected_action:
+expected_artifact:
+allowed_claim:
+blocked_claim:
+ledger_or_replay_update:</code></pre>
+<h2 id="typed-action">Typed action</h2>
+<p>자주 쓰는 action은 다음과 같다.</p>
 <table>
 <thead><tr>
-<th>항목</th>
-<th>의미</th>
+<th>action</th>
+<th>적용 상황</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>state</td>
-<td>현재 repo, 실험, 원고, reviewer 상태</td>
+<td>workspace_context_reconstruction</td>
+<td>이전 작업 상태를 이어야 할 때</td>
 </tr>
 <tr>
-<td>evidence</td>
-<td>실제로 읽은 파일이나 실행 출력</td>
+<td>implementation_debug_loop</td>
+<td>코드, runtime, Docker, ROS2 문제가 있을 때</td>
 </tr>
 <tr>
-<td>candidate actions</td>
-<td>AI가 제안한 원인, 수정, 실험 후보</td>
+<td>experiment_design</td>
+<td>실험 조건을 새로 정할 때</td>
 </tr>
 <tr>
-<td>selected action</td>
-<td>지금 실제로 할 하나의 행동</td>
+<td>result_interpretation</td>
+<td>숫자와 표를 해석할 때</td>
 </tr>
 <tr>
-<td>expected artifact</td>
-<td>행동 뒤 남아야 할 파일, 로그, 표, diff</td>
+<td>paper_experiment_contract</td>
+<td>논문 claim에 실험을 연결할 때</td>
 </tr>
 <tr>
-<td>allowed claim</td>
-<td>현재 증거로 말할 수 있는 범위</td>
+<td>manuscript_argument_repair</td>
+<td>원고 claim과 evidence를 고칠 때</td>
 </tr>
 <tr>
-<td>blocked claim</td>
-<td>아직 말하면 안 되는 범위</td>
+<td>reviewer_response</td>
+<td>심사 의견에 답할 때</td>
 </tr>
 <tr>
-<td>ledger update</td>
-<td>다음 세션에서 반복을 막기 위한 기록</td>
+<td>literature_positioning</td>
+<td>관련 연구와 novelty를 정리할 때</td>
 </tr>
 </tbody></table>
-<h2 id="하네스가-막는-오류">하네스가 막는 오류</h2>
+<h2 id="mode">Mode</h2>
+<p>mode를 먼저 정한다.</p>
+<table>
+<thead><tr>
+<th>mode</th>
+<th>허용되는 행동</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>read-only</td>
+<td>파일 읽기와 분석만 허용</td>
+</tr>
+<tr>
+<td>proposal-only</td>
+<td>구조나 계획 제안만 허용</td>
+</tr>
+<tr>
+<td>run-allowed</td>
+<td>명령 실행 허용, 파일 수정은 별도 확인</td>
+</tr>
+<tr>
+<td>edit-allowed</td>
+<td>파일 수정 허용</td>
+</tr>
+<tr>
+<td>execution-requested</td>
+<td>실행과 결과 확인까지 요구</td>
+</tr>
+</tbody></table>
+<p>mode가 없으면 AI가 읽기 요청에서 편집을 하거나, 실행 요청에서 계획만 내놓는 일이 생긴다.</p>
+<h2 id="smallest-permitted-action">Smallest permitted action</h2>
+<p>가장 작은 행동은 evidence boundary를 넘지 않고 연구 상태를 한 단계만 바꾸는 행동이다.</p>
+<p>예시:</p>
 <ul>
-<li>warning 한 줄을 전체 실패 원인으로 올리는 것</li>
-<li><code>R@1</code> 증가를 곧바로 방법 개선으로 쓰는 것</li>
-<li>build 성공을 runtime 성공으로 쓰는 것</li>
-<li>generated summary를 source truth로 쓰는 것</li>
-<li>reviewer comment를 paragraph polish 문제로만 처리하는 것</li>
+<li>runtime failure: stale process 정리 후 reproduction command 하나</li>
+<li>paper edit: 문장 수정 전 claim/evidence 표 작성</li>
+<li>result interpretation: best number 선택 전 metric protocol 확인</li>
+<li>code archaeology: 파일 요약 전 active code path 확인</li>
 </ul>
-<h2 id="좋은-실행-단위">좋은 실행 단위</h2>
-<p>실행 단위는 작아야 한다.</p>
-<ul>
-<li>topic이 보이는지 확인한다.</li>
-<li>subscriber가 받는지 확인한다.</li>
-<li>clock과 namespace를 확인한다.</li>
-<li>그다음 launch file을 수정한다.</li>
-</ul>
-<p>VPR에서는 다음 순서를 우선한다.</p>
-<ul>
-<li>query/database 방향</li>
-<li>cached feature version</li>
-<li>normalization</li>
-<li>index order</li>
-<li>positive radius</li>
-<li>metric script</li>
-</ul>
-<p>model architecture 수정은 위 항목이 닫힌 뒤에 한다.</p>
-<h2 id="반복-실패-기록">반복 실패 기록</h2>
-<p>같은 실패가 반복되면 조언으로 남기지 않고 gate로 남긴다.</p>
+<h2 id="narrowest-proven-outcome">Narrowest proven outcome</h2>
+<p>마지막 보고는 좁게 쓴다.</p>
+<table>
+<thead><tr>
+<th>잘못된 완료 보고</th>
+<th>좁은 완료 보고</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>시스템을 고쳤다</td>
+<td>command X 뒤 warning signature Y가 사라졌다</td>
+</tr>
+<tr>
+<td>성능이 좋아졌다</td>
+<td>protocol P에서 metric M이 baseline B보다 낮아졌다</td>
+</tr>
+<tr>
+<td>논문 답변이 준비됐다</td>
+<td>Table 2 조건과 response scope를 맞췄다</td>
+</tr>
+<tr>
+<td>repo를 이해했다</td>
+<td>source of truth 파일 A/B/C와 open claim D를 확인했다</td>
+</tr>
+</tbody></table>
+<h2 id="ledger-replay-update">Ledger / replay update</h2>
+<p>반복되는 실패는 설명으로 남기지 않는다. 다음 세션에서 같은 실패를 막는 형태로 남긴다.</p>
 <table>
 <thead><tr>
 <th>반복 실패</th>
-<th>다음 gate</th>
+<th>남길 것</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Docker error에서 driver만 의심</td>
-<td>device 권한, volume, user group 확인</td>
+<td>summary를 source처럼 사용</td>
+<td>source 확인 전 claim 금지 rule</td>
 </tr>
 <tr>
-<td>retrieval metric 혼동</td>
-<td>metric 이름 옆에 positive definition 기록</td>
+<td>코드 존재를 active method로 착각</td>
+<td>implementation status label</td>
 </tr>
 <tr>
-<td>reviewer comment를 문체 문제로 처리</td>
-<td>답변서 앞에 claim/evidence 표 작성</td>
+<td>metric 조건 혼동</td>
+<td>experiment contract</td>
 </tr>
 <tr>
-<td>summary를 원문처럼 사용</td>
-<td>원본 artifact 확인 전 claim 금지</td>
+<td>reviewer comment를 문장 문제로 처리</td>
+<td>claim/evidence table</td>
+</tr>
+<tr>
+<td>사용자 반려 패턴 반복</td>
+<td>user reaction prior</td>
 </tr>
 </tbody></table>
 <h1 id="ch-4-논문-코드-실험-매핑">Ch.4 — 논문, 코드, 실험 매핑</h1>
@@ -795,7 +845,7 @@ next stage:</code></pre>
 <li>evidence가 부족하면 실험, 재계산, claim 축소 중 하나를 선택한다.</li>
 <li>원고 수정 위치를 답변서에 명시한다.</li>
 </ol>
-<h2 id="자주-생기는-실패-2">자주 생기는 실패</h2>
+<h2 id="자주-생기는-실패">자주 생기는 실패</h2>
 <table>
 <thead><tr>
 <th>실패</th>

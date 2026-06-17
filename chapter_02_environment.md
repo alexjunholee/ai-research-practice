@@ -1,56 +1,63 @@
-# Ch.2 — 연구 상태 복원
+# Ch.2 — 증거 흐름과 상태 복원
 
 ## 목적
 
-이전 대화나 오래된 작업을 이어서 할 때 현재 연구 상태를 복원한다. 복원의 목표는 요약문 작성이
-아니다. 다음 행동이 의존할 source of truth를 정하는 것이다.
-
-## 연구 상태를 이루는 항목
-
-로보틱스/CV 연구 상태는 여러 파일과 artifact에 분산된다.
-
-| 항목 | 예 |
-|---|---|
-| 코드 상태 | branch, commit, modified file, launch file, config |
-| 실행 상태 | command, workdir, container, device 권한, environment variable |
-| 데이터 상태 | dataset version, split, sequence, calibration, bag |
-| 결과 상태 | result table, metric output, plot, failed run |
-| 원고 상태 | TeX diff, figure source, claim/evidence map, reviewer memo |
-| 기억 상태 | project memory, handoff note, previous summary |
+연구 상태를 복원할 때 어떤 증거를 어느 무게로 사용할지 정한다. 요약, memory, 파일명, 검색 결과는
+방향을 잡는 데 도움이 되지만 source truth를 대신하지 않는다.
 
 ## 증거 등급
 
-모든 항목을 같은 무게로 다루지 않는다.
-
 | 등급 | 예 | 허용되는 말 |
 |---|---|---|
-| 원본 파일 | source code, config, TeX, CSV | 파일 안에서 관찰한 내용 |
-| 실행 출력 | command output, log, generated artifact | 해당 실행의 결과 |
-| 요약 | handoff, compact summary, memory note | 다음에 확인할 위치 |
-| 추론 | AI explanation, suspected cause | 확인해야 할 후보 |
+| raw artifact | source code, config, TeX, CSV, log | 파일 안에서 직접 확인한 내용 |
+| execution output | command output, generated artifact, metric result | 해당 실행의 결과 |
+| protocol-bound result | dataset, split, metric, baseline이 닫힌 결과 | 같은 protocol 안의 비교 |
+| generated summary | handoff, compact summary, memory note | 다음에 확인할 위치 |
+| assistant inference | 원인 추정, 구조 해석, 요약 판단 | 확인해야 할 후보 |
+
+증거 등급은 claim의 상한을 정한다. summary는 source 위치를 알려 줄 수 있다. summary만으로
+paper claim을 닫을 수는 없다. execution output은 해당 실행의 결과를 말할 수 있다. 그러나
+dataset, split, metric이 닫히기 전에는 방법 개선 claim으로 올라가지 않는다.
+
+## 상태 복원 대상
+
+로보틱스/CV 연구 상태는 여러 artifact에 분산된다.
+
+| 상태 | 확인할 항목 |
+|---|---|
+| repo state | branch, commit, modified file, build artifact |
+| runtime state | process, container, device, environment, output path |
+| data state | dataset version, split, sequence, calibration |
+| result state | metric output, plot, table, failed run |
+| manuscript state | TeX diff, figure source, claim/evidence map |
+| memory state | project memory, handoff, durable correction |
 
 ## 복원 절차
 
-1. repo의 현재 파일 상태를 본다.
-2. README, AGENTS, project memory가 있으면 먼저 읽는다.
-3. 최근 결과 폴더와 실행 로그를 확인한다.
-4. 원고 작업이면 claim이 걸린 table, figure, paragraph를 찾는다.
-5. 요약과 원본이 충돌하면 원본을 우선한다.
-6. 다음 행동 하나만 정한다.
+1. 현재 repo와 공개/비공개 경계를 확인한다.
+2. project memory나 handoff가 있으면 orientation으로 읽는다.
+3. source of truth 파일을 찾는다.
+4. 실행 결과가 필요한 경우 command와 output path를 확인한다.
+5. 원고 작업이면 claim이 걸린 table, figure, paragraph를 찾는다.
+6. summary와 source가 충돌하면 source를 우선한다.
+7. 다음 action 하나만 정한다.
+
+## Evidence gate
+
+작업 전에는 다음 네 줄을 둔다.
+
+```text
+current evidence permits:
+current evidence forbids:
+promotion requires:
+quarantine if:
+```
+
+예를 들어 `final_results.csv`가 있어도 command와 config가 없으면 현재 evidence는 숫자의 존재만
+허용한다. 방법 개선 claim은 금지한다. promotion에는 dataset, split, metric script, baseline 확인이
+필요하다. 파일명이 최신처럼 보이지만 생성 시각이나 command가 맞지 않으면 quarantine한다.
 
 ## 공개/비공개 경계
 
-공개 문서에는 raw transcript, 개인 경로, reviewer 원문, 미공개 숫자, 인증 정보가 들어가면
-안 된다. 공개할 수 있는 것은 반복된 실패 구조, 일반화된 운영 규칙, sanitized template이다.
-
-## Claude 자료를 Codex로 옮길 때
-
-옮길 것은 수행자 이름이 아니라 행동 규칙이다.
-
-- 처음 읽을 파일의 순서
-- 수정 가능한 범위
-- 실행 전에 밝혀야 할 가정
-- 완료를 말할 수 있는 증거
-- 공개 문서에 남기면 안 되는 항목
-
-특정 slash command, permission allowlist, UI 전제는 그대로 옮기지 않는다.
+공개 문서에는 개인 대화 원문, 개인 경로, reviewer 원문, 미공개 숫자, 인증 정보가 들어가면 안 된다.
+공개할 수 있는 것은 일반화된 실패 구조, 운영 규칙, 공개용 template이다.

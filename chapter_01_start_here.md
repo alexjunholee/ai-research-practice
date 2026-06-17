@@ -1,58 +1,80 @@
-# Ch.1 — AI 출력과 실행 경계
+# Ch.1 — 하네스가 다루는 연구 상태
 
 ## 목적
 
-AI가 낸 답을 연구 행동으로 옮기기 전에 확인할 경계를 정한다.
-AI 출력은 후보이고, 연구 상태를 바꾸는 일은 실행이다. 후보를 실행으로 옮길 때는 대상 파일,
-명령, 산출물, claim 범위를 먼저 정한다.
+하네스가 무엇을 통제하는지 먼저 정한다. 하네스는 AI가 만든 후보가 연구 상태를 어떻게 바꾸는지
+묻는다. prompt, tool 목록, 문장 스타일은 그 통제를 돕는 요소다. 주 대상은 연구 상태가 바뀌는
+지점과 그 지점을 닫는 증거다.
 
-## 적용 상황
+## 기본 전이
 
-- ROS2, Docker, CUDA, dataset path 문제를 디버깅할 때
-- 논문 코드에서 실제 실행 경로를 찾을 때
-- 실험 숫자를 원고 문장으로 옮길 때
-- reviewer comment에 답변할 때
-- 이전 대화 요약을 이어서 작업할 때
-
-## AI가 잘하는 일
-
-- 로그에서 가능한 원인 후보를 빠르게 나열한다.
-- 읽을 파일, 명령, 설정 후보를 좁힌다.
-- reviewer comment를 실험, 설명, 한계 항목으로 분류한다.
-- 긴 대화나 문서를 다음에 볼 항목으로 요약한다.
-
-## 자주 생기는 실패
-
-| 실패 | 설명 |
-|---|---|
-| 후보를 원인으로 취급 | QoS, namespace, Docker 권한 같은 후보가 확인 없이 원인이 된다. |
-| 요약을 원문으로 취급 | compact summary나 handoff note가 source file을 대신한다. |
-| 좁은 성공을 전체 성공으로 취급 | build pass, 일부 trajectory, plot 생성이 runtime 또는 실험 성공으로 올라간다. |
-| 숫자를 claim으로 취급 | split, frame, metric script 확인 없이 성능 문장이 나온다. |
-| 코드 존재를 실행 증거로 취급 | source에 factor나 config key가 있어도 runtime에서 쓰이지 않을 수 있다. |
-
-## 실행 전 확인
-
-AI 답변을 받은 뒤 바로 파일을 고치지 않는다. 먼저 아래 네 항목을 적는다.
+하네스는 모든 입력을 아래 흐름 안에 둔다.
 
 ```text
-observed evidence:
-candidate action:
-expected artifact:
-allowed claim after action:
+surface request
+-> current research state
+-> candidate transition
+-> smallest permitted action
+-> artifact
+-> allowed claim
+-> ledger or replay update
 ```
 
-예를 들어 subscriber callback이 비어 있으면 `observed evidence`는 topic list와
-QoS 출력이다. `candidate action`은 launch 수정이나 QoS 변경이다. `expected artifact`는
-수정 뒤의 callback log 또는 메시지 수신 기록이다. 이 기록이 없으면 수정 후에도 무엇이
-달라졌는지 말하기 어렵다.
+표면 요청이 "이 코드 고쳐줘"여도 실제 전이는 다를 수 있다. runtime state를 바꾸는 일일 수 있고,
+experiment protocol을 바꾸는 일일 수 있으며, paper claim을 바꾸는 일일 수도 있다. 전이를 잘못
+잡으면 결과가 국소적으로 맞아도 연구 상태는 틀어진다.
 
-## 완료 기준
+## Robotics/CV chain
 
-AI가 원인을 말한 것만으로 완료를 말하지 않는다. 완료 여부는 실행 뒤에 남은 artifact로 판단한다.
+로보틱스/CV 연구에서는 입력을 다음 chain 안에 놓는다.
 
-- 어떤 파일을 읽었는가
-- 어떤 파일을 바꾸었는가
-- 어떤 명령을 실행했는가
-- 어떤 output path가 생겼는가
-- 어떤 claim을 말할 수 있고, 어떤 claim은 아직 말할 수 없는가
+```text
+world
+-> observation model
+-> state representation
+-> method
+-> experiment / metric
+-> paper claim
+-> reviewer risk
+```
+
+예를 들어 SLAM metric을 다시 계산하는 일은 `experiment / metric` 전이에 해당한다. 그러나 frame convention이
+바뀌면 `state representation`까지 영향을 준다. 논문 문장을 고치는 일은 `paper claim` 전이지만,
+method를 실제보다 강하게 쓰면 `method` 전이를 몰래 바꾼 셈이 된다.
+
+## Object under truth control
+
+작업 전에는 truth control 대상 하나를 정한다.
+
+| 대상 | 예 |
+|---|---|
+| runtime state | ROS2 node, Docker container, CUDA process, bag replay |
+| implementation state | active code path, config consumption, disabled module |
+| experiment state | dataset, split, metric script, output path |
+| manuscript state | claim, figure, table, paragraph, reviewer response |
+| memory state | project memory, handoff note, user correction |
+
+한 turn에서 여러 대상을 건드릴 수는 있다. 그래도 주 대상은 하나로 둔다. 주 대상이 없으면 AI는
+파일 수정, 설명, 원고 문장, 실험 claim을 같은 층위에서 섞는다.
+
+## 시작 질문
+
+하네스는 매번 같은 질문으로 시작한다.
+
+```text
+이 행동이 틀리면 어떤 연구 상태가 무효가 되는가?
+```
+
+이 질문에 답해야 action mode와 evidence gate가 정해진다. 예를 들어 metric script를 바꾸는 행동이
+틀리면 result table과 paper claim이 무효가 된다. launch file을 바꾸는 행동이 틀리면 runtime
+state와 이후 로그 해석이 무효가 된다. reviewer 답변 문장을 바꾸는 행동이 틀리면 reviewer risk가
+커진다.
+
+## 하네스가 필요한 이유
+
+AI는 후보를 빠르게 만든다. 로보틱스 연구에서는 후보 하나를 실행하는 순간 코드, 데이터, 실행 로그,
+metric, 원고 claim이 같이 움직인다. 하네스는 후보를 실행으로 옮기기 전에 전이 대상, 증거 등급,
+허용 claim, 남길 기록을 정한다.
+
+나머지 장은 같은 구조를 적용한다. 상태를 복원하고, evidence gate를 닫고, 작은 action을 실행하고,
+artifact로 claim을 제한한다.
