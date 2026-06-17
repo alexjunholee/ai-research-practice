@@ -52,6 +52,14 @@ Hutchins의 distributed cognition은 판단이 사람 머리 안에서만 이루
 
 automation 연구도 같은 방향을 가리킨다. 자동화가 쉬운 일을 줄이면 사람에게는 감시와 드문 개입이 남는다. AI가 가능한 설명을 빨리 만들수록 연구자는 어느 설명을 실행할지, 어떤 숫자를 원고에 올릴지, reviewer에게 어디까지 말할지 판단해야 한다.
 
+Anthropic의 Claude Code 사용 분석은 agent를 잘 쓰는 사람의 전문성을 세 가지 신호로 보았다. 연구 작업에서는 이렇게 옮길 수 있다.
+
+| 사용자가 가져오는 것 | 연구 작업에서의 의미 |
+|---|---|
+| 구체적 문제 세팅 | dataset, split, code path, metric, reviewer concern을 정확히 지목한다 |
+| targeted verification | "확인해줘"가 아니라 어느 config가 runtime에서 읽혔는지 보여 달라고 묻는다 |
+| 오류 수정 방향 | AI가 제안한 원인 중 틀린 stage를 사용자가 걷어낸다 |
+
 ## 확인할 다섯 줄
 
 AI를 잘 쓰려면 먼저 일을 나눈다.
