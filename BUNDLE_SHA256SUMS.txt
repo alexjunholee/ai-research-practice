@@ -2,7 +2,7 @@ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855           0  .n
 a103516d819f2076d3fcb0e1e2a17369c54dd6d254f955af43d0e7b9f938ec80        2966  EXAMPLE_WORKSPACE.md
 458911ef429ffc778a1c7fbdf27f7491b252f077db797d279cf36790bf6a5aac        3486  PATH.md
 47aabad9ef904cd0e999a200bd0b5981045569e3090cb1578545c5bdef6469e3        9544  QUICKSTART.md
-8b65f7b9d70e3a1251df418365fa41456edeae377b20ae4ae221e1ce5ccca9b4        2256  README.md
+b7b704254ad721fe1977250315ae76343bc820783ed07c0ef037f27521504687        2236  README.md
 f0c3816e5f78459cefc736e1d0ee09f146f363a41c44b1e4f2040be6c6fa5506        5318  SOURCES.md
 a6f7aadd2fed875e22947330a8235744f3144335e5909de975c9b803833c271a        6329  TERMS.md
 122a877e3ed7796e8d2f84e593866cecedbffad8b2a122188b9db166c882fc8c        7234  chapter_01_start_here.md
@@ -24,8 +24,8 @@ ff8be68cd3d77103f10aeb30378531900a5bec2fb538a50aebb18a053b8829d3        1636  ex
 c45d0c57e9e9d0b04f59bbfab3ab57eeab4891316a7556605985d96eaf5f804b        1843  examples/first-robotics-workspace/notes/stage-local-debugging.md
 ff01e29abc15394a2f0371481460863edb0f39e4ccfeafe191a8dc2f1e026883         986  examples/first-robotics-workspace/notes/weekly-research-ledger.md
 b04dbc281bd894f761cdafd2a127c4a2489793bf371f5fe9e020048a12d12bfd        3759  examples/first-robotics-workspace/project-memory.json
-12b59a08554cfb351b5f6d9d864abfe57c6f09d6efc9318478c88a36cd55eda5       51737  guide.html
-0967ed487d25ec97d9dd436c2f105afe7dd195a605d2f1dc3d400b88ce98357d         310  index.html
+bef0099579ed9d68a685ebae830426b3676fc55c5bda325ce3e7056d88764244       51617  guide.html
+4591b7279e097c12d0759a582e3ebe699ff13a2b141f1eb00a8be973a4257c6a         267  index.html
 66e45c50030ac1abc3fda0acc9905cbad2fecd649c3a000c712e959726e1f6c4        2527  templates/AGENTS.template.md
 05e32b658413fecc14e17cd2968bcfe7df00412841f5436f2fafa6ebcaf66780         511  templates/claim-evidence-map.md
 1662ae722ad29b9a23622ac852a8cf21313a119fca42aa863526bf237cc7a77d        3114  templates/codex-porting-checklist.md

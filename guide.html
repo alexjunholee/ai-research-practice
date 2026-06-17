@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>로보틱스 연구자를 위한 AI 활용법</title>
+  <title>AI와 로봇 연구하기</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -165,9 +165,9 @@
 <body>
   <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
   <div id="progress-bar"></div>
-  <header id="topbar"><a href="#로보틱스-연구자를-위한-ai-활용법">로보틱스 연구자를 위한 AI 활용법</a></header>
+  <header id="topbar"><a href="#ai와-로봇-연구하기">AI와 로봇 연구하기</a></header>
   <nav id="sidebar" aria-label="문서 목차">
-    <a href="#로보틱스-연구자를-위한-ai-활용법">처음</a>
+    <a href="#ai와-로봇-연구하기">처음</a>
 <a class="chapter-link" href="#ch-1-ai-출력과-연구-상태">Ch.1 — AI 출력과 연구 상태</a>
 <a class="section-link" href="#개념">개념</a>
 <a class="section-link" href="#ai가-잘하는-일">AI가 잘하는 일</a>
@@ -243,7 +243,7 @@
   </nav>
   <main id="main-content" tabindex="-1">
     <article id="content">
-      <h1 id="로보틱스-연구자를-위한-ai-활용법">로보틱스 연구자를 위한 AI 활용법</h1>
+      <h1 id="ai와-로봇-연구하기">AI와 로봇 연구하기</h1>
 <blockquote><p>AI 출력은 후보로 두고, 실행과 claim은 증거로 닫는다.</p></blockquote>
 <p>AI를 로보틱스/CV 연구에 붙이면 산출물은 빨리 늘어난다. 에러 로그의 원인 후보, 논문에서 확인할 코드 경로, 실험 조건 초안, reviewer 답변 초안이 나온다. 이 산출물들은 아직 연구 결과가 아니다. 첫 장은 AI가 무엇을 잘하고 무엇을 못하는지, 그 차이가 왜 생기는지부터 설명한다.</p>
 <p>하네스는 이 확인을 절차로 고정한다. 모든 요청을 research-state transition으로 바꾸고, 현재 상태, evidence gate, 가장 작은 허용 action, 실행 뒤 artifact, allowed claim, ledger/replay update를 정한다. 이 문서는 그 개념 구조에서 시작해 코드 읽기, 실험, 디버깅, rebuttal, 외부 agent repo 이식으로 내려간다.</p>
