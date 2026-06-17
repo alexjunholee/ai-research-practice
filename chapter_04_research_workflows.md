@@ -2,7 +2,7 @@
 
 논문 요약은 시작일 뿐이다. 로봇 논문을 실제 연구에 쓰려면 논문 문장, 공개 코드, 현재 환경에서 돌릴 실험을 따로 확인해야 한다.
 
-논문 method, 공개 코드, runtime은 서로 다른 층위다. method 문장은 주장을 담고, 공개 코드는 구현 상태를 보이며, runtime은 현재 환경의 실행 결과를 보여 준다. computational reproducibility 논의가 반복해서 가리키는 지점도 여기에 있다. 논문에 적힌 component가 repo에 있어도 그 component가 config를 거쳐 실행되고 결과에 영향을 줬는지는 따로 확인해야 한다.
+논문 method는 주장이고, 공개 코드는 구현 상태이며, runtime은 현재 환경에서 실제로 나온 결과다. 이 셋은 따로 확인한다. computational reproducibility 논의도 이 차이를 반복해서 다룬다. 논문에 적힌 component가 repo에 있어도 그 component가 config를 거쳐 실행되고 결과에 영향을 줬는지는 따로 확인해야 한다.
 
 논문을 연구에 쓰려면 abstract 요약 다음에 주장의 실험 조건을 찾는다.
 
@@ -42,6 +42,6 @@ metric script:
 | dead | 남아 있으나 현재 경로에서 쓰이지 않는다 |
 | unknown | 아직 확인하지 않았다 |
 
-AI에게 맡기기 좋은 일은 paper에서 method component를 뽑고, repo에서 관련 function, class, config를 찾고, issue thread와 README의 convention 변화를 모으는 일이다. 실제 호출 여부, config가 runtime에 도달하는지, 같은 dataset과 metric 조건인지, 내 원고에서 어디까지 말할 수 있는지는 실행 결과로 확인한다.
+AI에게는 paper에서 method component를 뽑고, repo에서 관련 function, class, config를 찾고, issue thread와 README의 convention 변화를 모으는 일을 맡기기 좋다. 실제 호출 여부, config가 runtime에 도달하는지, 같은 dataset과 metric 조건인지, 원고에서 어디까지 말할 수 있는지는 실행 결과로 확인한다.
 
 abstract 다음에는 YAML, launch command, issue comment, failed sequence, table caption까지 내려간다.

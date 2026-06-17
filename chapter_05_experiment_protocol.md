@@ -2,7 +2,7 @@
 
 실험 숫자는 조건 없이 비교하지 않는다. ATE, RPE, Recall@K, precision-recall은 이름이 같아도 dataset, split, frame, alignment, query/database direction, positive rule, baseline이 다르면 다른 숫자다.
 
-SLAM benchmark와 VPR tutorial 문헌도 이 점을 반복해서 다룬다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.
+SLAM benchmark와 VPR tutorial 문헌도 조건을 함께 적으라고 반복한다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.
 
 ## 최소 기록
 
@@ -54,6 +54,6 @@ failure policy:
 
 > 성능이 향상되었다.
 
-표 caption도 같은 규칙을 따른다. ATE 표는 dataset별 오차와 비교 조건을 말한다. loop closure 개수 표에는 탐지 수가 있다. precision, outlier rejection, pose graph 영향까지 말하려면 추가 근거가 필요하다. 표 아래 한 문장이 허용하는 주장의 크기를 정한다.
+표 caption도 같은 규칙을 따른다. ATE 표는 dataset별 오차와 비교 조건을 말한다. loop closure 개수 표에는 탐지 수가 있다. precision, outlier rejection, pose graph 영향까지 말하려면 추가 근거가 필요하다. 표 아래 한 문장도 표가 직접 보여 준 범위 안에서만 쓴다.
 
 실패도 결과다. timeout, OOM, sensor dropout, tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험 조건을 정하는 자료가 된다.

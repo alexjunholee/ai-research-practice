@@ -44,4 +44,4 @@
 
 해당 항목이 있으면 문장을 추가하지 않는다. 다음 행동을 바꾼다.
 
-GitHub star 수는 발견의 단서다. 기준은 내 연구에서 같은 metric 혼동, 같은 cache 실수, 같은 reviewer 지적을 줄이는지다.
+GitHub star 수는 발견의 단서다. 기준은 연구에서 같은 metric 혼동, 같은 cache 실수, 같은 reviewer 지적을 줄이는지다.

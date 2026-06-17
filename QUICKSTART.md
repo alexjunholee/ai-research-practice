@@ -5,9 +5,9 @@
 
 ## 도구 역할을 먼저 나눈다
 
-처음에는 연구 상태와 도구 표면을 함께 정한다. 모델명은 그다음 문제다.
+처음에는 연구 상태와 도구 역할을 함께 정한다. 모델명은 그다음 문제다.
 
-| 연구 장면 | 먼저 열 도구 표면 | 첫 확인 |
+| 연구 장면 | 먼저 열 도구 | 첫 확인 |
 |---|---|---|
 | repo를 읽고 작은 수정을 한다 | coding agent | `AGENTS.md`와 원 파일을 먼저 읽었는가 |
 | 논문 주장을 code와 experiment에 연결한다 | chat model 또는 coding agent | 논문-코드-실험 표가 남는가 |
@@ -186,7 +186,7 @@ Do not infer project truth from summaries when source files or artifacts are
 available.
 ```
 
-이 요청은 가능한 설명이 연구 행동으로 바뀌기 전에 증거 상태를 확인한다.
+이 요청은 후보 설명이 연구 행동으로 바뀌기 전에 증거 상태를 확인한다.
 첫 메시지는 `artifacts/first-ai-session-message.txt`처럼 파일로 남겨 두면
 다음 세션에서 같은 읽기 순서를 다시 쓸 수 있다.
 
@@ -202,7 +202,7 @@ available.
 | 에러를 좁힌다 | [`stage-local-debugging.md`](templates/stage-local-debugging.md) |
 | 원고 문장을 고친다 | [`claim-evidence-map.md`](templates/claim-evidence-map.md) |
 
-한 번에 여러 루프를 열면 AI는 다시 넓어진다. 시작 지점에서는 작은 성공 하나가
+한 번에 여러 루프를 열면 요청 범위가 다시 넓어진다. 처음에는 작은 성공 하나가
 좋다. 예를 들어 "논문 요약" 대신 "이 논문의 central claim, active code
 path 확인 대상, experiment protocol 빈칸을 분리하라"처럼 요청한다.
 
