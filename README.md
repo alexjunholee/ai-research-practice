@@ -2,32 +2,47 @@
 
 [가이드 열기](guide.html)
 
-AI는 연구 작업에서 잘하는 일이 뚜렷하다. 큰 repo에서 관련 파일을 찾고, 긴 로그에서
-확인할 원인을 정리하고, 논문과 코드가 만나는 지점을 빠르게 좁힌다. 약한 부분도 뚜렷하다.
-현재 상태를 보지 않고 말하고, 파일 존재를 실제 방법 사용으로 보고, 조건을 확인하지 않은 숫자를
-성능 주장처럼 다룬다.
+AI는 연구 작업에서 유용하다. 큰 repo에서 관련 파일을 검색하고, 긴 로그에서 확인할 원인을 빠르게
+찾아내고, 논문을 보고 코드를 프로토타입으로 구현하는 등 일반화 작업을 매우 빠르게 수행한다.
+그러나 잘 못하는 부분도 분명 있다. 이것을 읽는 사용자는 AI모델을 다그쳐도 보고, 꾸짖어도 보고,
+달래도 보고 하면서 사람과 똑같이 대해가며 더 나은 결과를 이끌어냈을 것이다. 그런데 늘 이렇게
+할 수는 없지 않은가. 우리가 AI를 어르고 달래기 위해서 일을 하는게 아니지 않은가. 이 아티클은
+이 상황을 타개하는 원리와 도구를 소개하기 위해 작성하였다.
 
-그러면 좋은 모델을 자체 서버에 올려 돌리면 해결될까. 공급자 쪽 routing이나 quota 변화에서는
-조금 벗어날 수 있다. 그러나 그 모델이 연구실의 현재 상태를 저절로 아는 것은 아니다. 논문 PDF,
-code path, 실험 로그, dataset convention, reviewer comment가 앞에 놓이지 않으면 자체 서버의
-모델도 추측한다.
+- 많은 문제는 비싼 구독 모델을 쓰면 해결되지 않나?
 
-frontier model을 직접 만드는 길도 있다. 그러나 대부분 연구실에서 그 길은 첫 병목이 아니다.
-Lewis et al.의 RAG는 Wikipedia index를 검색해 open-domain QA와 지식 집약 생성에서
-parametric-only baseline을 앞섰다. DeepMind의 RETRO도 2 trillion token database를 붙여
-parameter가 25배 적은 모델로 GPT-3와 Jurassic-1 수준의 Pile 성능을 냈다. 연구실에서는 어떤
-자료를 모으고, 어떻게 찾아오고, 찾은 자료를 어떻게 근거로 남기는지가 더 직접적인 병목이다.
+일단 우리 연구실에서는 200USD짜리 구독을 6개월째 해오고 있다. 좋은 모델을 쓰면 성능이 더
+좋아지는 부분이 있기 때문이다. 그러나 완벽하지는 않다. 그리고 이것은 기본적으로 폐쇄형 서비스로,
+우리가 조작할 수 없는 모델에 프롬프트만 입력하는 식으로 작동한다. 사용자는 실제 parameter 수,
+token limit, backend routing, system prompt, cache, thinking 처리가 언제 어떻게 바뀌는지 거의
+알 수 없다. Anthropic의
+[2026년 4월 Claude Code postmortem](https://www.anthropic.com/engineering/april-23-postmortem)은
+reasoning effort 변경, thinking cache bug, 짧은 답변을 유도한 system prompt가 품질 저하 보고로
+이어졌다고 설명했다. 이처럼 공급자가 마음대로 변화시키는 것을 우리는 알아채기조차 힘들다. 이런
+것은 불안정하다. 연구는 장기 작업인데 이런 불안정성은 우리가 원하는 것이 아니다.
 
-2026년 4월 Anthropic은 [Claude Code 품질 저하 보고](https://www.anthropic.com/engineering/april-23-postmortem)를
-설명하며 세 가지를 들었다. 기본 reasoning effort를 `high`에서 `medium`으로 낮춘 일, 오래된
-thinking을 계속 지운 cache bug, 짧은 답변을 강제한 system prompt였다. 사용자 쪽에서도
-[Claude Code issue #42796](https://github.com/anthropics/claude-code/issues/42796)에
-thinking depth 감소와 read-before-edit 감소를 로그로 추정한 기록이 남았다.
-[Max plan 사용량 소송 보도](https://www.thetimes.com/business/wsj/article/anthropic-sued-limits-ai-plans-f95f2wjcx)는
-구독자가 기대한 사용량과 실제 limit 사이의 간격을 다뤘다.
+- 구독이 문제라면 직접 GPU에서 로컬로 돌리면 어떤가?
 
-좋은 모델이 계속 온다고 가정할 수 없다. 낮은 effort, 짧은 context, 성능 낮은 모델이 와도
-원 파일, 로그, 실행 결과로 일을 잘라 확인해야 한다.
+자체 서버도 완전한 답은 아니다. 모델을 직접 돌리면 공급자의 routing이나 quota 변화에서 조금
+자유로워진다. 하지만 논문 PDF, code path, 실험 로그, dataset convention, reviewer comment를
+가져오는 일은 여전히 남는다. RAG와 RETRO가 보여준 것처럼, 답의 품질은 모델 안의 parameter만이
+아니라 밖에서 어떤 자료를 찾아오느냐에 크게 묶인다.
+
+- 그러면 우리가 해야 할 일은 무엇인가?
+
+AI를 사람처럼 대하면 처음에는 잘 되는 것처럼 보인다. 더 자세히 설명하고, 다시 부탁하고,
+틀렸다고 지적하면 답이 좋아질 때가 있다. 그러나 이것은 작업 방식으로는 불안정하다. 매번 사용자가
+상황을 기억하고, 모델의 답을 의심하고, 빠진 맥락을 다시 채워 넣어야 하기 때문이다.
+
+연구 작업에서는 이 방식이 금방 한계에 닿는다. 실험은 며칠씩 이어지고, 원고는 여러 번 바뀌고,
+reviewer comment는 과거 결과와 현재 코드 상태를 동시에 요구한다. 이때 필요한 것은 AI를 더 잘
+달래는 능력이 아니라, AI가 틀리지 않게 만드는 작업 구조다.
+
+그러려면 AI가 아니라 작업 환경을 바꿔야 한다. 어떤 파일을 봤는지, 어떤 command를 실행했는지,
+어떤 결과를 근거로 삼았는지를 남겨야 한다. 그래야 AI가 바뀌어도 같은 일을 다시 이어갈 수 있다.
+이렇게 하면 모델 성능이 낮아져도 작업이 완전히 무너지지 않는다. 좋은 모델은 더 빨리 찾고 더 잘
+정리하겠지만, 성능이 낮은 모델도 같은 파일과 같은 로그를 보고 같은 절차를 따라갈 수 있다. 이
+아티클에서 소개하는 도구들은 그 절차를 만들기 위한 것이다.
 
 로봇/CV 연구 대화에서 나온 사용자 입력 27,759개를 분류했다. 같은 실패가 반복됐다. 요약을 현재
 상태처럼 믿는 일, 코드 존재를 method 사용으로 보는 일, protocol이 다른 숫자를 한 줄에 올리는
