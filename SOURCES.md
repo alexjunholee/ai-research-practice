@@ -3,8 +3,8 @@
 확인일: 2026-06-17
 
 이 목록은 공개 가이드에서 언급한 외부 repo와 이론 출처의 public entry point다.
-확인 범위는 링크 접근성, 제목·저자·repo 역할, 본문에서 인용한 최소 claim이다.
-star 수, 인기도 순위, 최신 framework 평가는 근거 claim으로 쓰지 않는다.
+확인 범위는 링크 접근성, 제목·저자·repo 역할, 본문에서 인용한 최소 주장이다.
+star 수, 인기도 순위, 최신 framework 평가는 근거 주장으로 쓰지 않는다.
 
 ## External Agent And Skills Repos
 
@@ -68,5 +68,5 @@ star 수, 인기도 순위, 최신 framework 평가는 근거 claim으로 쓰지
 
 - [Toulmin, *The Uses of Argument* background](https://en.wikipedia.org/wiki/Stephen_Toulmin)
 
-로컬 evidence source는 private audit note에만 둔다. 공개 `SOURCES.md`는 원
-대화 로그나 내부 작업 경로를 citation으로 삼지 않는다.
+로컬 근거 자료는 private audit note에만 둔다. 공개 `SOURCES.md`에는 원
+대화 로그와 내부 작업 경로를 citation으로 넣지 않는다.

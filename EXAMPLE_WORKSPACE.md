@@ -29,15 +29,15 @@ examples/first-robotics-workspace/
 |---|---|
 | [`AGENTS.md`](examples/first-robotics-workspace/AGENTS.md) | AI가 먼저 읽는 project contract |
 | [`README.md`](examples/first-robotics-workspace/README.md) | 예시 폴더만 열었을 때의 시작 순서 |
-| [`project-memory.json`](examples/first-robotics-workspace/project-memory.json) | 현재 truth, source of truth, evidence boundary, 연구 루프, 다음 행동 |
-| [`first-ai-session-message.txt`](examples/first-robotics-workspace/notes/first-ai-session-message.txt) | AI 세션에 바로 붙일 수 있는 메시지 |
+| [`project-memory.json`](examples/first-robotics-workspace/project-memory.json) | 현재 확인한 사실, 원 파일, 근거 범위, 연구 루프, 다음 행동 |
+| [`first-ai-session-message.txt`](examples/first-robotics-workspace/notes/first-ai-session-message.txt) | AI 세션에 바로 넣는 메시지 |
 | [`codex-porting-checklist.md`](examples/first-robotics-workspace/notes/codex-porting-checklist.md) | Claude/Cursor 중심 규칙을 Codex-first 규칙으로 옮기는 방식 |
-| [`first-ai-session-prompt.md`](examples/first-robotics-workspace/notes/first-ai-session-prompt.md) | AI 세션에 그대로 붙이는 읽기 순서와 evidence gate |
-| [`first-day-workspace-checklist.md`](examples/first-robotics-workspace/notes/first-day-workspace-checklist.md) | source of truth와 작은 action 경계 |
+| [`first-ai-session-prompt.md`](examples/first-robotics-workspace/notes/first-ai-session-prompt.md) | AI 세션에 넣는 읽기 순서와 확인 기준 |
+| [`first-day-workspace-checklist.md`](examples/first-robotics-workspace/notes/first-day-workspace-checklist.md) | 원 파일과 작은 행동 경계 |
 | [`paper-code-experiment-map.md`](examples/first-robotics-workspace/notes/paper-code-experiment-map.md) | 논문 읽기를 code path와 experiment protocol로 연결 |
-| [`experiment-contract.md`](examples/first-robotics-workspace/notes/experiment-contract.md) | 숫자를 claim으로 올리기 전 필요한 protocol |
+| [`experiment-contract.md`](examples/first-robotics-workspace/notes/experiment-contract.md) | 숫자를 주장으로 쓰기 전 필요한 protocol |
 | [`stage-local-debugging.md`](examples/first-robotics-workspace/notes/stage-local-debugging.md) | ROS2 topic 문제를 stage-local check로 좁히는 방식 |
-| [`weekly-research-ledger.md`](examples/first-robotics-workspace/notes/weekly-research-ledger.md) | 한 주의 claim, protocol, risk, next action |
+| [`weekly-research-ledger.md`](examples/first-robotics-workspace/notes/weekly-research-ledger.md) | 한 주의 주장, protocol, risk, next action |
 
 ## 예시에서 배울 경계
 

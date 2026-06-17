@@ -8,7 +8,7 @@
 ## Research Progress
 
 - Claim/evidence advanced: workspace boundary and first protocol created
-- Experiment protocol closed: none
+- Experiment protocol verified: none
 - Paper or code artifact improved: paper-code-experiment map started
 
 ## Setup Progress

@@ -1,20 +1,10 @@
-# Ch.5 — 실험과 metric protocol
+# Ch.5 — 실험 숫자는 조건 목록과 함께 읽는다
 
-## 목적
+실험 숫자는 조건 없이 비교하지 않는다. ATE, RPE, Recall@K, precision-recall은 이름이 같아도 dataset, split, frame, alignment, query/database direction, positive rule, baseline이 다르면 다른 숫자다.
 
-실험 숫자가 어떤 조건에서 나온 값인지 기록한다. 조건이 닫히지 않은 숫자는 원고 claim으로 쓰지
-않는다.
+SLAM benchmark와 VPR tutorial 문헌도 이 점을 반복해서 다룬다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.
 
-## 근거
-
-SLAM benchmark와 VPR tutorial 문헌은 같은 말을 다른 방식으로 한다. 숫자는 dataset, split, frame,
-alignment, query/database direction, positive rule, baseline과 함께 정의된다. ATE, RPE, Recall@K,
-precision-recall은 이름만 같아도 protocol이 다르면 다른 물체다.
-
-그래서 experiment contract는 행정 서류가 아니다. 숫자가 어떤 세계에서 나온 값인지 붙이는 장치다.
-이 장치가 없으면 낮은 RMSE나 높은 Recall@1도 원고 claim으로 올라갈 수 없다.
-
-## 최소 protocol
+## 최소 기록
 
 ```text
 dataset:
@@ -34,7 +24,7 @@ timeout:
 failure policy:
 ```
 
-## SLAM/VIO 확인 항목
+## SLAM/VIO에서 볼 항목
 
 | 항목 | 확인 내용 |
 |---|---|
@@ -45,7 +35,7 @@ failure policy:
 | alignment | SE(3), Sim(3), scale 처리 조건이 무엇인가 |
 | failure policy | 실패 sequence를 평균에서 제외했는가 |
 
-## VPR/retrieval 확인 항목
+## VPR/retrieval에서 볼 항목
 
 | 항목 | 확인 내용 |
 |---|---|
@@ -56,9 +46,7 @@ failure policy:
 | cache version | feature cache가 현재 model에서 나온 것인지 |
 | metric script | 지난번과 같은 script인지 |
 
-## 허용되는 문장
-
-좋은 문장은 조건을 포함한다.
+원고 문장에는 조건을 넣는다.
 
 > EuRoC MH_01-05에서 같은 alignment와 같은 metric script를 쓴 baseline 대비 ATE median이 줄었다.
 
@@ -66,16 +54,6 @@ failure policy:
 
 > 성능이 향상되었다.
 
-## 실패 결과 기록
+표 caption도 같은 규칙을 따른다. ATE 표는 dataset별 오차와 비교 조건을 말한다. loop closure 개수 표에는 탐지 수가 있다. precision, outlier rejection, pose graph 영향까지 말하려면 추가 근거가 필요하다. 표 아래 한 문장이 허용하는 주장의 크기를 정한다.
 
-성공 숫자만 남기지 않는다. 다음 항목도 결과에 포함한다.
-
-- timeout
-- OOM
-- sensor dropout
-- tracking lost
-- missing sequence
-- metric script failure
-- invalid ground truth
-
-실패 분포는 방법의 한계를 설명하는 자료다.
+실패도 결과다. timeout, OOM, sensor dropout, tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험 조건을 정하는 자료가 된다.

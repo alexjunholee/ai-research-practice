@@ -1,97 +1,60 @@
-# Ch.3 — 하네스 턴 절차
+# Ch.3 — 한 번의 AI 작업은 하나의 상태만 바꾼다
 
-## 목적
+AI에게 일을 맡길 때 가장 흔한 실패는 범위가 커지는 것이다. 처음에는 log 분석이었는데 중간에 코드 수정이 들어가고, 마지막에는 실험 해석과 원고 문장까지 따라온다. 이렇게 한 번에 여러 상태를 건드리면 무엇이 바뀌었는지 추적하기 어렵다.
 
-한 번의 AI 작업을 research-state transition으로 처리하는 절차를 정한다. 목적은 실행, claim,
-evidence, memory를 같은 층위에 놓지 않는 데 있다.
+ReAct와 Toolformer 계열 연구는 language model이 reasoning과 tool action을 섞을 때 더 많은 일을 처리할 수 있음을 보였다. tool 호출 기록과 연구 주장은 근거 수준이 다르다. `git diff`, `ros2` 출력, metric CSV, PDF build 결과가 각각 어떤 말을 허용하는지 따로 봐야 한다.
 
-## 근거
+Bainbridge가 말한 automation의 역설도 여기서 반복된다. 자동화가 쉬운 일을 대신하면 사람은 더 높은 수준의 감시와 개입을 맡는다. 한 번의 AI 작업은 작게 잡는다.
 
-ReAct와 Toolformer 계열 연구는 language model이 reasoning과 tool action을 섞을 때 더 강해질 수
-있음을 보였다. 그러나 tool을 호출했다는 사실과 연구 claim이 닫혔다는 사실은 다르다. `git diff`,
-`ros2` 출력, metric CSV, PDF build 결과가 어떤 claim을 허용하는지 따로 정해야 한다.
+## 작업 전에 적을 것
 
-Bainbridge가 지적한 automation의 역설도 여기서 반복된다. 자동화가 쉬운 일을 대신하면 사람은
-더 높은 수준의 감시와 개입을 맡는다. turn packet은 그 감시 부담을 줄이기 위한 최소 양식이다.
-
-## Turn packet
-
-비중 있는 작업은 아래 항목을 가진다.
+비중 있는 작업은 아래 항목을 먼저 둔다.
 
 ```text
-object_under_truth_control:
-typed_action:
-mode:
-higher_order_dimension:
-chain_link:
-source_of_truth:
-evidence_gate:
-selected_action:
-expected_artifact:
-allowed_claim:
-blocked_claim:
-ledger_or_replay_update:
+지금 실제로 본 것:
+바꾸려는 대상:
+바꿀 수 있는 파일 또는 실행:
+결과가 나오면 말할 수 있는 것:
+아직 말하면 안 되는 것:
+다음에 남길 기록:
 ```
 
-## Typed action
+여기까지만 적어도 작업 범위가 보인다. 내부 용어를 많이 적는다고 연구 판단이 좋아지지는 않는다.
 
-자주 쓰는 action은 다음과 같다.
+## 자주 나오는 작업 유형
 
-| action | 적용 상황 |
+| 작업 | 적용 상황 |
 |---|---|
-| workspace_context_reconstruction | 이전 작업 상태를 이어야 할 때 |
-| implementation_debug_loop | 코드, runtime, Docker, ROS2 문제가 있을 때 |
-| experiment_design | 실험 조건을 새로 정할 때 |
-| result_interpretation | 숫자와 표를 해석할 때 |
-| paper_experiment_contract | 논문 claim에 실험을 연결할 때 |
-| manuscript_argument_repair | 원고 claim과 evidence를 고칠 때 |
-| reviewer_response | 심사 의견에 답할 때 |
-| literature_positioning | 관련 연구와 novelty를 정리할 때 |
+| 작업 상태 복원 | 이전 작업을 이어야 할 때 |
+| 구현 디버깅 | 코드, Docker, ROS2, runtime 문제가 있을 때 |
+| 실험 설계 | 조건을 새로 정할 때 |
+| 결과 해석 | 숫자와 표를 해석할 때 |
+| 논문-실험 연결 | 논문 주장에 실험을 연결할 때 |
+| 원고 주장 수리 | 원고 주장의 근거를 고칠 때 |
+| reviewer 답변 | 심사 의견에 답할 때 |
+| 관련 연구 정리 | novelty와 비교 위치를 잡을 때 |
 
-## Mode
+## 실행 권한을 먼저 정한다
 
-mode를 먼저 정한다.
+작업 방식도 먼저 정한다.
 
-| mode | 허용되는 행동 |
+| 방식 | 허용되는 행동 |
 |---|---|
-| read-only | 파일 읽기와 분석만 허용 |
-| proposal-only | 구조나 계획 제안만 허용 |
-| run-allowed | 명령 실행 허용, 파일 수정은 별도 확인 |
-| edit-allowed | 파일 수정 허용 |
-| execution-requested | 실행과 결과 확인까지 요구 |
+| 읽기만 | 파일 읽기와 분석만 허용 |
+| 제안만 | 구조나 계획 제안만 허용 |
+| 실행 허용 | 명령 실행 허용, 파일 수정은 별도 확인 |
+| 편집 허용 | 파일 수정 허용 |
+| 실행 요청 | 실행과 결과 확인까지 요구 |
 
-mode가 없으면 AI가 읽기 요청에서 편집을 하거나, 실행 요청에서 계획만 내놓는 일이 생긴다.
+방식이 없으면 AI가 읽기 요청에서 편집을 하거나, 실행 요청에서 계획만 내놓는다.
 
-## Smallest permitted action
+## 완료 보고는 좁게 쓴다
 
-가장 작은 행동은 evidence boundary를 넘지 않고 연구 상태를 한 단계만 바꾸는 행동이다.
-
-예시:
-
-- runtime failure: stale process 정리 후 reproduction command 하나
-- paper edit: 문장 수정 전 claim/evidence 표 작성
-- result interpretation: best number 선택 전 metric protocol 확인
-- code archaeology: 파일 요약 전 active code path 확인
-
-## Narrowest proven outcome
-
-마지막 보고는 좁게 쓴다.
-
-| 잘못된 완료 보고 | 좁은 완료 보고 |
+| 넓은 보고 | 더 나은 보고 |
 |---|---|
 | 시스템을 고쳤다 | command X 뒤 warning signature Y가 사라졌다 |
-| 성능이 좋아졌다 | protocol P에서 metric M이 baseline B보다 낮아졌다 |
+| 성능이 좋아졌다 | 같은 조건 P에서 metric M이 baseline B와 비교해 낮아졌다 |
 | 논문 답변이 준비됐다 | Table 2 조건과 response scope를 맞췄다 |
-| repo를 이해했다 | source of truth 파일 A/B/C와 open claim D를 확인했다 |
+| repo를 이해했다 | 파일 A/B/C와 남은 질문 D를 확인했다 |
 
-## Ledger / replay update
-
-반복되는 실패는 설명으로 남기지 않는다. 다음 세션에서 같은 실패를 막는 형태로 남긴다.
-
-| 반복 실패 | 남길 것 |
-|---|---|
-| summary를 source처럼 사용 | source 확인 전 claim 금지 rule |
-| 코드 존재를 active method로 착각 | implementation status label |
-| metric 조건 혼동 | experiment contract |
-| reviewer comment를 문장 문제로 처리 | claim/evidence table |
-| 사용자 반려 패턴 반복 | user reaction prior |
+반복 실패는 다음 세션에서 확인할 규칙으로 바꾼다. 요약을 원본처럼 썼다면 원본 확인 규칙을 남긴다. 코드 존재를 active method로 착각했다면 구현 상태 라벨을 남긴다. reviewer comment를 문장 문제로 처리했다면 주장·근거 표를 남긴다.

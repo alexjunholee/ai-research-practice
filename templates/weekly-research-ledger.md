@@ -7,9 +7,9 @@
 
 ## Research Progress
 
-- Claim/evidence advanced:
-- Experiment protocol closed:
-- Paper or code artifact improved:
+- Claim and evidence advanced:
+- Experiment protocol verified:
+- Paper or code result improved:
 
 ## Setup Progress
 
@@ -19,7 +19,7 @@
 
 ## Numbers Produced
 
-| Number | Artifact | Protocol | Can claim? |
+| Number | Result file | Protocol | Can claim? |
 |---|---|---|---|
 
 ## Open Risks
@@ -30,4 +30,3 @@
 - Reviewer risk:
 
 ## Next Smallest Action
-
