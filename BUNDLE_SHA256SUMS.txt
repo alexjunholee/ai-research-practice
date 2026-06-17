@@ -24,7 +24,7 @@ ff8be68cd3d77103f10aeb30378531900a5bec2fb538a50aebb18a053b8829d3        1636  ex
 c45d0c57e9e9d0b04f59bbfab3ab57eeab4891316a7556605985d96eaf5f804b        1843  examples/first-robotics-workspace/notes/stage-local-debugging.md
 ff01e29abc15394a2f0371481460863edb0f39e4ccfeafe191a8dc2f1e026883         986  examples/first-robotics-workspace/notes/weekly-research-ledger.md
 b04dbc281bd894f761cdafd2a127c4a2489793bf371f5fe9e020048a12d12bfd        3759  examples/first-robotics-workspace/project-memory.json
-28c589830af3ce5a8efeca1f39eed4e34724ef09bcf34d383a60e01141ba57dd       32416  guide.html
+47440229a67b3e14b9ae398c328da49576bb42639c6a1f9cdfd962605a5d0f9c       32465  guide.html
 0967ed487d25ec97d9dd436c2f105afe7dd195a605d2f1dc3d400b88ce98357d         310  index.html
 66e45c50030ac1abc3fda0acc9905cbad2fecd649c3a000c712e959726e1f6c4        2527  templates/AGENTS.template.md
 05e32b658413fecc14e17cd2968bcfe7df00412841f5436f2fafa6ebcaf66780         511  templates/claim-evidence-map.md
