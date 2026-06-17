@@ -16,6 +16,7 @@ star 수, 인기도 순위, 최신 framework 평가는 근거 claim으로 쓰지
 - [`crewAIInc/crewAI`](https://github.com/crewAIInc/crewAI)
 - [`microsoft/autogen`](https://github.com/microsoft/autogen)
 - [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/)
+- [`alexjunholee/robotics-research-agent`](https://github.com/alexjunholee/robotics-research-agent)
 
 ## Human-AI Action Theory Sources
 

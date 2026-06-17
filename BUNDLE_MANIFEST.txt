@@ -39,5 +39,6 @@ templates/project-memory.template.json
 templates/replay-case.md
 templates/result-provenance-tuple.md
 templates/stage-local-debugging.md
+templates/user-reaction-prior.md
 templates/weekly-research-ledger.md
 templates/workspace-readme.md
