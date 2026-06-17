@@ -2,7 +2,7 @@
 
 AI는 root cause를 빨리 말한다. QoS, calibration, cache, normalization 같은 단어가 바로 나온다. 도움이 될 때도 있다. 어느 단계에서 신호가 끊겼는지 확인하기 전까지는 후보 설명으로 둔다.
 
-복잡한 로보틱스 pipeline은 단계마다 다른 실패를 낸다. data loading, representation, matching, geometry, optimization, evaluation이 각각 다른 증상을 만든다. human factors에서 말하는 상황 인식도 먼저 현재 신호를 보고, 그 신호가 어느 단계의 의미인지 구분한 뒤, 다음 행동을 고른다.
+복잡한 로보틱스 pipeline은 단계마다 다른 실패를 낸다. data loading, representation, matching, geometry, optimization, evaluation이 각각 다른 증상을 만든다. 상황 인식 연구에서도 먼저 현재 신호를 보고, 그 신호가 어느 단계에서 나온 것인지 구분한 뒤, 다음 행동을 고른다.
 
 ## 기본 순서
 

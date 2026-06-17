@@ -2,7 +2,7 @@
 
 논문 요약은 시작일 뿐이다. 로봇 논문을 실제 연구에 쓰려면 논문 문장, 공개 코드, 현재 환경에서 돌릴 실험을 따로 확인해야 한다.
 
-논문 method는 주장이고, 공개 코드는 구현 상태이며, runtime은 현재 환경에서 실제로 나온 결과다. 이 셋은 따로 확인한다. computational reproducibility 논의도 이 차이를 반복해서 다룬다. 논문에 적힌 component가 repo에 있어도 그 component가 config를 거쳐 실행되고 결과에 영향을 줬는지는 따로 확인해야 한다.
+논문 method 문장은 주장을 담고, 공개 코드는 구현 상태를 보이며, runtime은 현재 환경에서 실제로 나온 결과를 보여 준다. 이 셋은 따로 확인한다. computational reproducibility 논의도 이 차이를 반복해서 다룬다. 논문에 적힌 component가 repo에 있어도 그 component가 config를 거쳐 실행되고 결과에 영향을 줬는지는 따로 확인해야 한다.
 
 논문을 연구에 쓰려면 abstract 요약 다음에 주장의 실험 조건을 찾는다.
 

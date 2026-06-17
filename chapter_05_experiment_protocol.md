@@ -2,7 +2,7 @@
 
 실험 숫자는 조건 없이 비교하지 않는다. ATE, RPE, Recall@K, precision-recall은 이름이 같아도 dataset, split, frame, alignment, query/database direction, positive rule, baseline이 다르면 다른 숫자다.
 
-SLAM benchmark와 VPR tutorial 문헌도 조건을 함께 적으라고 반복한다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.
+SLAM benchmark와 VPR tutorial 문헌도 숫자를 조건과 함께 읽어야 한다고 말한다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.
 
 ## 최소 기록
 

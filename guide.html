@@ -77,11 +77,11 @@ body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD 
 <div class="overview-chapter"><a class="overview-chapter-link" href="#부록-e-출처"><span class="overview-chapter-num">부록</span>부록 E — 출처</a><div class="overview-sections"><a href="#sources-external-agent-and-skills-repos">External Agent And Skills Repos</a><span class="sep">/</span><a href="#sources-human-ai-action-theory-sources">Human-AI Action Theory Sources</a><span class="sep">/</span><a href="#sources-llm-agent-and-grounding-sources">LLM Agent And Grounding Sources</a><span class="sep">/</span><a href="#sources-model-serving-and-product-layer-sources">Model Serving And Product-Layer Sources</a><span class="sep">/</span><a href="#sources-robotics-cv-evaluation-sources">Robotics/CV Evaluation Sources</a></div></div></div></section><h1 id="ch-0-왜-작업-구조가-필요한가" data-source="chapter_00_intro.md">Ch.0 — 왜 작업 구조가 필요한가</h1>
 <p>AI는 연구 작업에서 유용하다. 큰 repo에서 관련 파일을 검색하고, 긴 로그에서 확인할 원인을 빠르게 찾아내고, 논문을 보고 코드를 프로토타입으로 구현하는 등 일반화 작업을 매우 빠르게 수행한다. 그러나 잘 못하는 부분도 분명 있다. 이것을 읽는 사용자는 AI 모델을 다그쳐도 보고, 꾸짖어도 보고, 달래도 보고 하면서 사람과 똑같이 대해가며 더 나은 결과를 이끌어냈을 것이다. 그런데 늘 이렇게 할 수는 없지 않은가. 우리가 AI를 어르고 달래기 위해서 일을 하는 게 아니지 않은가. 이 아티클은 이 상황을 타개하는 원리와 도구를 소개하기 위해 작성하였다.</p>
 <h2 id="chapter-00-intro-비싼-구독-모델을-쓰면-해결되지-않나" data-source="chapter_00_intro.md">비싼 구독 모델을 쓰면 해결되지 않나?</h2>
-<p>일단 우리 연구실에서는 200 USD짜리 구독을 6개월째 해오고 있다. 좋은 모델을 쓰면 성능이 더 좋아지는 부분이 있기 때문이다. 그러나 완벽하지는 않다. 구독 서비스는 기본적으로 폐쇄형 서비스다. 우리는 조작할 수 없는 모델에 프롬프트만 입력한다. 사용자는 실제 parameter 수, token limit, backend routing, system prompt, cache, thinking 처리가 언제 어떻게 바뀌는지 거의 알 수 없다. Anthropic의 <a href="https://www.anthropic.com/engineering/april-23-postmortem">2026년 4월 Claude Code postmortem</a>은 reasoning effort 변경, thinking cache bug, 짧은 답변을 유도한 system prompt가 품질 저하 보고로 이어졌다고 설명했다. 공급자가 이런 항목을 바꿔도 우리는 알아채기조차 힘들다. 이 상태는 불안정하다. 연구는 장기 작업인데 이런 불안정성은 우리가 원하는 것이 아니다.</p>
+<p>일단 우리 연구실에서는 200 USD짜리 구독을 6개월째 해오고 있다. 좋은 모델을 쓰면 성능이 더 좋아지는 부분이 있기 때문이다. 그러나 완벽하지는 않다. 상용 구독은 폐쇄형 서비스다. 사용자는 통제할 수 없는 모델에 프롬프트만 입력한다. 실제 parameter 수, token limit, backend routing, system prompt, cache, thinking 처리가 언제 어떻게 바뀌는지 거의 알 수 없다. Anthropic의 <a href="https://www.anthropic.com/engineering/april-23-postmortem">2026년 4월 Claude Code postmortem</a>은 reasoning effort 변경, thinking cache bug, 짧은 답변을 유도한 system prompt가 품질 저하 보고로 이어졌다고 설명했다. 공급자가 이런 항목을 바꿔도 우리는 알아채기조차 힘들다. 이 상태는 불안정하다. 연구는 장기 작업인데 이런 불안정성은 우리가 원하는 것이 아니다.</p>
 <h2 id="chapter-00-intro-좋은-모델을-자체-서버에서-돌리면-어떤가" data-source="chapter_00_intro.md">좋은 모델을 자체 서버에서 돌리면 어떤가?</h2>
 <p>좋은 모델을 자체 서버에 올리면 공급자의 routing이나 quota 변화에서는 조금 자유로워진다. 그러나 상용 서비스가 제공하는 것은 LLM 가중치 하나가 아니다. 모델 선택, routing, system prompt, context 압축, cache, tool 호출, retrieval, 권한, 실행 환경을 묶은 작업 하네스다. 연구실에서 같은 효과를 내려면 논문 PDF, code path, 실험 로그, dataset convention, reviewer comment를 검색 가능한 단위로 정리하고, 질문마다 어떤 근거를 쓸지 정해야 한다.</p>
 <p>이 문제를 해결하기 위해 연구자들은 retrieval을 모델 구조 안으로 끌어들였다. <a href="https://arxiv.org/abs/2002.08909">REALM</a>은 지식을 parameter 안에 암묵적으로 밀어 넣는 방식이 더 큰 모델을 요구한다고 보고, pre-training 단계부터 retriever를 붙여 문서를 검색하게 했다. <a href="https://arxiv.org/abs/2004.04906">DPR</a>은 검색 단계 자체를 병목으로 보고, BM25 같은 sparse matching 대신 질문과 passage를 dense representation으로 맞추는 dual encoder를 학습했다. <a href="https://arxiv.org/abs/2005.11401">RAG</a>는 generator가 사실을 더 정확히 다루고 provenance와 knowledge update 문제를 줄이기 위해 seq2seq model의 parametric memory와 Wikipedia dense index를 결합했다.</p>
-<p>그다음 연구들은 generator가 검색된 자료를 어떻게 읽어야 하는지 물었다. <a href="https://arxiv.org/abs/2007.01282">FiD</a>는 여러 passage를 따로 encode한 뒤 decoder에서 합쳐, 여러 근거를 조합하는 방식을 보였다. <a href="https://arxiv.org/abs/2112.04426">RETRO</a>는 language model이 다음 token을 예측할 때 2 trillion token database에서 가까운 chunk를 같이 보게 했다. model 밖의 explicit memory를 실행 중에 참조하게 만든 것이다. <a href="https://arxiv.org/abs/2208.03299">Atlas</a>는 few-shot 상황에서도 retrieval-augmented model이 knowledge-intensive task를 풀 수 있는지 보았고, index 내용을 바꾸면 knowledge source를 갱신할 수 있다는 점도 실험했다.</p>
+<p>그다음 연구들은 검색된 자료를 generator가 어떻게 읽는지 살폈다. <a href="https://arxiv.org/abs/2007.01282">FiD</a>는 여러 passage를 따로 encode한 뒤 decoder에서 합쳐, 여러 근거를 조합하는 방식을 보였다. <a href="https://arxiv.org/abs/2112.04426">RETRO</a>는 language model이 다음 token을 예측할 때 2 trillion token database에서 가까운 chunk를 같이 보게 했다. model 밖의 explicit memory를 실행 중에 참조하게 만든 것이다. <a href="https://arxiv.org/abs/2208.03299">Atlas</a>는 few-shot 상황에서도 retrieval-augmented model이 knowledge-intensive task를 풀 수 있는지 보았고, index 내용을 바꾸면 knowledge source를 갱신할 수 있다는 점도 실험했다.</p>
 <p>그러나 연구실에서 필요한 것은 이 논문들의 거대한 web-scale index가 아니다. 어느 논문 PDF, 어느 code path, 어느 실험 로그, 어느 reviewer comment를 어떤 단위로 잘라 두고, 질문이 들어왔을 때 무엇을 찾아 쓸지 정하는 일이다. 답의 품질은 모델의 parameter뿐 아니라 바깥 자료를 얼마나 정확히 찾아 쓰느냐에 달려 있다.</p>
 <p>Anthropic의 <a href="https://www.anthropic.com/research/claude-code-expertise">2026년 Claude Code 사용 분석</a>은 이 분업을 실제 세션에서 관찰했다. 사용자는 목표, 접근 방식, 완료 기준을 정하는 쪽에 더 많이 개입했고, Claude는 파일을 고치고 명령을 실행하는 쪽을 더 많이 맡았다. 사용자의 전문성은 특히 문제를 구체적으로 세팅하고, 검증할 대상을 정확히 짚고, agent의 잘못된 판단을 바로잡는 능력으로 나타났다. 그래서 우리는 어떤 문제를 풀 것인지 좁히고, 무엇을 확인해야 하는지 정하고, 잘못된 실행 방향을 끊어 내는 능력을 키우려 한다.</p>
 <h2 id="chapter-00-intro-그러면-우리가-해야-할-일은-무엇인가" data-source="chapter_00_intro.md">그러면 우리가 해야 할 일은 무엇인가?</h2>
@@ -116,7 +116,7 @@ body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD 
 </tbody></table>
 <p>AI가 내놓은 설명이 실행으로 넘어가는 순간부터 비용이 생긴다. 이 구분을 놓치면 연구자는 빠른 답을 얻고도 같은 일을 다시 확인한다.</p>
 <h2 id="chapter-01-start-here-왜-이런-일이-생기는가" data-source="chapter_01_start_here.md">왜 이런 일이 생기는가</h2>
-<p>반복 실패는 대체로 작업을 나누는 방식에서 나온다. AI는 대화와 파일 일부를 보고 다음 후보 설명을 만든다. 로보틱스/CV 연구는 대화 밖의 상태를 바꾼다. Docker container, ROS2 topic, CUDA process, dataset split, calibration file, metric script, TeX table은 실제 파일과 실행 결과로 확인한다.</p>
+<p>반복 실패는 대체로 작업을 나누는 방식에서 나온다. AI는 대화와 파일 일부를 보고 다음 후보 설명을 만든다. 로보틱스/CV 연구의 상태는 대화 밖에서 바뀐다. Docker container, ROS2 topic, CUDA process, dataset split, calibration file, metric script, TeX table은 실제 파일과 실행 결과로 확인한다.</p>
 <p>AI는 텍스트를 빠르게 훑고 나누는 데 강하다. 연구자는 실행과 증거를 확인한다. 이 둘을 섞으면 같은 오류가 반복된다.</p>
 <table>
 <thead><tr><th>섞인 것</th><th>반복되는 오류</th></tr></thead>
@@ -228,7 +228,7 @@ body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD 
 <p>반복 실패는 다음 세션에서 확인할 규칙으로 바꾼다. 요약을 원본처럼 썼다면 원본 확인 규칙을 남긴다. 코드 존재를 active method로 착각했다면 구현 상태 라벨을 남긴다. reviewer comment를 문장 문제로 처리했다면 주장·근거 표를 남긴다.</p>
 <h1 id="ch-4-논문은-코드와-실험-조건까지-읽어야-한다" data-source="chapter_04_research_workflows.md">Ch.4 — 논문은 코드와 실험 조건까지 읽어야 한다</h1>
 <p>논문 요약은 시작일 뿐이다. 로봇 논문을 실제 연구에 쓰려면 논문 문장, 공개 코드, 현재 환경에서 돌릴 실험을 따로 확인해야 한다.</p>
-<p>논문 method는 주장이고, 공개 코드는 구현 상태이며, runtime은 현재 환경에서 실제로 나온 결과다. 이 셋은 따로 확인한다. computational reproducibility 논의도 이 차이를 반복해서 다룬다. 논문에 적힌 component가 repo에 있어도 그 component가 config를 거쳐 실행되고 결과에 영향을 줬는지는 따로 확인해야 한다.</p>
+<p>논문 method 문장은 주장을 담고, 공개 코드는 구현 상태를 보이며, runtime은 현재 환경에서 실제로 나온 결과를 보여 준다. 이 셋은 따로 확인한다. computational reproducibility 논의도 이 차이를 반복해서 다룬다. 논문에 적힌 component가 repo에 있어도 그 component가 config를 거쳐 실행되고 결과에 영향을 줬는지는 따로 확인해야 한다.</p>
 <p>논문을 연구에 쓰려면 abstract 요약 다음에 주장의 실험 조건을 찾는다.</p>
 <h2 id="chapter-04-research-workflows-남길-항목" data-source="chapter_04_research_workflows.md">남길 항목</h2>
 <pre><code>논문 주장:
@@ -265,7 +265,7 @@ metric script:
 <p>abstract 다음에는 YAML, launch command, issue comment, failed sequence, table caption까지 내려간다.</p>
 <h1 id="ch-5-실험-숫자는-조건-목록과-함께-읽는다" data-source="chapter_05_experiment_protocol.md">Ch.5 — 실험 숫자는 조건 목록과 함께 읽는다</h1>
 <p>실험 숫자는 조건 없이 비교하지 않는다. ATE, RPE, Recall@K, precision-recall은 이름이 같아도 dataset, split, frame, alignment, query/database direction, positive rule, baseline이 다르면 다른 숫자다.</p>
-<p>SLAM benchmark와 VPR tutorial 문헌도 조건을 함께 적으라고 반복한다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.</p>
+<p>SLAM benchmark와 VPR tutorial 문헌도 숫자를 조건과 함께 읽어야 한다고 말한다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.</p>
 <h2 id="chapter-05-experiment-protocol-최소-기록" data-source="chapter_05_experiment_protocol.md">최소 기록</h2>
 <pre><code>dataset:
 split:
@@ -312,7 +312,7 @@ failure policy:</code></pre>
 <p>실패도 결과다. timeout, OOM, sensor dropout, tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험 조건을 정하는 자료가 된다.</p>
 <h1 id="ch-6-디버깅은-신호가-끊긴-단계를-찾는-일이다" data-source="chapter_06_stage_local_debugging.md">Ch.6 — 디버깅은 신호가 끊긴 단계를 찾는 일이다</h1>
 <p>AI는 root cause를 빨리 말한다. QoS, calibration, cache, normalization 같은 단어가 바로 나온다. 도움이 될 때도 있다. 어느 단계에서 신호가 끊겼는지 확인하기 전까지는 후보 설명으로 둔다.</p>
-<p>복잡한 로보틱스 pipeline은 단계마다 다른 실패를 낸다. data loading, representation, matching, geometry, optimization, evaluation이 각각 다른 증상을 만든다. human factors에서 말하는 상황 인식도 먼저 현재 신호를 보고, 그 신호가 어느 단계의 의미인지 구분한 뒤, 다음 행동을 고른다.</p>
+<p>복잡한 로보틱스 pipeline은 단계마다 다른 실패를 낸다. data loading, representation, matching, geometry, optimization, evaluation이 각각 다른 증상을 만든다. 상황 인식 연구에서도 먼저 현재 신호를 보고, 그 신호가 어느 단계에서 나온 것인지 구분한 뒤, 다음 행동을 고른다.</p>
 <h2 id="chapter-06-stage-local-debugging-기본-순서" data-source="chapter_06_stage_local_debugging.md">기본 순서</h2>
 <pre><code>input
 preprocessing
@@ -396,7 +396,7 @@ next stage:</code></pre>
 실행해야 할 때 계획만 말했는가:
 사용자가 싫어한 문체나 구조를 반복했는가:
 공개 문서에 내부 작업 기록을 남겼는가:</code></pre>
-<p>해당 항목이 있으면 문장을 추가하지 않는다. 다음 행동을 바꾼다.</p>
+<p>해당 항목이 하나라도 있으면 문장을 추가하지 않는다. 다음 행동을 바꾼다.</p>
 <p>GitHub star 수는 발견의 단서다. 기준은 연구에서 같은 metric 혼동, 같은 cache 실수, 같은 reviewer 지적을 줄이는지다.</p>
 <h1 id="부록-a-헷갈리기-쉬운-말들" data-source="TERMS.md">부록 A — 헷갈리기 쉬운 말들</h1>
 <p>AI 도구를 연구에 쓰면 단어가 쉽게 섞인다. model, tool, agent, memory를 같은 종류로 부르면 실험 숫자와 원고 주장까지 흔들린다. 자주 섞이는 말을 구분하기 위한 최소 기준은 아래와 같다.</p>
@@ -453,7 +453,7 @@ next stage:</code></pre>
 </tbody></table>
 <p>Codex에서는 <code>AGENTS.md</code>, <code>templates/</code>, project memory가 이식된 규칙을 받는다. 이식 후에는 빠진 확인 항목을 따로 점검한다.</p>
 <h1 id="부록-b-빠른-시작-파일" data-source="QUICKSTART.md">부록 B — 빠른 시작 파일</h1>
-<p>본문을 읽은 뒤 새 연구 workspace에 옮길 파일을 정리한다. AI가 잘하는 일과 자주 틀리는 일, 사람이 감당하는 위험, 하네스가 확인하는 경계를 먼저 이해하고 이 부록을 쓴다.</p>
+<p>본문을 읽은 뒤 새 연구 workspace에 옮길 파일을 정리한다. AI가 잘하는 일과 자주 틀리는 일, 사람이 감당하는 위험, 하네스가 확인하는 경계를 먼저 이해하고 그다음 이 부록을 본다.</p>
 <h2 id="quickstart-도구-역할을-먼저-나눈다" data-source="QUICKSTART.md">도구 역할을 먼저 나눈다</h2>
 <p>처음에는 연구 상태와 도구 역할을 함께 정한다. 모델명은 그다음 문제다.</p>
 <table>
