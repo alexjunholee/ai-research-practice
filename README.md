@@ -25,8 +25,21 @@ reasoning effort 변경, thinking cache bug, 짧은 답변을 유도한 system p
 
 자체 서버도 완전한 답은 아니다. 모델을 직접 돌리면 공급자의 routing이나 quota 변화에서 조금
 자유로워진다. 하지만 논문 PDF, code path, 실험 로그, dataset convention, reviewer comment를
-가져오는 일은 여전히 남는다. RAG와 RETRO가 보여준 것처럼, 답의 품질은 모델 안의 parameter만이
-아니라 밖에서 어떤 자료를 찾아오느냐에 크게 묶인다.
+가져오는 일은 여전히 남는다.
+
+이 점은 retrieval-augmented language model 계열 연구에서 이미 정리됐다. [REALM](https://arxiv.org/abs/2002.08909)은
+지식을 parameter 안에 암묵적으로 저장하는 대신, 대규모 corpus에서 문서를 검색해 attention에
+올리는 구조를 보였다. [DPR](https://arxiv.org/abs/2004.04906)은 sparse keyword matching이 아니라
+dense representation으로 passage를 찾는 방식을 학습했고, [RAG](https://arxiv.org/abs/2005.11401)는
+seq2seq model의 parametric memory와 Wikipedia dense index라는 non-parametric memory를 결합했다.
+[FiD](https://arxiv.org/abs/2007.01282)는 여러 retrieved passage를 generator가 합쳐 답할 수 있음을
+보였고, [RETRO](https://arxiv.org/abs/2112.04426)는 2 trillion token database에서 가까운 chunk를
+붙여 parameter가 25배 작은 모델로 GPT-3와 Jurassic-1 수준의 Pile 성능을 냈다. [Atlas](https://arxiv.org/abs/2208.03299)는
+index 내용을 바꾸면 knowledge source를 갱신할 수 있다는 점도 보여 주었다.
+
+연구실에서 필요한 것은 이 논문들의 거대한 web-scale index가 아니다. 어느 논문 PDF, 어느 code
+path, 어느 실험 로그, 어느 reviewer comment를 가져와 답변 앞에 놓을 것인지 정하는 일이다. 답의
+품질은 모델 안의 parameter만이 아니라 밖에서 어떤 자료를 찾아오느냐에 크게 묶인다.
 
 - 그러면 우리가 해야 할 일은 무엇인가?
 
