@@ -5,8 +5,8 @@ f25ba87ff78e64c86595389d6451459c1b8d34972ad0eda3c2acbd3295da5ff5        2921  EX
 2ade70deadc9f7c7c0e2a531f4a833c6892b32350ac9917982ac73a4f8ae3fae        2370  README.md
 c9816d04716bcca758a0f50842a093b4bb13303abad09369e0407fc61878002c        5230  SOURCES.md
 3dc4a6c08e95240317e9306a95d95fc7cfab95e478eb7838a2e27ab5dfd59752        4707  TERMS.md
-efb94cfecc856aef673d452331ceeab7caa777781a2312c037c47321e9741446        6180  chapter_00_intro.md
-5371cad7c7d9d32bdc96d989c70a125d940eb37ba48ab5412f48156dd02f078d        6287  chapter_01_start_here.md
+0212cba74af420cbb0043b4a7b10e75c056822b5f0c335cffd9b0b774c724cbd        5996  chapter_00_intro.md
+c479c7a32c618853b0993c9e53d37d14d4f28761f69cf985552f1cb1ff9477d3        6505  chapter_01_start_here.md
 3c9f3fd3c6a18e08355ee74f11c61ef3ac9b42672fbfdd226e39b56675c61c6c        3199  chapter_02_environment.md
 5cb661208d94e5a972833c8a479056faaa221f64b7a9f163ede927b8c1b4ca19        3833  chapter_03_harness.md
 522091075dd70ade9d1e50a035a2647c7bafa3f92551de271fb3a0206eecc1df        2700  chapter_04_research_workflows.md
@@ -25,7 +25,7 @@ ff8be68cd3d77103f10aeb30378531900a5bec2fb538a50aebb18a053b8829d3        1636  ex
 c45d0c57e9e9d0b04f59bbfab3ab57eeab4891316a7556605985d96eaf5f804b        1843  examples/first-robotics-workspace/notes/stage-local-debugging.md
 c96c5fa8c9b7dd26cf724b8bd7e80b2045ebd421488e384ef08028238d6570d4         988  examples/first-robotics-workspace/notes/weekly-research-ledger.md
 b04dbc281bd894f761cdafd2a127c4a2489793bf371f5fe9e020048a12d12bfd        3759  examples/first-robotics-workspace/project-memory.json
-d7b7ff3d457a5cb15775aabe7641823d515441b4ca4963313d71201f1b3da923       97520  guide.html
+f4696a57dc5f8880e84f1e90d2ac22251ca00c46e88861ad8e280202023cd04c       97576  guide.html
 4591b7279e097c12d0759a582e3ebe699ff13a2b141f1eb00a8be973a4257c6a         267  index.html
 66e45c50030ac1abc3fda0acc9905cbad2fecd649c3a000c712e959726e1f6c4        2527  templates/AGENTS.template.md
 05e32b658413fecc14e17cd2968bcfe7df00412841f5436f2fafa6ebcaf66780         511  templates/claim-evidence-map.md
