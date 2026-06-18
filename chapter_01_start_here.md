@@ -46,13 +46,13 @@ AI는 텍스트를 빠르게 훑고 나누는 데 강하다. 연구자는 실행
 | 문장과 답변 | reviewer가 요구한 실험 없이 rebuttal 문장만 고친다 |
 | 요약과 증거 | handoff나 memory를 source로 쓴다 |
 
-Suchman의 situated action은 계획과 현장 행동 사이의 간격을 다룬다. 연구에서도 prompt와 plan은 확인 지시서에 가깝다. `ros2 topic info`, CSV, TeX diff, rebuttal table 같은 자료를 보고 나서야 실제 행동을 판단할 수 있다.
+[Suchman의 *Plans and Situated Actions*](https://www.lancaster.ac.uk/humanities-arts-and-social-sciences/people/lucy-suchman)는 계획을 현장의 행동을 대신 써 놓은 각본으로 보지 않았다. Suchman은 Xerox PARC에서 사람들이 복사기를 쓰는 장면을 관찰하며, 시스템이 예상한 절차와 사용자가 실제로 마주한 상황이 자주 어긋난다는 점을 보였다. 연구에서도 prompt와 plan은 확인 지시서에 가깝다. `ros2 topic info`, CSV, TeX diff, rebuttal table 같은 자료를 보고 나서야 실제 행동을 판단할 수 있다.
 
-Hutchins의 distributed cognition은 판단이 사람 머리 안에서만 이루어지지 않는다고 본다. 연구실의 판단도 repo, launch file, dataset, terminal output, paper table, 기억 노트에 흩어져 있다. AI가 말한 연결이 그럴듯해도, 이 자료들을 다시 대조해야 연구 상태를 판단할 수 있다.
+[Hutchins의 *Cognition in the Wild*](https://mitpress.mit.edu/9780262581462/cognition-in-the-wild/)는 해군 함정의 항법을 보며 계산과 판단이 사람 한 명의 머리 안에만 있지 않다고 설명했다. chart, 도구, 절차, 팀의 말 주고받기가 함께 항로를 만든다. 연구실의 판단도 repo, launch file, dataset, terminal output, paper table, 기억 노트에 흩어져 있다. AI가 말한 연결이 그럴듯해도, 이 자료들을 다시 대조해야 연구 상태를 판단할 수 있다.
 
-automation 연구에서도 같은 문제가 나온다. 자동화가 쉬운 일을 줄이면 사람에게는 감시와 드문 개입이 남는다. AI가 후보 설명을 빨리 만들수록 연구자는 어느 설명을 실행할지, 어떤 숫자를 원고에 올릴지, reviewer에게 어디까지 말할지 판단해야 한다.
+[Bainbridge의 *Ironies of Automation*](https://doi.org/10.1016/0005-1098(83)90046-8)은 자동화가 operator의 일을 없애는 것이 아니라 감시와 비정상 상황 개입을 남긴다고 지적했다. [Parasuraman & Riley](https://doi.org/10.1518/001872097778543886)는 use, misuse, disuse, abuse를 나누고, 신뢰와 workload가 자동화 사용을 바꾼다고 보았다. AI가 후보 설명을 빨리 만들수록 연구자는 어느 설명을 실행할지, 어떤 숫자를 원고에 올릴지, reviewer에게 어디까지 말할지 판단해야 한다.
 
-Anthropic의 Claude Code 사용 분석에서도 같은 모습이 보인다. 잘 쓰는 사용자는 문제를 좁히고, 확인할 대상을 짚고, 잘못된 실행 방향을 끊었다. 연구 작업에서는 이 역할이 더 중요해진다.
+[Anthropic의 2026년 Claude Code 사용 분석](https://www.anthropic.com/research/claude-code-expertise)은 실제 세션에서 사람과 agent의 결정을 나눠 보았다. 보고서는 사용자가 planning decision의 약 70%를, Claude가 execution decision의 약 80%를 맡는다고 분석했다. 사용자의 전문성은 지시문 길이가 아니라 문제를 구체적으로 세팅하고, 검증할 대상을 짚고, 잘못된 실행 방향을 바로잡는 신호로 나타났다. 연구 작업에서는 이 역할이 더 중요해진다.
 
 | 사용자가 가져오는 것 | 연구 작업에서의 의미 |
 |---|---|
