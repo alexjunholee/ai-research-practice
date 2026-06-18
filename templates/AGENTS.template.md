@@ -32,6 +32,19 @@ Private:
 - 개인 경로
 - raw dataset paths if they reveal private storage
 
+## Managed Agent Boundary
+
+This workspace follows the managed-agent pattern at the project level.
+
+- Session: `project-memory.json`, weekly ledger, replay cases, and artifacts.
+- Harness: this `AGENTS.md`, evidence gate, work modes, and durable corrections.
+- Sandbox: code repos, datasets, commands, tools, and generated outputs.
+
+Before starting work, state which session record will be updated, which harness
+rule controls the action, and which sandbox action is currently allowed. Leave a
+command result, file diff, or artifact path before promoting an observation into
+a research claim.
+
 ## Work Modes
 
 ### Read-only audit

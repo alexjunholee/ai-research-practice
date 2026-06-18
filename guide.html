@@ -87,7 +87,7 @@ body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD 
 <p>AI를 사람처럼 대하면 처음에는 잘 되는 것처럼 보인다. 더 자세히 설명하고, 다시 부탁하고, 틀렸다고 지적하면 답이 좋아질 때가 있다. 이 방식은 작업 방식으로 불안정하다. 매번 사용자가 상황을 기억하고, 모델의 답을 의심하고, 빠진 맥락을 다시 채워 넣어야 하기 때문이다.</p>
 <p>연구 작업에서는 이 방식이 금방 한계에 닿는다. 실험은 며칠씩 이어지고, 원고는 여러 번 바뀌고, reviewer comment는 과거 결과와 현재 코드 상태를 동시에 요구한다. 이때는 AI가 틀리지 않게 만드는 작업 구조가 필요하다.</p>
 <p>작업 환경부터 바꿔야 한다. 어떤 파일을 봤는지, 어떤 command를 실행했는지, 어떤 결과를 근거로 삼았는지를 남겨야 한다. 그래야 AI가 바뀌어도 같은 일을 다시 이어갈 수 있다. 이렇게 하면 모델 성능이 낮아져도 작업을 계속 붙잡을 수 있다. 좋은 모델은 더 빨리 찾고 더 잘 정리하겠지만, 성능이 낮은 모델도 같은 파일과 같은 로그를 보고 같은 절차를 따라갈 수 있다. 이 아티클은 그 절차를 만드는 도구들을 소개한다.</p>
-<p>이 글을 훑어 볼 분들에게 전하는 조언은, 이를 읽지 말고 에이전트에게 이 페이지를 넘겨서 문서화하게 하고 여기에 나온 법칙대로 자기만의 하네스를 만들라는 것이다. 사람이 이런 작업을 하는 시대는 지났다. 이 페이지를 직접 agent에게 읽히고 하네스를 작성하도록 시키라.</p>
+<p>이 글을 훑어 볼 분들에게 전하는 조언은, 이를 읽지 말고 에이전트에게 이 페이지를 넘겨서 문서화하게 하고 여기에 나온 법칙대로 자기만의 하네스를 만들라는 것이다. 사람이 이런 작업을 하는 시대는 지났다. 이 페이지를 직접 agent에게 읽히고 하네스를 작성하도록 시키시라.</p>
 <h1 id="ch-1-ai가-잘하는-일과-자주-틀리는-일" data-source="chapter_01_start_here.md">Ch.1 — AI가 잘하는 일과 자주 틀리는 일</h1>
 <p>AI는 먼저 확인 대상을 만든다. 에러 원인, 읽을 파일, 실험 조건, 원고 문장처럼 실제 작업 전에 좁혀 볼 목록을 빠르게 만든다. 그 설명이 맞는지는 repo, 실행 결과, dataset, metric, 원고 주장을 보고 판단한다.</p>
 <p>로보틱스 연구 대화에서 나온 사용자 입력 27,759개를 분류하면 장점과 실패가 함께 보인다. AI는 큰 repo를 훑고, 긴 log를 나누고, 논문 문장과 code path를 맞춰 보는 데 도움을 줬다. 반복 실패도 뚜렷했다. 빈도로 보면 현재 실행 상태를 보지 않은 단정과 파일 존재를 실제 사용으로 보는 착각이 가장 많았고, 조건이 다른 숫자의 비교와 실패 단계 혼합이 그다음이었다. 위험 비용을 무시한 원고 주장 확대는 더 적게 보였지만, 한 번 생기면 비용이 컸다.</p>
@@ -379,6 +379,7 @@ next stage:</code></pre>
 <h1 id="ch-8-유명한-agent-repo에서는-습관만-골라-온다" data-source="chapter_08_external_templates.md">Ch.8 — 유명한 agent repo에서는 습관만 골라 온다</h1>
 <p>공개 agent repo에는 가져올 습관이 있다. 작은 수정, 가정 명시, 실패 보고, 역할 분리, tool 호출 기록 같은 습관은 연구에도 도움이 된다. 그 규칙을 로봇 연구에 그대로 옮기면 빠지는 항목이 많다.</p>
 <p>일반 agent repo는 코드 변경과 tool use에 강하다. 로보틱스 연구에서는 dataset, calibration, frame, metric, 실패 처리, reviewer risk가 실험 숫자의 의미를 정한다.</p>
+<p>Anthropic의 <a href="https://www.anthropic.com/engineering/managed-agents">Managed Agents</a>는 agent를 하나의 큰 실행 환경으로 묶지 않고 session, harness, sandbox를 나누는 방식을 제시했다. 연구 workspace에 옮기면 session은 다음 세션이 다시 읽을 기록이고, harness는 agent가 따라야 할 규칙이며, sandbox는 실제 파일·command·dataset이 있는 실행 경계다. 외부 repo를 가져올 때도 prompt 문구보다 이 세 경계를 먼저 옮겨야 한다.</p>
 <h2 id="chapter-08-external-templates-참고할-repo-유형" data-source="chapter_08_external_templates.md">참고할 repo 유형</h2>
 <table>
 <thead><tr><th>유형</th><th>예</th><th>볼 것</th></tr></thead>
@@ -391,7 +392,7 @@ next stage:</code></pre>
 <h2 id="chapter-08-external-templates-그대로-가져오면-빠지는-항목" data-source="chapter_08_external_templates.md">그대로 가져오면 빠지는 항목</h2>
 <ul><li>dataset, split, sequence</li><li>task input/output</li><li>ground-truth frame</li><li>metric script</li><li>failure policy</li><li>implementation status</li><li>result provenance</li><li>원고에서 말할 수 있는 범위</li></ul>
 <h2 id="chapter-08-external-templates-옮길-때-볼-것" data-source="chapter_08_external_templates.md">옮길 때 볼 것</h2>
-<ol><li>외부 repo의 규칙을 기능별로 나눈다.</li><li>Claude, Cursor, Codex 등 특정 도구에 묶인 호출법을 제거한다.</li><li>남는 행동 규칙을 <code>AGENTS.md</code>나 template로 옮긴다.</li><li>dataset, metric, 결과물, reviewer risk 항목을 더한다.</li><li>사용자가 반복해서 반려한 패턴을 앞에 둔다.</li></ol>
+<ol><li>외부 repo의 규칙을 기능별로 나눈다.</li><li>Claude, Cursor, Codex 등 특정 도구에 묶인 호출법을 제거한다.</li><li>durable state는 <code>project-memory.json</code>, ledger, replay case로 옮긴다.</li><li>남는 행동 규칙은 <code>AGENTS.md</code>나 template로 옮긴다.</li><li>실제 실행 경계는 repo, dataset, artifact, command로 나눈다.</li><li>dataset, metric, 결과물, reviewer risk 항목을 더한다.</li><li>사용자가 반복해서 반려한 패턴을 앞에 둔다.</li></ol>
 <p>답변 전에 아래 항목을 확인한다.</p>
 <pre><code>읽지 않은 파일을 읽은 것처럼 말했는가:
 근거 범위를 넘는 주장을 썼는가:
@@ -547,10 +548,11 @@ mkdir -p artifacts</code></pre>
 Get-Content .\project-memory.json | ConvertFrom-Json | Out-Null
 New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null</code></pre>
 <p><code>project-memory.json</code>에는 다섯 묶음이 있어야 한다. <code>source_of_truth</code>는 AI가 다시 읽을 파일을 가리키고, <code>tool_surface_map</code>은 연구 장면별 도구 역할을 나눈다. <code>current_evidence</code>는 지금 쓸 수 있는 말과 보류할 말을 분리한다. <code>first_research_loop</code>는 처음 열 루프 하나만 고정하고, <code>next_smallest_actions</code>는 다음 세션의 첫 행동을 남긴다.</p>
+<p>이 구조는 Anthropic의 <a href="https://www.anthropic.com/engineering/managed-agents">Managed Agents</a>에서 말한 session, harness, sandbox 분리를 연구 workspace에 옮긴 것이다. <code>project-memory.json</code>과 ledger는 session이고, <code>AGENTS.md</code>와 prompt template은 harness이며, repo·dataset·artifact·command는 sandbox다. 첫 AI 세션은 이 세 경계를 먼저 말한 뒤 하나의 행동만 골라야 한다.</p>
 <p>그다음 <code>notes/first-ai-session-prompt.md</code>의 <code>Prompt To Send</code> 블록에서 빈칸을 채우고 <code>artifacts/first-ai-session-message.txt</code>에 저장한다. 이 파일이 첫 AI 세션의 실제 입력이다.</p>
 <h2 id="quickstart-agents-md-작성" data-source="QUICKSTART.md">AGENTS.md 작성</h2>
 <p><a href="templates/workspace-readme.md"><code>templates/workspace-readme.md</code></a>를 <code>README.md</code>로 복사하고, 프로젝트 이름과 repo, dataset, artifact 위치만 채운다. 그다음 <a href="templates/AGENTS.template.md"><code>templates/AGENTS.template.md</code></a>에서 다음 항목만 먼저 채운다.</p>
-<ul><li>project truth</li><li>public/private boundary</li><li>work modes</li><li>evidence gate</li><li>durable corrections</li></ul>
+<ul><li>project truth</li><li>public/private boundary</li><li>managed agent boundary</li><li>work modes</li><li>evidence gate</li><li>durable corrections</li></ul>
 <p>이미 <code>CLAUDE.md</code>, <code>.claude/</code>, Cursor rule이 있으면 <a href="templates/codex-porting-checklist.md"><code>templates/codex-porting-checklist.md</code></a>로 옮길 규칙과 버릴 명령을 나눈다. 파일 이름과 plugin 명령은 도구별 형식이다. 먼저 규칙의 의미를 본다. assumption을 드러내라, 작게 고쳐라, 성공 기준을 검증 가능하게 만들어라 같은 규칙은 Codex에서도 그대로 쓴다.</p>
 <h2 id="quickstart-첫-상태-체크리스트를-채운다" data-source="QUICKSTART.md">첫 상태 체크리스트를 채운다</h2>
 <p><a href="templates/first-day-workspace-checklist.md"><code>templates/first-day-workspace-checklist.md</code></a>는 현재 연구 상태의 원 파일과 실행 결과를 정한다.</p>
@@ -594,7 +596,7 @@ available.</code></pre>
 <p>AI가 틀린 assumption을 했다면 <code>replay-case.md</code>에 반복 확인 사례로 적는다. 같은 실수를 다음 세션에서 다시 설명하지 않기 위해서다.</p>
 <p>첫 세션이 끝난 뒤 <code>project-memory.json</code>의 <code>current_evidence</code>, <code>first_research_loop</code>, <code>claim_boundaries</code>, <code>next_smallest_actions</code>를 함께 고친다. memory를 바꾸면 다음 AI 세션이 같은 근거 범위를 이어받는다.</p>
 <h1 id="부록-c-예시-workspace" data-source="EXAMPLE_WORKSPACE.md">부록 C — 예시 workspace</h1>
-<p><code>examples/first-robotics-workspace/</code>는 quickstart를 따라 만든 작은 공개 예시다. 공개할 수 있는 파일 이름과 기록 단위만 남겼다. 새 사용자는 이 예시를 보고 자기 workspace에 맞게 이름과 경로를 바꾸어 쓴다. 연구 상태는 다음 세션에서 다시 읽을 수 있게 파일로 남긴다.</p>
+<p><code>examples/first-robotics-workspace/</code>는 quickstart를 따라 만든 작은 공개 예시다. 공개할 수 있는 파일 이름과 기록 단위만 남겼다. 새 사용자는 이 예시를 보고 자기 workspace에 맞게 이름과 경로를 바꾸어 쓴다. 연구 상태는 다음 세션에서 다시 읽을 수 있게 파일로 남긴다. 예시는 session, harness, sandbox 경계도 함께 보여준다.</p>
 <h2 id="example-workspace-파일-구조" data-source="EXAMPLE_WORKSPACE.md">파일 구조</h2>
 <pre><code>examples/first-robotics-workspace/
 ├── AGENTS.md
@@ -627,10 +629,13 @@ available.</code></pre>
 </tbody></table>
 <h2 id="example-workspace-예시에서-배울-경계" data-source="EXAMPLE_WORKSPACE.md">예시에서 배울 경계</h2>
 <p>이 예시는 AI가 어디서 시작해야 하는지 알 수 있을 만큼만 채운 상태다.</p>
-<pre><code>current evidence permits:
+<pre><code>session record to update:
+harness rule:
+sandbox action:
+current evidence permits:
 current evidence forbids:
 next smallest action:</code></pre>
-<p>세 줄이 있으면 AI는 같은 연구 상태에서 시작한다. 세 줄이 없으면 AI는 일반적인 조언으로 돌아간다.</p>
+<p>이 여섯 줄이 있으면 AI는 같은 연구 상태에서 시작한다. 이 줄들이 없으면 AI는 일반적인 조언으로 돌아간다.</p>
 <h1 id="부록-d-작업-흐름을-남기는-법" data-source="PATH.md">부록 D — 작업 흐름을 남기는 법</h1>
 <p>AI와 연구할 때 기록은 길 필요가 없다. 다음 세션이 같은 상태에서 시작할 만큼만 남기면 된다. 파일, 명령, 숫자, 원고 문장이 어디에서 왔는지를 남긴다.</p>
 <h2 id="path-다시-시작할-때-필요한-것" data-source="PATH.md">다시 시작할 때 필요한 것</h2>
@@ -681,7 +686,7 @@ Which output?</code></pre>
 <h2 id="sources-human-ai-action-theory-sources" data-source="SOURCES.md">Human-AI Action Theory Sources</h2>
 <ul><li><a href="https://doi.org/10.1016/0005-1098(83)90046-8">Bainbridge, <em>Ironies of Automation</em></a></li><li><a href="https://doi.org/10.1518/001872097778543886">Parasuraman &amp; Riley, <em>Humans and Automation: Use, Misuse, Disuse, Abuse</em></a></li><li><a href="https://doi.org/10.1518/001872095779049543">Endsley, <em>Toward a Theory of Situation Awareness in Dynamic Systems</em></a></li><li><a href="https://www.lancaster.ac.uk/humanities-arts-and-social-sciences/people/lucy-suchman">Suchman, <em>Plans and Situated Actions</em> / Lancaster profile</a></li><li><a href="https://mitpress.mit.edu/9780262581462/cognition-in-the-wild/">Hutchins, <em>Cognition in the Wild</em></a></li></ul>
 <h2 id="sources-llm-agent-and-grounding-sources" data-source="SOURCES.md">LLM Agent And Grounding Sources</h2>
-<ul><li><a href="https://arxiv.org/abs/2210.03629">Yao et al., <em>ReAct: Synergizing Reasoning and Acting in Language Models</em></a></li><li><a href="https://arxiv.org/abs/2302.04761">Schick et al., <em>Toolformer: Language Models Can Teach Themselves to Use Tools</em></a></li><li><a href="https://www.anthropic.com/research/claude-code-expertise">Anthropic, <em>Agentic coding and persistent returns to expertise</em></a></li><li><a href="https://cdn.sanity.io/files/4zrzovbb/website/ef87578c3828dc79d711f6d9c52eff39ac4e3be0.pdf">Anthropic, <em>Appendix to Agentic Coding and Persistent Returns to Expertise</em></a></li><li><a href="https://arxiv.org/abs/2202.03629">Ji et al., <em>Survey of Hallucination in Natural Language Generation</em></a></li><li><a href="https://aclanthology.org/2020.acl-main.173/">Maynez et al., <em>On Faithfulness and Factuality in Abstractive Summarization</em></a></li><li><a href="https://arxiv.org/abs/2002.08909">Guu et al., <em>REALM: Retrieval-Augmented Language Model Pre-Training</em></a></li><li><a href="https://arxiv.org/abs/2004.04906">Karpukhin et al., <em>Dense Passage Retrieval for Open-Domain Question Answering</em></a></li><li><a href="https://arxiv.org/abs/2005.11401">Lewis et al., <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</em></a></li><li><a href="https://arxiv.org/abs/2007.01282">Izacard &amp; Grave, <em>Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering</em></a></li><li><a href="https://arxiv.org/abs/2112.04426">Borgeaud et al., <em>Improving language models by retrieving from trillions of tokens</em></a></li><li><a href="https://arxiv.org/abs/2208.03299">Izacard et al., <em>Atlas: Few-shot Learning with Retrieval Augmented Language Models</em></a></li></ul>
+<ul><li><a href="https://arxiv.org/abs/2210.03629">Yao et al., <em>ReAct: Synergizing Reasoning and Acting in Language Models</em></a></li><li><a href="https://arxiv.org/abs/2302.04761">Schick et al., <em>Toolformer: Language Models Can Teach Themselves to Use Tools</em></a></li><li><a href="https://www.anthropic.com/research/claude-code-expertise">Anthropic, <em>Agentic coding and persistent returns to expertise</em></a></li><li><a href="https://cdn.sanity.io/files/4zrzovbb/website/ef87578c3828dc79d711f6d9c52eff39ac4e3be0.pdf">Anthropic, <em>Appendix to Agentic Coding and Persistent Returns to Expertise</em></a></li><li><a href="https://www.anthropic.com/engineering/managed-agents">Anthropic, <em>Scaling Managed Agents: Decoupling the brain from the hands</em></a></li><li><a href="https://arxiv.org/abs/2202.03629">Ji et al., <em>Survey of Hallucination in Natural Language Generation</em></a></li><li><a href="https://aclanthology.org/2020.acl-main.173/">Maynez et al., <em>On Faithfulness and Factuality in Abstractive Summarization</em></a></li><li><a href="https://arxiv.org/abs/2002.08909">Guu et al., <em>REALM: Retrieval-Augmented Language Model Pre-Training</em></a></li><li><a href="https://arxiv.org/abs/2004.04906">Karpukhin et al., <em>Dense Passage Retrieval for Open-Domain Question Answering</em></a></li><li><a href="https://arxiv.org/abs/2005.11401">Lewis et al., <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</em></a></li><li><a href="https://arxiv.org/abs/2007.01282">Izacard &amp; Grave, <em>Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering</em></a></li><li><a href="https://arxiv.org/abs/2112.04426">Borgeaud et al., <em>Improving language models by retrieving from trillions of tokens</em></a></li><li><a href="https://arxiv.org/abs/2208.03299">Izacard et al., <em>Atlas: Few-shot Learning with Retrieval Augmented Language Models</em></a></li></ul>
 <h2 id="sources-model-serving-and-product-layer-sources" data-source="SOURCES.md">Model Serving And Product-Layer Sources</h2>
 <ul><li><a href="https://platform.claude.com/docs/en/about-claude/models/overview">Anthropic, <em>Models overview</em></a></li><li><a href="https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions">Anthropic, <em>Model IDs and versioning</em></a></li><li><a href="https://platform.claude.com/docs/en/build-with-claude/effort">Anthropic, <em>Effort</em></a></li><li><a href="https://www.anthropic.com/engineering/april-23-postmortem">Anthropic, <em>An update on recent Claude Code quality reports</em></a></li><li><a href="https://github.com/anthropics/claude-code/issues/42796">GitHub issue, <code>anthropics/claude-code</code> #42796</a></li><li><a href="https://www.businessinsider.com/anthropic-admits-claude-code-issues-user-complaints-denies-nerfing-degrading-2026-4">Business Insider, <em>Anthropic says Claude Code did get worse</em></a></li><li><a href="https://www.businessinsider.com/claude-max-20x-ai-plan-subscribers-2026-6">Business Insider, <em>Meet the people who pay $2,400 a year for Anthropic's top-of-the-line Claude plan</em></a></li><li><a href="https://www.thetimes.com/business/wsj/article/anthropic-sued-limits-ai-plans-f95f2wjcx">The Times / Wall Street Journal, <em>Anthropic Sued Over Limits on Its $200-a-Month AI Plans</em></a></li></ul>
 <h2 id="sources-evaluation-and-reproducibility-sources" data-source="SOURCES.md">Evaluation And Reproducibility Sources</h2>

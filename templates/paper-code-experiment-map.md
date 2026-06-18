@@ -41,16 +41,20 @@ Status labels:
 - Baseline:
 - Artifact:
 
-## Issue / PR Notes
+## Agent Handoff Note
 
 Only include issues that change how the method should be run, evaluated, or
 cited.
 
+- Session record to update:
+- Harness rule triggered:
+- Sandbox file / command to inspect next:
 - Build issue:
 - Dataset convention issue:
 - Metric issue:
 - Sensor setup issue:
 - Claim or limitation issue:
+- Verification left for next session:
 
 ## Reusable Research Output
 

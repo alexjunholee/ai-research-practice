@@ -26,6 +26,10 @@ Read these files before answering.
 State these fields first.
 
 ```text
+Session record to update:
+Harness rule that controls this action:
+Sandbox action allowed now:
+Sandbox action not allowed now:
 Object under truth control:
 Current evidence permits:
 Current evidence forbids:
@@ -39,6 +43,7 @@ Verification:
 - Identify central claim and active code path candidates.
 - Mark missing dataset, split, metric, baseline, command, and artifact fields.
 - Choose one file or command output to inspect next.
+- Leave a session record, harness rule, sandbox action, and verification record.
 
 ## Blocked Claims
 
@@ -72,6 +77,10 @@ First research loop target: notes/paper-code-experiment-map.md
 Expected artifact: filled sections in notes/paper-code-experiment-map.md
 
 Before giving advice, state:
+- Session record to update
+- Harness rule that controls this action
+- Sandbox action allowed now
+- Sandbox action not allowed now
 - Object under truth control
 - Current evidence permits
 - Current evidence forbids

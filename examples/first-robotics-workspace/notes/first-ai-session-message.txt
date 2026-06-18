@@ -8,6 +8,10 @@ First research loop target: notes/paper-code-experiment-map.md
 Expected artifact: filled sections in notes/paper-code-experiment-map.md
 
 Before giving advice, state:
+- Session record to update
+- Harness rule that controls this action
+- Sandbox action allowed now
+- Sandbox action not allowed now
 - Object under truth control
 - Current evidence permits
 - Current evidence forbids

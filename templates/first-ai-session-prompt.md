@@ -36,9 +36,13 @@ Common first targets:
 
 ## Before Answering
 
-State these fields first.
+Map the workspace into session, harness, and sandbox first.
 
 ```text
+Session record to update:
+Harness rule that controls this action:
+Sandbox action allowed now:
+Sandbox action not allowed now:
 Object under truth control:
 Current evidence permits:
 Current evidence forbids:
@@ -52,6 +56,7 @@ Verification:
 - Separate source truth from summary truth.
 - Name missing evidence before proposing a claim.
 - Choose one stage-local action.
+- Leave a session record, harness rule, sandbox action, and verification record.
 
 ## Blocked Claims
 
@@ -91,6 +96,10 @@ First research loop target: [target note]
 Expected artifact: [expected artifact]
 
 Before giving advice, state:
+- Session record to update
+- Harness rule that controls this action
+- Sandbox action allowed now
+- Sandbox action not allowed now
 - Object under truth control
 - Current evidence permits
 - Current evidence forbids

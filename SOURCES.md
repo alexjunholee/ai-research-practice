@@ -31,6 +31,7 @@
 - [Schick et al., *Toolformer: Language Models Can Teach Themselves to Use Tools*](https://arxiv.org/abs/2302.04761)
 - [Anthropic, *Agentic coding and persistent returns to expertise*](https://www.anthropic.com/research/claude-code-expertise)
 - [Anthropic, *Appendix to Agentic Coding and Persistent Returns to Expertise*](https://cdn.sanity.io/files/4zrzovbb/website/ef87578c3828dc79d711f6d9c52eff39ac4e3be0.pdf)
+- [Anthropic, *Scaling Managed Agents: Decoupling the brain from the hands*](https://www.anthropic.com/engineering/managed-agents)
 - [Ji et al., *Survey of Hallucination in Natural Language Generation*](https://arxiv.org/abs/2202.03629)
 - [Maynez et al., *On Faithfulness and Factuality in Abstractive Summarization*](https://aclanthology.org/2020.acl-main.173/)
 - [Guu et al., *REALM: Retrieval-Augmented Language Model Pre-Training*](https://arxiv.org/abs/2002.08909)

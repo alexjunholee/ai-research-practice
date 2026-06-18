@@ -45,11 +45,12 @@ Current evidence forbids:
 
 Promotion requires:
 
-## Failure Notes
+## Agent Handoff Note
 
-- Timeout:
-- OOM:
-- Tracking lost:
-- Metric script failure:
-- Missing sequence:
-- Invalid ground truth:
+- Session record to update:
+- Harness rule triggered:
+- Sandbox file / command to inspect next:
+- Failure observed:
+- Claim allowed now:
+- Claim blocked now:
+- Verification left for next session:

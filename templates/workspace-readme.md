@@ -11,7 +11,8 @@ repo, dataset 위치, 첫 AI 세션 경계만 채운 뒤 시작한다.
 3. `notes/first-day-workspace-checklist.md`로 source of truth를 잠근다.
 4. 기존 `CLAUDE.md`, `.claude/`, Cursor rule이 있으면
    `notes/codex-porting-checklist.md`로 행동 원칙만 옮긴다.
-5. 첫 AI 세션에는 `notes/first-ai-session-prompt.md`를 채워 보낸다.
+5. session, harness, sandbox 경계를 먼저 쓴다.
+6. 첫 AI 세션에는 `notes/first-ai-session-prompt.md`를 채워 보낸다.
 
 ## First Run Check
 
@@ -35,6 +36,12 @@ left before it is sent.
 `project-memory.json` should also include `source_of_truth`, `tool_surface_map`,
 `current_evidence`, `first_research_loop`, and `next_smallest_actions`. These
 fields keep the next AI session from treating memory as proof.
+
+Use the workspace as a managed-agent harness.
+
+- Session: `project-memory.json`, ledger, replay cases, and artifacts.
+- Harness: `AGENTS.md`, prompt templates, evidence gates, and work modes.
+- Sandbox: repos, datasets, commands, tools, and generated outputs.
 
 ## Workspace Shape
 
@@ -71,6 +78,9 @@ workspace/
 ## Evidence Gate
 
 ```text
+session record to update:
+harness rule:
+sandbox action:
 current evidence permits:
 current evidence forbids:
 next smallest action:

@@ -11,7 +11,8 @@
 3. `notes/first-day-workspace-checklist.md`로 원 파일과 실행 결과를 정한다.
 4. 기존 `CLAUDE.md`, `.claude/`, Cursor rule이 있으면
    `notes/codex-porting-checklist.md`로 행동 원칙만 옮긴다.
-5. 첫 AI 세션에는 `notes/first-ai-session-prompt.md`를 채워 보낸다.
+5. session, harness, sandbox 경계를 먼저 쓴다.
+6. 첫 AI 세션에는 `notes/first-ai-session-prompt.md`를 채워 보낸다.
 
 ## First Run Check
 
@@ -53,6 +54,9 @@ notes/first-ai-session-prompt.md
 첫 세션의 답은 항상 아래 경계를 포함해야 한다.
 
 ```text
+session record to update:
+harness rule:
+sandbox action:
 current evidence permits:
 current evidence forbids:
 next action:

@@ -32,16 +32,20 @@
 - Baseline: not verified
 - Artifact: not produced
 
-## Issue / PR Notes
+## Agent Handoff Note
 
 Only include issues that change how the method should be run, evaluated, or
 cited.
 
+- Session record to update: project-memory.json and weekly ledger
+- Harness rule triggered: evidence gate before performance claim
+- Sandbox file / command to inspect next: evaluation script and dataset split file
 - Build issue:
 - Dataset convention issue:
 - Metric issue:
 - Sensor setup issue:
 - Claim or limitation issue:
+- Verification left for next session: cite the file or command output used for each filled field
 
 ## Reusable Research Output
 

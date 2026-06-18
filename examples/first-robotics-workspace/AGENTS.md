@@ -29,6 +29,15 @@ Private:
 - machine-specific storage names
 - unpublished result tables
 
+## Managed Agent Boundary
+
+- Session: project-memory.json, weekly ledger, replay cases, and artifacts.
+- Harness: AGENTS.md, evidence gate, work modes, and durable corrections.
+- Sandbox: repos/localization-stack, dataset inventory, commands, and generated outputs.
+
+Before starting work, state the session record to update, the harness rule that
+controls the action, and the sandbox action currently allowed.
+
 ## Work Modes
 
 ### Workspace Resume

@@ -47,6 +47,15 @@ Current evidence forbids:
 
 Promotion requires:
 
+## Agent Handoff Note
+
+- Session record to update:
+- Harness rule triggered:
+- Sandbox file / command to inspect next:
+- Claim allowed now:
+- Claim blocked now:
+- Verification left for next session:
+
 ## Reusable Citation Role
 
 - Background:

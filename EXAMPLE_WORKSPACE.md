@@ -3,7 +3,8 @@
 `examples/first-robotics-workspace/`는 quickstart를 따라 만든 작은 공개 예시다.
 공개할 수 있는 파일 이름과 기록 단위만 남겼다. 새 사용자는 이 예시를
 보고 자기 workspace에 맞게 이름과 경로를 바꾸어 쓴다. 연구 상태는 다음 세션에서
-다시 읽을 수 있게 파일로 남긴다.
+다시 읽을 수 있게 파일로 남긴다. 예시는 session, harness, sandbox 경계도
+함께 보여준다.
 
 ## 파일 구조
 
@@ -44,10 +45,13 @@ examples/first-robotics-workspace/
 이 예시는 AI가 어디서 시작해야 하는지 알 수 있을 만큼만 채운 상태다.
 
 ```text
+session record to update:
+harness rule:
+sandbox action:
 current evidence permits:
 current evidence forbids:
 next smallest action:
 ```
 
-세 줄이 있으면 AI는 같은 연구 상태에서 시작한다. 세 줄이 없으면 AI는 일반적인
-조언으로 돌아간다.
+이 여섯 줄이 있으면 AI는 같은 연구 상태에서 시작한다. 이 줄들이 없으면 AI는
+일반적인 조언으로 돌아간다.
