@@ -33,6 +33,6 @@ AI는 원고 문장을 매끄럽게 만든다. 원고와 답변서에서는 이 
 | citation만 추가 | reviewer가 지적한 실험 조건 확인이 빠진다 |
 | 공손한 문장부터 작성 | Table, Figure, Section 수정이 빠진다 |
 
-표를 고칠 때도 같은 순서다. ATE 표에는 낮은 error와 함께 alignment, 실패 처리, sequence 범위가 있어야 비교가 된다. loop closure 개수 표는 탐지 수를 센다. trajectory 개선이나 제약 정확도까지 말하려면 precision, outlier rejection, pose graph 영향 근거가 필요하다. caption과 본문 문장은 표가 담은 범위 안에서 쓴다.
+표를 고칠 때도 같은 순서다. metric 표에는 낮은 error나 높은 success rate와 함께 dataset, sensor, frame, failure policy가 있어야 비교가 된다. event count 표는 센 횟수를 말한다. downstream task 영향까지 말하려면 precision, outlier rejection, runtime 영향 근거가 필요하다. caption과 본문 문장은 표가 담은 범위 안에서 쓴다.
 
 예의는 필요하다. 정중한 문장은 실험 조건 위에 얹는다. 같은 split과 같은 metric script로 baseline을 다시 맞췄다면 그렇게 쓴다. cross-dataset generalization 근거가 없으면 해당 표현은 줄인다.

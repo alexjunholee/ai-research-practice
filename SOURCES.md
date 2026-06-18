@@ -51,14 +51,9 @@
 - [Business Insider, *Meet the people who pay $2,400 a year for Anthropic's top-of-the-line Claude plan*](https://www.businessinsider.com/claude-max-20x-ai-plan-subscribers-2026-6)
 - [The Times / Wall Street Journal, *Anthropic Sued Over Limits on Its $200-a-Month AI Plans*](https://www.thetimes.com/business/wsj/article/anthropic-sued-limits-ai-plans-f95f2wjcx)
 
-## Robotics/CV Evaluation Sources
+## Evaluation And Reproducibility Sources
 
 - [Pineau et al., *Improving Reproducibility in Machine Learning Research*](https://arxiv.org/abs/2003.12206)
-- [Sturm et al., *A Benchmark for the Evaluation of RGB-D SLAM Systems*](https://vision.in.tum.de/data/datasets/rgbd-dataset)
-- [Geiger, Lenz & Urtasun, *Are we ready for Autonomous Driving? The KITTI Vision Benchmark Suite*](https://www.cvlibs.net/publications/Geiger2012CVPR.pdf)
-- [Schubert et al., *Visual Place Recognition: A Tutorial*](https://arxiv.org/abs/2303.03281)
-- [Schubert & Neubert, *What makes visual place recognition easy or hard?*](https://arxiv.org/abs/2106.12671)
-- [Lowry et al., *Visual Place Recognition: A Survey*](https://doi.org/10.1109/TRO.2015.2496823)
 
 ## Argument And Manuscript Sources
 

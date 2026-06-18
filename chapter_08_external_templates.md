@@ -2,7 +2,7 @@
 
 공개 agent repo에는 가져올 습관이 있다. 작은 수정, 가정 명시, 실패 보고, 역할 분리, tool 호출 기록 같은 습관은 연구에도 도움이 된다. 그 규칙을 로봇 연구에 그대로 옮기면 빠지는 항목이 많다.
 
-일반 agent repo는 코드 변경과 tool use에 강하다. 로보틱스/CV 연구에서는 dataset, calibration, frame, metric, 실패 처리, reviewer risk가 실험 숫자의 의미를 정한다.
+일반 agent repo는 코드 변경과 tool use에 강하다. 로보틱스 연구에서는 dataset, calibration, frame, metric, 실패 처리, reviewer risk가 실험 숫자의 의미를 정한다.
 
 ## 참고할 repo 유형
 
@@ -16,7 +16,7 @@
 ## 그대로 가져오면 빠지는 항목
 
 - dataset, split, sequence
-- query/database direction
+- task input/output
 - ground-truth frame
 - metric script
 - failure policy

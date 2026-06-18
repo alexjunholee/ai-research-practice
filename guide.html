@@ -60,21 +60,21 @@ body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD 
 <div id="sidebar-overlay"></div>
 <nav id="sidebar"><div id="search-box"><input type="text" id="search-input" placeholder="Search headings... (Ctrl+K)"></div><div id="toc-container"></div><div class="toc-no-results" id="toc-no-results">No matching sections</div></nav>
 <main id="main-content"><div id="content"><section class="guide-overview"><div class="overview-header"><h1 class="overview-title">AI와 로봇 연구하기</h1><p>AI는 연구 작업에서 유용하다. 큰 repo에서 관련 파일을 검색하고, 긴 로그에서 확인할 원인을 빠르게 찾아내고, 논문을 보고 코드를 프로토타입으로 구현하는 등 일반화 작업을 매우 빠르게 수행한다. 그러나 잘 못하는 부분도 분명 있다.</p>
-<p>로봇/CV 연구 대화에서 나온 사용자 입력 27,759개를 분류했다. 같은 실패가 반복됐다. 요약을 현재 상태처럼 믿는 일, 코드 존재를 실제 사용으로 보는 일, protocol이 다른 숫자를 한 줄에 올리는 일이었다. 원 파일, 로그, 실행 결과에서 현재 상태를 확인하고, 실험 조건, 구현 상태, 실행 시점, 원고 주장 범위를 함께 본다.</p>
+<p>로보틱스 연구 대화에서 나온 사용자 입력 27,759개를 분류했다. 가장 자주 반복된 것은 요약을 현재 상태처럼 믿는 일과 코드 존재를 실제 사용으로 보는 일이었다. protocol이 다른 숫자를 한 줄에 올리는 일과 실패 단계를 섞는 일은 그다음으로 자주 나왔다. 원 파일, 로그, 실행 결과에서 현재 상태를 확인하고, 실험 조건, 구현 상태, 실행 시점, 원고 주장 범위를 함께 본다.</p>
 <p>문서 범위는 코드 읽기, 디버깅, 실험 protocol, metric 해석, 원고 수정, reviewer response, 외부 agent repo 이식이다.</p></div><div class="overview-group"><div class="overview-group-label">Guide</div><div class="overview-chapter"><a class="overview-chapter-link" href="#ch-0-왜-작업-구조가-필요한가"><span class="overview-chapter-num">00</span>Ch.0 — 왜 작업 구조가 필요한가</a><div class="overview-sections"><a href="#chapter-00-intro-비싼-구독-모델을-쓰면-해결되지-않나">비싼 구독 모델을 쓰면 해결되지 않나?</a><span class="sep">/</span><a href="#chapter-00-intro-sota-모델을-자체-서버에서-돌리면-어떤가">SOTA 모델을 자체 서버에서 돌리면 어떤가?</a><span class="sep">/</span><a href="#chapter-00-intro-그러면-우리가-해야-할-일은-무엇인가">그러면 우리가 해야 할 일은 무엇인가?</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#ch-1-ai가-잘하는-일과-자주-틀리는-일"><span class="overview-chapter-num">01</span>Ch.1 — AI가 잘하는 일과 자주 틀리는 일</a><div class="overview-sections"><a href="#chapter-01-start-here-잘하는-일">잘하는 일</a><span class="sep">/</span><a href="#chapter-01-start-here-자주-틀리는-일">자주 틀리는 일</a><span class="sep">/</span><a href="#chapter-01-start-here-왜-이런-일이-생기는가">왜 이런 일이 생기는가</a><span class="sep">/</span><a href="#chapter-01-start-here-확인할-다섯-줄">확인할 다섯 줄</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#ch-2-현재-상태는-원-파일-로그-실행-결과에-있다"><span class="overview-chapter-num">02</span>Ch.2 — 현재 상태는 원 파일, 로그, 실행 결과에 있다</a><div class="overview-sections"><a href="#chapter-02-environment-증거의-무게">증거의 무게</a><span class="sep">/</span><a href="#chapter-02-environment-복원할-항목">복원할 항목</a><span class="sep">/</span><a href="#chapter-02-environment-복원-순서">복원 순서</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#ch-3-한-번의-ai-작업은-하나의-상태만-바꾼다"><span class="overview-chapter-num">03</span>Ch.3 — 한 번의 AI 작업은 하나의 상태만 바꾼다</a><div class="overview-sections"><a href="#chapter-03-harness-작업-전에-적을-것">작업 전에 적을 것</a><span class="sep">/</span><a href="#chapter-03-harness-자주-나오는-작업-유형">자주 나오는 작업 유형</a><span class="sep">/</span><a href="#chapter-03-harness-실행-권한을-먼저-정한다">실행 권한을 먼저 정한다</a><span class="sep">/</span><a href="#chapter-03-harness-완료-보고는-좁게-쓴다">완료 보고는 좁게 쓴다</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#ch-4-논문은-코드와-실험-조건까지-읽어야-한다"><span class="overview-chapter-num">04</span>Ch.4 — 논문은 코드와 실험 조건까지 읽어야 한다</a><div class="overview-sections"><a href="#chapter-04-research-workflows-남길-항목">남길 항목</a><span class="sep">/</span><a href="#chapter-04-research-workflows-확인할-질문">확인할 질문</a><span class="sep">/</span><a href="#chapter-04-research-workflows-구현-상태-라벨">구현 상태 라벨</a></div></div>
-<div class="overview-chapter"><a class="overview-chapter-link" href="#ch-5-실험-숫자는-조건-목록과-함께-읽는다"><span class="overview-chapter-num">05</span>Ch.5 — 실험 숫자는 조건 목록과 함께 읽는다</a><div class="overview-sections"><a href="#chapter-05-experiment-protocol-최소-기록">최소 기록</a><span class="sep">/</span><a href="#chapter-05-experiment-protocol-slam-vio에서-볼-항목">SLAM/VIO에서 볼 항목</a><span class="sep">/</span><a href="#chapter-05-experiment-protocol-vpr-retrieval에서-볼-항목">VPR/retrieval에서 볼 항목</a></div></div>
-<div class="overview-chapter"><a class="overview-chapter-link" href="#ch-6-디버깅은-신호가-끊긴-단계를-찾는-일이다"><span class="overview-chapter-num">06</span>Ch.6 — 디버깅은 신호가 끊긴 단계를 찾는 일이다</a><div class="overview-sections"><a href="#chapter-06-stage-local-debugging-기본-순서">기본 순서</a><span class="sep">/</span><a href="#chapter-06-stage-local-debugging-ros2-callback이-비어-있을-때">ROS2 callback이 비어 있을 때</a><span class="sep">/</span><a href="#chapter-06-stage-local-debugging-vpr-성능이-갑자기-떨어졌을-때">VPR 성능이 갑자기 떨어졌을 때</a><span class="sep">/</span><a href="#chapter-06-stage-local-debugging-기록-형식">기록 형식</a></div></div>
+<div class="overview-chapter"><a class="overview-chapter-link" href="#ch-5-실험-숫자는-조건-목록과-함께-읽는다"><span class="overview-chapter-num">05</span>Ch.5 — 실험 숫자는 조건 목록과 함께 읽는다</a><div class="overview-sections"><a href="#chapter-05-experiment-protocol-최소-기록">최소 기록</a><span class="sep">/</span><a href="#chapter-05-experiment-protocol-로보틱스-task에서-볼-항목">로보틱스 task에서 볼 항목</a><span class="sep">/</span><a href="#chapter-05-experiment-protocol-평가-조건에서-볼-항목">평가 조건에서 볼 항목</a></div></div>
+<div class="overview-chapter"><a class="overview-chapter-link" href="#ch-6-디버깅은-신호가-끊긴-단계를-찾는-일이다"><span class="overview-chapter-num">06</span>Ch.6 — 디버깅은 신호가 끊긴 단계를 찾는 일이다</a><div class="overview-sections"><a href="#chapter-06-stage-local-debugging-기본-순서">기본 순서</a><span class="sep">/</span><a href="#chapter-06-stage-local-debugging-ros2-callback이-비어-있을-때">ROS2 callback이 비어 있을 때</a><span class="sep">/</span><a href="#chapter-06-stage-local-debugging-일반적인-로보틱스-task에서-성능이-갑자기-떨어졌을-때">일반적인 로보틱스 task에서 성능이 갑자기 떨어졌을 때</a><span class="sep">/</span><a href="#chapter-06-stage-local-debugging-기록-형식">기록 형식</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#ch-7-원고와-답변서는-주장과-근거부터-본다"><span class="overview-chapter-num">07</span>Ch.7 — 원고와 답변서는 주장과 근거부터 본다</a><div class="overview-sections"><a href="#chapter-07-manuscript-rebuttal-답변-전에-볼-것">답변 전에 볼 것</a><span class="sep">/</span><a href="#chapter-07-manuscript-rebuttal-처리-순서">처리 순서</a><span class="sep">/</span><a href="#chapter-07-manuscript-rebuttal-자주-생기는-실패">자주 생기는 실패</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#ch-8-유명한-agent-repo에서는-습관만-골라-온다"><span class="overview-chapter-num">08</span>Ch.8 — 유명한 agent repo에서는 습관만 골라 온다</a><div class="overview-sections"><a href="#chapter-08-external-templates-참고할-repo-유형">참고할 repo 유형</a><span class="sep">/</span><a href="#chapter-08-external-templates-그대로-가져오면-빠지는-항목">그대로 가져오면 빠지는 항목</a><span class="sep">/</span><a href="#chapter-08-external-templates-옮길-때-볼-것">옮길 때 볼 것</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#부록-a-헷갈리기-쉬운-말들"><span class="overview-chapter-num">부록</span>부록 A — 헷갈리기 쉬운 말들</a><div class="overview-sections"><a href="#terms-기본-용어">기본 용어</a><span class="sep">/</span><a href="#terms-근거의-무게">근거의 무게</a><span class="sep">/</span><a href="#terms-도구별로-볼-것">도구별로 볼 것</a><span class="sep">/</span><a href="#terms-claude-규칙을-codex에서-쓸-때">Claude 규칙을 Codex에서 쓸 때</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#부록-b-빠른-시작-파일"><span class="overview-chapter-num">부록</span>부록 B — 빠른 시작 파일</a><div class="overview-sections"><a href="#quickstart-도구-역할을-먼저-나눈다">도구 역할을 먼저 나눈다</a><span class="sep">/</span><a href="#quickstart-workspace를-나눈다">Workspace를 나눈다</a><span class="sep">/</span><a href="#quickstart-agents-md-작성">AGENTS.md 작성</a><span class="sep">/</span><a href="#quickstart-첫-상태-체크리스트를-채운다">첫 상태 체크리스트를 채운다</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#부록-c-예시-workspace"><span class="overview-chapter-num">부록</span>부록 C — 예시 workspace</a><div class="overview-sections"><a href="#example-workspace-파일-구조">파일 구조</a><span class="sep">/</span><a href="#example-workspace-이-예시가-보여주는-것">이 예시가 보여주는 것</a><span class="sep">/</span><a href="#example-workspace-예시에서-배울-경계">예시에서 배울 경계</a></div></div>
 <div class="overview-chapter"><a class="overview-chapter-link" href="#부록-d-작업-흐름을-남기는-법"><span class="overview-chapter-num">부록</span>부록 D — 작업 흐름을 남기는 법</a><div class="overview-sections"><a href="#path-다시-시작할-때-필요한-것">다시 시작할 때 필요한 것</a><span class="sep">/</span><a href="#path-하나의-작업을-결과물로-남긴다">하나의 작업을 결과물로 남긴다</a><span class="sep">/</span><a href="#path-반복-실패를-다음-작업-전에-잡는다">반복 실패를 다음 작업 전에 잡는다</a><span class="sep">/</span><a href="#path-매주-남길-세-줄">매주 남길 세 줄</a></div></div>
-<div class="overview-chapter"><a class="overview-chapter-link" href="#부록-e-출처"><span class="overview-chapter-num">부록</span>부록 E — 출처</a><div class="overview-sections"><a href="#sources-external-agent-and-skills-repos">External Agent And Skills Repos</a><span class="sep">/</span><a href="#sources-human-ai-action-theory-sources">Human-AI Action Theory Sources</a><span class="sep">/</span><a href="#sources-llm-agent-and-grounding-sources">LLM Agent And Grounding Sources</a><span class="sep">/</span><a href="#sources-model-serving-and-product-layer-sources">Model Serving And Product-Layer Sources</a><span class="sep">/</span><a href="#sources-robotics-cv-evaluation-sources">Robotics/CV Evaluation Sources</a></div></div></div></section><h1 id="ch-0-왜-작업-구조가-필요한가" data-source="chapter_00_intro.md">Ch.0 — 왜 작업 구조가 필요한가</h1>
+<div class="overview-chapter"><a class="overview-chapter-link" href="#부록-e-출처"><span class="overview-chapter-num">부록</span>부록 E — 출처</a><div class="overview-sections"><a href="#sources-external-agent-and-skills-repos">External Agent And Skills Repos</a><span class="sep">/</span><a href="#sources-human-ai-action-theory-sources">Human-AI Action Theory Sources</a><span class="sep">/</span><a href="#sources-llm-agent-and-grounding-sources">LLM Agent And Grounding Sources</a><span class="sep">/</span><a href="#sources-model-serving-and-product-layer-sources">Model Serving And Product-Layer Sources</a><span class="sep">/</span><a href="#sources-evaluation-and-reproducibility-sources">Evaluation And Reproducibility Sources</a></div></div></div></section><h1 id="ch-0-왜-작업-구조가-필요한가" data-source="chapter_00_intro.md">Ch.0 — 왜 작업 구조가 필요한가</h1>
 <p>AI는 연구 작업에서 유용하다. 큰 repo에서 관련 파일을 검색하고, 긴 로그에서 확인할 원인을 빠르게 찾아내고, 논문을 보고 코드를 프로토타입으로 구현하는 등 일반화 작업을 매우 빠르게 수행한다. 그러나 잘 못하는 부분도 분명 있다. 이 글을 읽는 사용자는 AI 모델을 다그쳐도 보고, 꾸짖어도 보고, 달래도 보고 하면서 사람과 똑같이 대해가며 더 나은 결과를 이끌어낸 경험이 있다. 그런데 늘 이렇게 할 수는 없지 않은가. 우리가 AI를 어르고 달래기 위해서 일을 하는 게 아니지 않은가. 이 아티클은 이 상황을 타개하는 원리와 도구를 소개하기 위해 작성하였다.</p>
 <h2 id="chapter-00-intro-비싼-구독-모델을-쓰면-해결되지-않나" data-source="chapter_00_intro.md">비싼 구독 모델을 쓰면 해결되지 않나?</h2>
 <p>일단 우리 연구실에서는 200 USD짜리 구독을 6개월째 해오고 있다. 좋은 모델을 쓰면 성능이 더 좋아지는 부분이 있기 때문이다. 그래도 작업 품질은 흔들린다. 상용 구독은 폐쇄형 서비스다. 사용자는 통제할 수 없는 모델에 프롬프트만 입력한다. 공급자는 실제 parameter 수, token limit, backend routing, system prompt, cache, thinking 처리의 변화 정보를 제한적으로만 공개한다. Anthropic의 <a href="https://www.anthropic.com/engineering/april-23-postmortem">2026년 4월 Claude Code postmortem</a>은 reasoning effort 변경, thinking cache bug, 짧은 답변을 유도한 system prompt가 품질 저하 보고로 이어졌다고 적었다. 공급자가 이런 항목을 바꿔도 우리는 알아채기조차 힘들다. 장기 연구에는 안정적인 작업 조건이 필요하다.</p>
@@ -90,7 +90,7 @@ body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD 
 <p>이 글을 훑어 볼 분들에게 전하는 조언은, 이를 읽지 말고 에이전트에게 이 페이지를 넘겨서 문서화하게 하고 여기에 나온 법칙대로 자기만의 하네스를 만들라는 것이다. 사람이 이런 작업을 하는 시대는 지났다. 이 페이지를 직접 agent에게 읽히고 하네스를 작성하도록 시키라.</p>
 <h1 id="ch-1-ai가-잘하는-일과-자주-틀리는-일" data-source="chapter_01_start_here.md">Ch.1 — AI가 잘하는 일과 자주 틀리는 일</h1>
 <p>AI는 먼저 확인 대상을 만든다. 에러 원인, 읽을 파일, 실험 조건, 원고 문장처럼 실제 작업 전에 좁혀 볼 목록을 빠르게 만든다. 그 설명이 맞는지는 repo, 실행 결과, dataset, metric, 원고 주장을 보고 판단한다.</p>
-<p>로봇/CV 연구 대화에서 나온 사용자 입력 27,759개를 분류하면 장점과 실패가 함께 보인다. AI는 큰 repo를 훑고, 긴 log를 나누고, 논문 문장과 code path를 맞춰 보는 데 도움을 줬다. 반복 실패도 뚜렷했다. 현재 실행 상태를 보지 않은 단정, 파일 존재를 실제 사용으로 보는 착각, 조건이 다른 숫자의 비교였다.</p>
+<p>로보틱스 연구 대화에서 나온 사용자 입력 27,759개를 분류하면 장점과 실패가 함께 보인다. AI는 큰 repo를 훑고, 긴 log를 나누고, 논문 문장과 code path를 맞춰 보는 데 도움을 줬다. 반복 실패도 뚜렷했다. 빈도로 보면 현재 실행 상태를 보지 않은 단정과 파일 존재를 실제 사용으로 보는 착각이 가장 많았고, 조건이 다른 숫자의 비교와 실패 단계 혼합이 그다음이었다. 위험 비용을 무시한 원고 주장 확대는 더 적게 보였지만, 한 번 생기면 비용이 컸다.</p>
 <h2 id="chapter-01-start-here-잘하는-일" data-source="chapter_01_start_here.md">잘하는 일</h2>
 <p>AI는 눈앞의 텍스트와 파일을 빠르게 훑는다. 연구자가 좁혀야 할 범위를 줄여 준다.</p>
 <table>
@@ -111,12 +111,12 @@ body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD 
 <tr><td>보지 않은 현재 상태 확정</td><td>파일명, memory, 요약만으로 최신 repo나 runtime을 단정한다</td></tr>
 <tr><td>코드 존재와 실행 사용 혼동</td><td>source에 있는 module을 active method로 착각한다</td></tr>
 <tr><td>숫자와 주장 거리 조절 실패</td><td>metric 하나를 방법 개선이나 generalization 주장으로 올린다</td></tr>
-<tr><td>실패 단계 혼합</td><td>retrieval, geometry, optimization, evaluation 실패를 한 원인으로 합친다</td></tr>
+<tr><td>실패 단계 혼합</td><td>data loading, matching, optimization, evaluation 실패를 한 원인으로 합친다</td></tr>
 <tr><td>위험 비용 무시</td><td>시간, compute, reviewer trust, 원고 주장 범위는 사람이 감당한다</td></tr>
 </tbody></table>
 <p>AI가 내놓은 설명이 실행으로 넘어가는 순간부터 비용이 생긴다. 이 구분을 놓치면 연구자는 빠른 답을 얻고도 같은 일을 다시 확인한다.</p>
 <h2 id="chapter-01-start-here-왜-이런-일이-생기는가" data-source="chapter_01_start_here.md">왜 이런 일이 생기는가</h2>
-<p>반복 실패는 대체로 작업을 나누는 방식에서 나온다. AI는 대화와 파일 일부를 보고 다음 후보 설명을 만든다. 로보틱스/CV 연구의 상태는 대화 밖에서 바뀐다. Docker container, ROS2 topic, CUDA process, dataset split, calibration file, metric script, TeX table은 실제 파일과 실행 결과로 확인한다.</p>
+<p>반복 실패는 대체로 작업을 나누는 방식에서 나온다. AI는 대화와 파일 일부를 보고 다음 후보 설명을 만든다. 로보틱스 연구의 상태는 대화 밖에서 바뀐다. Docker container, ROS2 topic, CUDA process, dataset split, calibration file, metric script, TeX table은 실제 파일과 실행 결과로 확인한다.</p>
 <p>AI는 텍스트를 빠르게 훑고 나누는 데 강하다. 연구자는 실행과 증거를 확인한다. 이 둘을 섞으면 같은 오류가 반복된다.</p>
 <table>
 <thead><tr><th>섞인 것</th><th>반복되는 오류</th></tr></thead>
@@ -163,7 +163,7 @@ body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD 
 </tbody></table>
 <p>논문 주장은 원 파일, 실행 결과, dataset, split, metric을 확인한 뒤 확정한다. 명령 출력은 해당 실행의 결과를 말할 수 있다. 방법이 좋아졌다는 문장은 조건 확인 뒤에 쓴다.</p>
 <h2 id="chapter-02-environment-복원할-항목" data-source="chapter_02_environment.md">복원할 항목</h2>
-<p>로보틱스/CV 연구 상태는 여러 파일에 흩어져 있다.</p>
+<p>로보틱스 연구 상태는 여러 파일에 흩어져 있다.</p>
 <table>
 <thead><tr><th>상태</th><th>확인할 항목</th></tr></thead>
 <tbody>
@@ -265,14 +265,14 @@ metric script:
 <p>AI에게는 paper에서 method component를 뽑고, repo에서 관련 function, class, config를 찾고, issue thread와 README의 convention 변화를 모으는 일을 맡기기 좋다. 실제 호출 여부, config가 runtime에 도달하는지, 같은 dataset과 metric 조건인지, 원고에서 어디까지 말할 수 있는지는 실행 결과로 확인한다.</p>
 <p>abstract 다음에는 YAML, launch command, issue comment, failed sequence, table caption까지 내려간다.</p>
 <h1 id="ch-5-실험-숫자는-조건-목록과-함께-읽는다" data-source="chapter_05_experiment_protocol.md">Ch.5 — 실험 숫자는 조건 목록과 함께 읽는다</h1>
-<p>실험 숫자는 조건과 함께 비교한다. ATE, RPE, Recall@K, precision-recall은 이름이 같아도 dataset, split, frame, alignment, query/database direction, positive rule, baseline이 다르면 다른 숫자다.</p>
-<p><a href="https://vision.in.tum.de/data/datasets/rgbd-dataset">Sturm et al.의 RGB-D SLAM benchmark</a>는 trajectory error를 evaluation script와 함께 공개했다. <a href="https://arxiv.org/abs/2303.03281">Schubert et al.의 VPR tutorial</a>은 query, database, ground truth, matching rule에 따라 평가 해석이 달라진다고 정리했다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.</p>
+<p>실험 숫자는 조건과 함께 비교한다. 로보틱스 metric은 이름이 같아도 dataset, split, sensor, frame, calibration, alignment, metric script, failure policy, baseline이 다르면 다른 숫자다.</p>
+<p>로보틱스 benchmark는 숫자만 두지 않고 evaluation script, dataset protocol, failure policy를 함께 둔다. 낮은 error, 높은 success rate, 빠른 latency를 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.</p>
 <h2 id="chapter-05-experiment-protocol-최소-기록" data-source="chapter_05_experiment_protocol.md">최소 기록</h2>
 <pre><code>dataset:
 split:
 sequence:
 sensor/modality:
-query/database direction:
+task input/output:
 ground-truth frame:
 alignment:
 metric:
@@ -283,33 +283,34 @@ config:
 output path:
 timeout:
 failure policy:</code></pre>
-<h2 id="chapter-05-experiment-protocol-slam-vio에서-볼-항목" data-source="chapter_05_experiment_protocol.md">SLAM/VIO에서 볼 항목</h2>
+<h2 id="chapter-05-experiment-protocol-로보틱스-task에서-볼-항목" data-source="chapter_05_experiment_protocol.md">로보틱스 task에서 볼 항목</h2>
 <table>
 <thead><tr><th>항목</th><th>확인 내용</th></tr></thead>
 <tbody>
-<tr><td>coverage</td><td>trajectory가 전체 bag을 덮는가</td></tr>
-<tr><td>pose count</td><td>예상 pose 수와 출력 pose 수가 맞는가</td></tr>
+<tr><td>coverage</td><td>입력 구간과 출력 구간이 서로 맞는가</td></tr>
+<tr><td>output count</td><td>예상 출력 수와 실제 출력 수가 맞는가</td></tr>
 <tr><td>timestamp span</td><td>시작/종료 시간이 맞는가</td></tr>
-<tr><td>tracking lost</td><td>실패 구간을 어떻게 처리했는가</td></tr>
-<tr><td>alignment</td><td>SE(3), Sim(3), scale 처리 조건이 무엇인가</td></tr>
-<tr><td>failure policy</td><td>실패 sequence를 평균에서 제외했는가</td></tr>
+<tr><td>frame/calibration</td><td>frame convention과 calibration이 같은가</td></tr>
+<tr><td>preprocessing</td><td>resize, crop, filtering, normalization 조건이 같은가</td></tr>
+<tr><td>cache/checkpoint</td><td>현재 model과 config에서 나온 결과물인가</td></tr>
+<tr><td>failure policy</td><td>실패 구간을 평균이나 집계에서 어떻게 처리했는가</td></tr>
 </tbody></table>
-<h2 id="chapter-05-experiment-protocol-vpr-retrieval에서-볼-항목" data-source="chapter_05_experiment_protocol.md">VPR/retrieval에서 볼 항목</h2>
+<h2 id="chapter-05-experiment-protocol-평가-조건에서-볼-항목" data-source="chapter_05_experiment_protocol.md">평가 조건에서 볼 항목</h2>
 <table>
 <thead><tr><th>항목</th><th>확인 내용</th></tr></thead>
 <tbody>
-<tr><td>direction</td><td>camera-to-LiDAR인지 LiDAR-to-camera인지</td></tr>
-<tr><td>positive rule</td><td>exact frame인지 radius rule인지</td></tr>
-<tr><td>query count</td><td>invalid query 포함 여부</td></tr>
-<tr><td>feature source</td><td>backbone, projection head, teacher, student 구분</td></tr>
-<tr><td>cache version</td><td>feature cache가 현재 model에서 나온 것인지</td></tr>
+<tr><td>task input/output</td><td>어떤 입력에서 어떤 출력을 평가하는가</td></tr>
+<tr><td>ground truth</td><td>정답 파일, 좌표계, 시간 범위가 같은가</td></tr>
+<tr><td>threshold</td><td>success/failure를 가르는 기준이 같은가</td></tr>
+<tr><td>baseline</td><td>같은 조건의 baseline인가</td></tr>
 <tr><td>metric script</td><td>지난번과 같은 script인지</td></tr>
+<tr><td>output path</td><td>실제로 읽은 결과 파일이 맞는지</td></tr>
 </tbody></table>
 <p>원고 문장에는 조건을 넣는다.</p>
-<blockquote>EuRoC MH_01-05에서 같은 alignment와 같은 metric script를 쓴 baseline 대비 ATE median이 줄었다.</blockquote>
+<blockquote>같은 dataset, 같은 sensor 입력, 같은 metric script를 쓴 baseline 대비 main metric이 개선되었다.</blockquote>
 <p>조건이 빠진 문장은 보류한다.</p>
 <blockquote>성능이 향상되었다.</blockquote>
-<p>표 caption도 같은 규칙을 따른다. ATE 표는 dataset별 오차와 비교 조건을 말한다. loop closure 개수 표에는 탐지 수가 있다. precision, outlier rejection, pose graph 영향까지 말하려면 추가 근거가 필요하다. 표 아래 한 문장도 표가 담은 범위 안에서 쓴다.</p>
+<p>표 caption도 같은 규칙을 따른다. metric 표에는 수치와 비교 조건이 있어야 한다. event count 표는 센 횟수만 말한다. downstream task 영향까지 말하려면 추가 근거가 필요하다. 표 아래 한 문장도 표가 담은 범위 안에서 쓴다.</p>
 <p>실패도 결과다. timeout, OOM, sensor dropout, tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험 조건을 정하는 자료가 된다.</p>
 <h1 id="ch-6-디버깅은-신호가-끊긴-단계를-찾는-일이다" data-source="chapter_06_stage_local_debugging.md">Ch.6 — 디버깅은 신호가 끊긴 단계를 찾는 일이다</h1>
 <p>AI는 root cause를 빨리 말한다. QoS, calibration, cache, normalization 같은 단어가 바로 나온다. 도움이 될 때도 있다. 어느 단계에서 신호가 끊겼는지 확인하기 전까지는 후보 설명으로 둔다.</p>
@@ -318,16 +319,16 @@ failure policy:</code></pre>
 <pre><code>input
 preprocessing
 representation
-matching/retrieval
+matching
 geometry
 optimization
 evaluation</code></pre>
 <h2 id="chapter-06-stage-local-debugging-ros2-callback이-비어-있을-때" data-source="chapter_06_stage_local_debugging.md">ROS2 callback이 비어 있을 때</h2>
 <p>수정 전에 다음을 본다.</p>
 <ol><li><code>ros2 topic list</code>로 topic 존재 확인</li><li><code>ros2 topic info --verbose</code>로 QoS 확인</li><li>publisher/subscriber namespace 확인</li><li><code>use_sim_time</code>과 <code>/clock</code> 확인</li><li>container device, network, volume 확인</li><li>그다음 코드 또는 launch 수정</li></ol>
-<h2 id="chapter-06-stage-local-debugging-vpr-성능이-갑자기-떨어졌을-때" data-source="chapter_06_stage_local_debugging.md">VPR 성능이 갑자기 떨어졌을 때</h2>
+<h2 id="chapter-06-stage-local-debugging-일반적인-로보틱스-task에서-성능이-갑자기-떨어졌을-때" data-source="chapter_06_stage_local_debugging.md">일반적인 로보틱스 task에서 성능이 갑자기 떨어졌을 때</h2>
 <p>수정 전에 다음을 본다.</p>
-<ol><li>query/database split 확인</li><li>cached feature version 확인</li><li>normalization 확인</li><li>index order 확인</li><li>positive radius 확인</li><li>metric script 확인</li><li>그다음 model architecture 또는 training 설정 수정</li></ol>
+<ol><li>dataset, split, sensor input 범위 확인</li><li>timestamp, frame, calibration 확인</li><li>preprocessing과 normalization 확인</li><li>cache, checkpoint, intermediate output 확인</li><li>matching, geometry, optimization의 입력과 출력 확인</li><li>metric script와 failure policy 확인</li><li>그다음 model architecture, training 설정, control parameter 수정</li></ol>
 <h2 id="chapter-06-stage-local-debugging-기록-형식" data-source="chapter_06_stage_local_debugging.md">기록 형식</h2>
 <p>각 확인은 같은 형식으로 남긴다.</p>
 <pre><code>stage:
@@ -346,7 +347,7 @@ next stage:</code></pre>
 <tr><td>평가 실패</td><td>wrong frame, wrong split, wrong metric script</td></tr>
 <tr><td>방법 실패</td><td>조건을 맞춰 확인한 뒤에도 성능이 낮음</td></tr>
 </tbody></table>
-<p>build pass는 소스 컴파일을 확인한다. callback, tf lookup, metric correctness, trajectory validity는 따로 확인한다.</p>
+<p>build pass는 소스 컴파일을 확인한다. callback, tf lookup, metric correctness, output validity는 따로 확인한다.</p>
 <h1 id="ch-7-원고와-답변서는-주장과-근거부터-본다" data-source="chapter_07_manuscript_rebuttal.md">Ch.7 — 원고와 답변서는 주장과 근거부터 본다</h1>
 <p>AI는 원고 문장을 매끄럽게 만든다. 원고와 답변서에서는 이 능력이 위험해질 수 있다. reviewer comment가 tone, 실험 조건, 주장 범위 중 무엇을 겨냥하는지 먼저 확인한다.</p>
 <p><a href="https://www.cambridge.org/core/books/uses-of-argument/26CF801BC12004587B66778297D5567C">Toulmin의 <em>The Uses of Argument</em></a>는 실제 논쟁에서 주장이 어떻게 버티는지 분석했다. claim, data, warrant, backing, qualifier, rebuttal은 서로 다른 역할을 맡는다. 논문 답변서에서도 주장은 근거와 보증을 따라간다. reviewer comment는 주로 주장을 받치는 근거와 보증을 묻는다.</p>
@@ -373,11 +374,11 @@ next stage:</code></pre>
 <tr><td>citation만 추가</td><td>reviewer가 지적한 실험 조건 확인이 빠진다</td></tr>
 <tr><td>공손한 문장부터 작성</td><td>Table, Figure, Section 수정이 빠진다</td></tr>
 </tbody></table>
-<p>표를 고칠 때도 같은 순서다. ATE 표에는 낮은 error와 함께 alignment, 실패 처리, sequence 범위가 있어야 비교가 된다. loop closure 개수 표는 탐지 수를 센다. trajectory 개선이나 제약 정확도까지 말하려면 precision, outlier rejection, pose graph 영향 근거가 필요하다. caption과 본문 문장은 표가 담은 범위 안에서 쓴다.</p>
+<p>표를 고칠 때도 같은 순서다. metric 표에는 낮은 error나 높은 success rate와 함께 dataset, sensor, frame, failure policy가 있어야 비교가 된다. event count 표는 센 횟수를 말한다. downstream task 영향까지 말하려면 precision, outlier rejection, runtime 영향 근거가 필요하다. caption과 본문 문장은 표가 담은 범위 안에서 쓴다.</p>
 <p>예의는 필요하다. 정중한 문장은 실험 조건 위에 얹는다. 같은 split과 같은 metric script로 baseline을 다시 맞췄다면 그렇게 쓴다. cross-dataset generalization 근거가 없으면 해당 표현은 줄인다.</p>
 <h1 id="ch-8-유명한-agent-repo에서는-습관만-골라-온다" data-source="chapter_08_external_templates.md">Ch.8 — 유명한 agent repo에서는 습관만 골라 온다</h1>
 <p>공개 agent repo에는 가져올 습관이 있다. 작은 수정, 가정 명시, 실패 보고, 역할 분리, tool 호출 기록 같은 습관은 연구에도 도움이 된다. 그 규칙을 로봇 연구에 그대로 옮기면 빠지는 항목이 많다.</p>
-<p>일반 agent repo는 코드 변경과 tool use에 강하다. 로보틱스/CV 연구에서는 dataset, calibration, frame, metric, 실패 처리, reviewer risk가 실험 숫자의 의미를 정한다.</p>
+<p>일반 agent repo는 코드 변경과 tool use에 강하다. 로보틱스 연구에서는 dataset, calibration, frame, metric, 실패 처리, reviewer risk가 실험 숫자의 의미를 정한다.</p>
 <h2 id="chapter-08-external-templates-참고할-repo-유형" data-source="chapter_08_external_templates.md">참고할 repo 유형</h2>
 <table>
 <thead><tr><th>유형</th><th>예</th><th>볼 것</th></tr></thead>
@@ -388,7 +389,7 @@ next stage:</code></pre>
 <tr><td>local research agent repo</td><td><code>alexjunholee/robotics-research-agent</code></td><td>user reaction prior, 연구 증거 확인 규칙</td></tr>
 </tbody></table>
 <h2 id="chapter-08-external-templates-그대로-가져오면-빠지는-항목" data-source="chapter_08_external_templates.md">그대로 가져오면 빠지는 항목</h2>
-<ul><li>dataset, split, sequence</li><li>query/database direction</li><li>ground-truth frame</li><li>metric script</li><li>failure policy</li><li>implementation status</li><li>result provenance</li><li>원고에서 말할 수 있는 범위</li></ul>
+<ul><li>dataset, split, sequence</li><li>task input/output</li><li>ground-truth frame</li><li>metric script</li><li>failure policy</li><li>implementation status</li><li>result provenance</li><li>원고에서 말할 수 있는 범위</li></ul>
 <h2 id="chapter-08-external-templates-옮길-때-볼-것" data-source="chapter_08_external_templates.md">옮길 때 볼 것</h2>
 <ol><li>외부 repo의 규칙을 기능별로 나눈다.</li><li>Claude, Cursor, Codex 등 특정 도구에 묶인 호출법을 제거한다.</li><li>남는 행동 규칙을 <code>AGENTS.md</code>나 template로 옮긴다.</li><li>dataset, metric, 결과물, reviewer risk 항목을 더한다.</li><li>사용자가 반복해서 반려한 패턴을 앞에 둔다.</li></ol>
 <p>답변 전에 아래 항목을 확인한다.</p>
@@ -683,8 +684,8 @@ Which output?</code></pre>
 <ul><li><a href="https://arxiv.org/abs/2210.03629">Yao et al., <em>ReAct: Synergizing Reasoning and Acting in Language Models</em></a></li><li><a href="https://arxiv.org/abs/2302.04761">Schick et al., <em>Toolformer: Language Models Can Teach Themselves to Use Tools</em></a></li><li><a href="https://www.anthropic.com/research/claude-code-expertise">Anthropic, <em>Agentic coding and persistent returns to expertise</em></a></li><li><a href="https://cdn.sanity.io/files/4zrzovbb/website/ef87578c3828dc79d711f6d9c52eff39ac4e3be0.pdf">Anthropic, <em>Appendix to Agentic Coding and Persistent Returns to Expertise</em></a></li><li><a href="https://arxiv.org/abs/2202.03629">Ji et al., <em>Survey of Hallucination in Natural Language Generation</em></a></li><li><a href="https://aclanthology.org/2020.acl-main.173/">Maynez et al., <em>On Faithfulness and Factuality in Abstractive Summarization</em></a></li><li><a href="https://arxiv.org/abs/2002.08909">Guu et al., <em>REALM: Retrieval-Augmented Language Model Pre-Training</em></a></li><li><a href="https://arxiv.org/abs/2004.04906">Karpukhin et al., <em>Dense Passage Retrieval for Open-Domain Question Answering</em></a></li><li><a href="https://arxiv.org/abs/2005.11401">Lewis et al., <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</em></a></li><li><a href="https://arxiv.org/abs/2007.01282">Izacard &amp; Grave, <em>Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering</em></a></li><li><a href="https://arxiv.org/abs/2112.04426">Borgeaud et al., <em>Improving language models by retrieving from trillions of tokens</em></a></li><li><a href="https://arxiv.org/abs/2208.03299">Izacard et al., <em>Atlas: Few-shot Learning with Retrieval Augmented Language Models</em></a></li></ul>
 <h2 id="sources-model-serving-and-product-layer-sources" data-source="SOURCES.md">Model Serving And Product-Layer Sources</h2>
 <ul><li><a href="https://platform.claude.com/docs/en/about-claude/models/overview">Anthropic, <em>Models overview</em></a></li><li><a href="https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions">Anthropic, <em>Model IDs and versioning</em></a></li><li><a href="https://platform.claude.com/docs/en/build-with-claude/effort">Anthropic, <em>Effort</em></a></li><li><a href="https://www.anthropic.com/engineering/april-23-postmortem">Anthropic, <em>An update on recent Claude Code quality reports</em></a></li><li><a href="https://github.com/anthropics/claude-code/issues/42796">GitHub issue, <code>anthropics/claude-code</code> #42796</a></li><li><a href="https://www.businessinsider.com/anthropic-admits-claude-code-issues-user-complaints-denies-nerfing-degrading-2026-4">Business Insider, <em>Anthropic says Claude Code did get worse</em></a></li><li><a href="https://www.businessinsider.com/claude-max-20x-ai-plan-subscribers-2026-6">Business Insider, <em>Meet the people who pay $2,400 a year for Anthropic's top-of-the-line Claude plan</em></a></li><li><a href="https://www.thetimes.com/business/wsj/article/anthropic-sued-limits-ai-plans-f95f2wjcx">The Times / Wall Street Journal, <em>Anthropic Sued Over Limits on Its $200-a-Month AI Plans</em></a></li></ul>
-<h2 id="sources-robotics-cv-evaluation-sources" data-source="SOURCES.md">Robotics/CV Evaluation Sources</h2>
-<ul><li><a href="https://arxiv.org/abs/2003.12206">Pineau et al., <em>Improving Reproducibility in Machine Learning Research</em></a></li><li><a href="https://vision.in.tum.de/data/datasets/rgbd-dataset">Sturm et al., <em>A Benchmark for the Evaluation of RGB-D SLAM Systems</em></a></li><li><a href="https://www.cvlibs.net/publications/Geiger2012CVPR.pdf">Geiger, Lenz &amp; Urtasun, <em>Are we ready for Autonomous Driving? The KITTI Vision Benchmark Suite</em></a></li><li><a href="https://arxiv.org/abs/2303.03281">Schubert et al., <em>Visual Place Recognition: A Tutorial</em></a></li><li><a href="https://arxiv.org/abs/2106.12671">Schubert &amp; Neubert, <em>What makes visual place recognition easy or hard?</em></a></li><li><a href="https://doi.org/10.1109/TRO.2015.2496823">Lowry et al., <em>Visual Place Recognition: A Survey</em></a></li></ul>
+<h2 id="sources-evaluation-and-reproducibility-sources" data-source="SOURCES.md">Evaluation And Reproducibility Sources</h2>
+<ul><li><a href="https://arxiv.org/abs/2003.12206">Pineau et al., <em>Improving Reproducibility in Machine Learning Research</em></a></li></ul>
 <h2 id="sources-argument-and-manuscript-sources" data-source="SOURCES.md">Argument And Manuscript Sources</h2>
 <ul><li><a href="https://www.cambridge.org/core/books/uses-of-argument/26CF801BC12004587B66778297D5567C">Toulmin, <em>The Uses of Argument</em></a></li></ul>
 <p>로컬 근거 자료, 대화 로그, 내부 작업 경로는 로컬 기록에 둔다.</p></div></main>

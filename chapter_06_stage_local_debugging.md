@@ -10,7 +10,7 @@ AI는 root cause를 빨리 말한다. QoS, calibration, cache, normalization 같
 input
 preprocessing
 representation
-matching/retrieval
+matching
 geometry
 optimization
 evaluation
@@ -27,17 +27,17 @@ evaluation
 5. container device, network, volume 확인
 6. 그다음 코드 또는 launch 수정
 
-## VPR 성능이 갑자기 떨어졌을 때
+## 일반적인 로보틱스 task에서 성능이 갑자기 떨어졌을 때
 
 수정 전에 다음을 본다.
 
-1. query/database split 확인
-2. cached feature version 확인
-3. normalization 확인
-4. index order 확인
-5. positive radius 확인
-6. metric script 확인
-7. 그다음 model architecture 또는 training 설정 수정
+1. dataset, split, sensor input 범위 확인
+2. timestamp, frame, calibration 확인
+3. preprocessing과 normalization 확인
+4. cache, checkpoint, intermediate output 확인
+5. matching, geometry, optimization의 입력과 출력 확인
+6. metric script와 failure policy 확인
+7. 그다음 model architecture, training 설정, control parameter 수정
 
 ## 기록 형식
 
@@ -62,4 +62,4 @@ next stage:
 | 평가 실패 | wrong frame, wrong split, wrong metric script |
 | 방법 실패 | 조건을 맞춰 확인한 뒤에도 성능이 낮음 |
 
-build pass는 소스 컴파일을 확인한다. callback, tf lookup, metric correctness, trajectory validity는 따로 확인한다.
+build pass는 소스 컴파일을 확인한다. callback, tf lookup, metric correctness, output validity는 따로 확인한다.

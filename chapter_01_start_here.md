@@ -2,7 +2,7 @@
 
 AI는 먼저 확인 대상을 만든다. 에러 원인, 읽을 파일, 실험 조건, 원고 문장처럼 실제 작업 전에 좁혀 볼 목록을 빠르게 만든다. 그 설명이 맞는지는 repo, 실행 결과, dataset, metric, 원고 주장을 보고 판단한다.
 
-로봇/CV 연구 대화에서 나온 사용자 입력 27,759개를 분류하면 장점과 실패가 함께 보인다. AI는 큰 repo를 훑고, 긴 log를 나누고, 논문 문장과 code path를 맞춰 보는 데 도움을 줬다. 반복 실패도 뚜렷했다. 현재 실행 상태를 보지 않은 단정, 파일 존재를 실제 사용으로 보는 착각, 조건이 다른 숫자의 비교였다.
+로보틱스 연구 대화에서 나온 사용자 입력 27,759개를 분류하면 장점과 실패가 함께 보인다. AI는 큰 repo를 훑고, 긴 log를 나누고, 논문 문장과 code path를 맞춰 보는 데 도움을 줬다. 반복 실패도 뚜렷했다. 빈도로 보면 현재 실행 상태를 보지 않은 단정과 파일 존재를 실제 사용으로 보는 착각이 가장 많았고, 조건이 다른 숫자의 비교와 실패 단계 혼합이 그다음이었다. 위험 비용을 무시한 원고 주장 확대는 더 적게 보였지만, 한 번 생기면 비용이 컸다.
 
 ## 잘하는 일
 
@@ -27,14 +27,14 @@ AI 답변은 확인할 후보를 준다. 현재 process가 살아 있는지, con
 | 보지 않은 현재 상태 확정 | 파일명, memory, 요약만으로 최신 repo나 runtime을 단정한다 |
 | 코드 존재와 실행 사용 혼동 | source에 있는 module을 active method로 착각한다 |
 | 숫자와 주장 거리 조절 실패 | metric 하나를 방법 개선이나 generalization 주장으로 올린다 |
-| 실패 단계 혼합 | retrieval, geometry, optimization, evaluation 실패를 한 원인으로 합친다 |
+| 실패 단계 혼합 | data loading, matching, optimization, evaluation 실패를 한 원인으로 합친다 |
 | 위험 비용 무시 | 시간, compute, reviewer trust, 원고 주장 범위는 사람이 감당한다 |
 
 AI가 내놓은 설명이 실행으로 넘어가는 순간부터 비용이 생긴다. 이 구분을 놓치면 연구자는 빠른 답을 얻고도 같은 일을 다시 확인한다.
 
 ## 왜 이런 일이 생기는가
 
-반복 실패는 대체로 작업을 나누는 방식에서 나온다. AI는 대화와 파일 일부를 보고 다음 후보 설명을 만든다. 로보틱스/CV 연구의 상태는 대화 밖에서 바뀐다. Docker container, ROS2 topic, CUDA process, dataset split, calibration file, metric script, TeX table은 실제 파일과 실행 결과로 확인한다.
+반복 실패는 대체로 작업을 나누는 방식에서 나온다. AI는 대화와 파일 일부를 보고 다음 후보 설명을 만든다. 로보틱스 연구의 상태는 대화 밖에서 바뀐다. Docker container, ROS2 topic, CUDA process, dataset split, calibration file, metric script, TeX table은 실제 파일과 실행 결과로 확인한다.
 
 AI는 텍스트를 빠르게 훑고 나누는 데 강하다. 연구자는 실행과 증거를 확인한다. 이 둘을 섞으면 같은 오류가 반복된다.
 
