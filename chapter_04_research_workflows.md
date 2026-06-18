@@ -2,7 +2,7 @@
 
 논문 요약은 시작일 뿐이다. 로봇 논문을 실제 연구에 쓰려면 논문 문장, 공개 코드, 현재 환경에서 돌릴 실험을 따로 확인해야 한다.
 
-논문 method 문장은 주장을 담고, 공개 코드는 구현 상태를 보이며, runtime은 현재 환경에서 실제로 나온 결과를 보여 준다. 이 셋은 따로 확인한다. computational reproducibility 논의도 이 차이를 반복해서 다룬다. 논문에 적힌 component가 repo에 있어도 그 component가 config를 거쳐 실행되고 결과에 영향을 줬는지는 따로 확인해야 한다.
+논문 method 문장은 주장을 담고, 공개 코드는 구현 상태를 드러내며, runtime은 현재 환경에서 실제로 나온 결과를 남긴다. 이 셋은 따로 확인한다. [NeurIPS 2019 Reproducibility Program 보고서](https://arxiv.org/abs/2003.12206)도 결과의 신뢰성을 확인하려면 같은 code와 data, 실행 조건으로 다시 돌려 보는 일이 필요하다고 썼다. 논문에 적힌 component가 repo에 있어도 그 component가 config를 거쳐 실행되고 결과에 영향을 줬는지는 따로 확인해야 한다.
 
 논문을 연구에 쓰려면 abstract 요약 다음에 주장의 실험 조건을 찾는다.
 
@@ -36,11 +36,11 @@ metric script:
 |---|---|
 | active | runtime에서 호출되고 결과에 영향을 준다 |
 | disabled | 구현되어 있으나 꺼져 있다 |
-| configured-unused | config에는 있으나 실행 경로에서 읽히지 않는다 |
+| configured-unused | config에는 있으나 실행 경로 밖에 있다 |
 | planned-only | 문서나 issue에만 있다 |
 | tested-failed | 시도했으나 실패 기록이 있다 |
-| dead | 남아 있으나 현재 경로에서 쓰이지 않는다 |
-| unknown | 아직 확인하지 않았다 |
+| dead | 남아 있으나 현재 경로 밖에 있다 |
+| unknown | 확인 전 |
 
 AI에게는 paper에서 method component를 뽑고, repo에서 관련 function, class, config를 찾고, issue thread와 README의 convention 변화를 모으는 일을 맡기기 좋다. 실제 호출 여부, config가 runtime에 도달하는지, 같은 dataset과 metric 조건인지, 원고에서 어디까지 말할 수 있는지는 실행 결과로 확인한다.
 

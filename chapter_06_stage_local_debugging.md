@@ -2,7 +2,7 @@
 
 AI는 root cause를 빨리 말한다. QoS, calibration, cache, normalization 같은 단어가 바로 나온다. 도움이 될 때도 있다. 어느 단계에서 신호가 끊겼는지 확인하기 전까지는 후보 설명으로 둔다.
 
-복잡한 로보틱스 pipeline은 단계마다 다른 실패를 낸다. data loading, representation, matching, geometry, optimization, evaluation이 각각 다른 증상을 만든다. 상황 인식 연구에서도 먼저 현재 신호를 보고, 그 신호가 어느 단계에서 나온 것인지 구분한 뒤, 다음 행동을 고른다.
+복잡한 로보틱스 pipeline은 단계마다 다른 실패를 낸다. data loading, representation, matching, geometry, optimization, evaluation이 각각 다른 증상을 만든다. [Endsley의 situation awareness 모델](https://doi.org/10.1518/001872095779049543)은 먼저 현재 신호를 지각하고, 그 의미를 이해한 뒤, 다음 상태를 예측하는 순서를 잡았다. 디버깅도 먼저 신호를 보고, 그 신호가 어느 단계에서 나온 것인지 구분한 뒤, 다음 행동을 고른다.
 
 ## 기본 순서
 
@@ -62,4 +62,4 @@ next stage:
 | 평가 실패 | wrong frame, wrong split, wrong metric script |
 | 방법 실패 | 조건을 맞춰 확인한 뒤에도 성능이 낮음 |
 
-build pass로 알 수 있는 것은 소스가 컴파일됐다는 사실뿐이다. callback, tf lookup, metric correctness, trajectory validity는 따로 확인한다.
+build pass는 소스 컴파일을 확인한다. callback, tf lookup, metric correctness, trajectory validity는 따로 확인한다.

@@ -1,8 +1,8 @@
 # Ch.8 — 유명한 agent repo에서는 습관만 골라 온다
 
-많이 읽힌 agent repo에는 배울 것이 있다. 작은 수정, 가정 명시, 실패 보고, 역할 분리, tool 호출 기록 같은 습관은 연구에도 도움이 된다. 그 규칙을 로봇 연구에 그대로 옮기면 빠지는 항목이 많다.
+공개 agent repo에는 가져올 습관이 있다. 작은 수정, 가정 명시, 실패 보고, 역할 분리, tool 호출 기록 같은 습관은 연구에도 도움이 된다. 그 규칙을 로봇 연구에 그대로 옮기면 빠지는 항목이 많다.
 
-일반 agent repo는 코드 변경과 tool use에 강하다. 로보틱스/CV 연구에는 dataset, calibration, frame, metric, 실패 처리, reviewer risk까지 필요하다. "파일을 읽고 고쳤다"는 기록만으로 실험 숫자의 의미가 정해지지 않는다.
+일반 agent repo는 코드 변경과 tool use에 강하다. 로보틱스/CV 연구에서는 dataset, calibration, frame, metric, 실패 처리, reviewer risk가 실험 숫자의 의미를 정한다.
 
 ## 참고할 repo 유형
 
@@ -42,6 +42,6 @@
 공개 문서에 내부 작업 기록을 남겼는가:
 ```
 
-해당 항목이 하나라도 있으면 문장을 추가하지 않는다. 다음 행동을 바꾼다.
+해당 항목이 하나라도 있으면 다음 행동을 바꾼다.
 
-GitHub star 수는 발견의 단서다. 기준은 연구에서 같은 metric 혼동, 같은 cache 실수, 같은 reviewer 지적을 줄이는지다.
+GitHub star 수는 발견의 단서다. 기준은 연구에서 같은 metric 혼동, 같은 cache 실수, 같은 reviewer comment를 줄일 수 있는지다.

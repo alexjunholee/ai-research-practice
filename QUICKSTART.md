@@ -36,8 +36,8 @@ workspace/
 ```
 
 동기화 폴더, 외장 디스크, 원격 서버를 쓰면 git metadata와 dataset 저장 위치를
-먼저 정한다. 코드 이력, raw data, 실험 결과물, 비공개 메모를 한 덩어리로
-섞지 않는다.
+먼저 정한다. 코드 이력, raw data, 실험 결과물, 비공개 메모는 처음부터
+나눠 둔다.
 
 새 workspace를 처음 만들 때는 공개 번들에서 다음 파일을 먼저 복사한다.
 
@@ -148,7 +148,7 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 이미 `CLAUDE.md`, `.claude/`, Cursor rule이 있으면
 [`templates/codex-porting-checklist.md`](templates/codex-porting-checklist.md)로
 옮길 규칙과 버릴 명령을 나눈다. 파일 이름과 plugin 명령은 도구별 형식이다.
-먼저 볼 것은 규칙의 의미다. assumption을 드러내라, 작게 고쳐라, 성공 기준을 검증 가능하게
+먼저 규칙의 의미를 본다. assumption을 드러내라, 작게 고쳐라, 성공 기준을 검증 가능하게
 만들어라 같은 규칙은 Codex에서도 그대로 쓴다.
 
 ## 첫 상태 체크리스트를 채운다
@@ -166,8 +166,8 @@ reviewer risk:
 durable corrections:
 ```
 
-이 표가 비어 있으면 AI는 현재 상태를 복원하지 못한다. README만으로는
-실험 protocol, reviewer risk, dataset convention을 알 수 없다.
+첫 상태 체크리스트가 현재 상태 복원의 기준이다. 실험 protocol,
+reviewer risk, dataset convention도 여기에서 확인한다.
 
 ## 첫 AI 요청을 좁힌다
 
@@ -203,8 +203,8 @@ available.
 | 원고 문장을 고친다 | [`claim-evidence-map.md`](templates/claim-evidence-map.md) |
 
 한 번에 여러 루프를 열면 요청 범위가 다시 넓어진다. 처음에는 작은 성공 하나가
-좋다. 예를 들어 "논문 요약" 대신 "이 논문의 central claim, active code
-path 확인 대상, experiment protocol 빈칸을 분리하라"처럼 요청한다.
+좋다. 요청은 이렇게 좁힌다. "이 논문의 central claim, active code path
+확인 대상, experiment protocol 빈칸을 분리하라."
 
 ## 결과를 기록에 남긴다
 
@@ -222,4 +222,4 @@ AI가 틀린 assumption을 했다면 `replay-case.md`에 반복 확인 사례로
 
 첫 세션이 끝난 뒤 `project-memory.json`의 `current_evidence`,
 `first_research_loop`, `claim_boundaries`, `next_smallest_actions`를 함께 고친다.
-memory가 바뀌지 않으면 다음 AI 세션은 같은 근거 범위를 이어받지 못한다.
+memory를 바꾸면 다음 AI 세션이 같은 근거 범위를 이어받는다.

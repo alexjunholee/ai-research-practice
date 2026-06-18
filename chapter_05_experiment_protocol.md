@@ -1,8 +1,8 @@
 # Ch.5 — 실험 숫자는 조건 목록과 함께 읽는다
 
-실험 숫자는 조건 없이 비교하지 않는다. ATE, RPE, Recall@K, precision-recall은 이름이 같아도 dataset, split, frame, alignment, query/database direction, positive rule, baseline이 다르면 다른 숫자다.
+실험 숫자는 조건과 함께 비교한다. ATE, RPE, Recall@K, precision-recall은 이름이 같아도 dataset, split, frame, alignment, query/database direction, positive rule, baseline이 다르면 다른 숫자다.
 
-SLAM benchmark와 VPR tutorial 문헌도 숫자를 조건과 함께 읽어야 한다고 말한다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.
+[Sturm et al.의 RGB-D SLAM benchmark](https://vision.in.tum.de/data/datasets/rgbd-dataset)는 trajectory error를 evaluation script와 함께 공개했다. [Schubert et al.의 VPR tutorial](https://arxiv.org/abs/2303.03281)은 query, database, ground truth, matching rule에 따라 평가 해석이 달라진다고 정리했다. 낮은 RMSE나 높은 Recall@1을 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.
 
 ## 최소 기록
 

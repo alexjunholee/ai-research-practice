@@ -1,10 +1,10 @@
 # Ch.3 — 한 번의 AI 작업은 하나의 상태만 바꾼다
 
-AI에게 일을 맡길 때 가장 흔한 실패는 범위가 커지는 것이다. 처음에는 log 분석이었는데 중간에 코드 수정이 들어가고, 마지막에는 실험 해석과 원고 문장까지 따라온다. 이렇게 한 번에 여러 상태를 건드리면 무엇이 바뀌었는지 추적하기 어렵다.
+AI 작업은 범위가 쉽게 커진다. 처음에는 log 분석이었는데 중간에 코드 수정이 들어가고, 마지막에는 실험 해석과 원고 문장까지 따라온다. 이렇게 한 번에 여러 상태를 건드리면 무엇이 바뀌었는지 추적하기 어렵다.
 
-[ReAct](https://arxiv.org/abs/2210.03629)는 reasoning trace와 task-specific action을 번갈아 생성하게 해, Wikipedia API나 환경에서 새 정보를 얻으며 plan을 고치게 했다. [Toolformer](https://arxiv.org/abs/2302.04761)는 calculator, QA, search, translation, calendar API를 언제 부를지 모델이 학습하게 했다. 두 연구는 tool 사용이 답변 능력을 넓힐 수 있음을 보였다. 연구 작업으로 옮길 때는 tool 호출과 근거의 무게를 나눠야 한다. `git diff`, `ros2` 출력, metric CSV, PDF build 결과가 각각 어떤 말을 허용하는지 따로 봐야 한다.
+[ReAct](https://arxiv.org/abs/2210.03629)는 reasoning trace와 task-specific action을 번갈아 생성하게 해, Wikipedia API나 환경에서 새 정보를 얻으며 plan을 고치게 했다. [Toolformer](https://arxiv.org/abs/2302.04761)는 calculator, QA, search, translation, calendar API를 언제 부를지 모델이 학습하게 했다. 두 연구는 모델이 대화 밖의 도구를 쓰게 했다. 연구 작업으로 옮길 때는 tool 호출과 근거의 무게를 나눠야 한다. `git diff`, `ros2` 출력, metric CSV, PDF build 결과가 각각 어떤 말을 허용하는지 따로 봐야 한다.
 
-[Bainbridge가 지적한 automation 역설](https://doi.org/10.1016/0005-1098(83)90046-8)은 AI 작업에도 나타난다. 자동화가 쉬운 일을 대신하면 사람은 더 높은 수준의 감시와 개입을 맡는다. 한 번의 AI 작업은 작게 잡는다.
+[Bainbridge가 지적한 automation 역설](https://doi.org/10.1016/0005-1098(83)90046-8)은 AI 작업에도 나타난다. 자동화가 쉬운 일을 넘겨받으면 사람은 더 높은 수준의 감시와 개입을 맡는다. 한 번의 AI 작업은 작게 잡는다.
 
 ## 작업 전에 적을 것
 
@@ -19,7 +19,7 @@ AI에게 일을 맡길 때 가장 흔한 실패는 범위가 커지는 것이다
 다음에 남길 기록:
 ```
 
-여기까지만 적어도 작업 범위가 보인다. 내부 용어를 많이 적는다고 연구 판단이 좋아지지는 않는다.
+여기까지 적으면 작업 범위가 보인다. 확인 범위가 선명할수록 연구 판단도 정확해진다.
 
 ## 자주 나오는 작업 유형
 
@@ -50,7 +50,7 @@ AI에게 일을 맡길 때 가장 흔한 실패는 범위가 커지는 것이다
 
 ## 완료 보고는 좁게 쓴다
 
-성공은 답변의 설득력으로 판단하지 않는다. [Anthropic의 Claude Code 사용 분석](https://www.anthropic.com/research/claude-code-expertise)은 judged success와 별도로 verified success를 두고, passing test, matching commit, 목표와 맞는 command output, 사용자의 명시적 확인처럼 다시 확인할 수 있는 신호를 보았다. 연구 작업에서도 같은 기준을 쓴다.
+성공 기준은 다시 확인할 수 있는 신호다. [Anthropic의 Claude Code 사용 분석](https://www.anthropic.com/research/claude-code-expertise)은 judged success와 별도로 verified success를 두고, passing test, matching commit, 목표와 맞는 command output, 사용자의 명시적 확인을 집계했다. 연구 작업에서도 같은 기준을 쓴다.
 
 | 넓은 보고 | 더 나은 보고 |
 |---|---|
