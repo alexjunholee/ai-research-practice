@@ -73,6 +73,6 @@ AI가 계속 답을 만들 수 있어도 연구는 멈춰야 할 때가 있다.
 - tool failure와 method failure가 섞여 있다.
 - 실험 조건이 바뀌었는데 숫자를 비교하려 한다.
 - reviewer risk가 남았는데 문장 다듬기만 반복한다.
-- private material이 공개 문서로 넘어갈 위험이 있다.
+- private material이 공개 문서에 섞일 위험이 있다.
 
 중단 조건을 남기면 다음 행동이 작아진다.

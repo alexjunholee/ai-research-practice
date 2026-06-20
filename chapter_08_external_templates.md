@@ -48,4 +48,4 @@ Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agen
 
 해당 항목이 하나라도 있으면 다음 행동을 바꾼다.
 
-GitHub star 수는 발견의 단서다. 기준은 연구에서 같은 metric 혼동, 같은 cache 실수, 같은 reviewer comment를 줄일 수 있는지다.
+GitHub star 수는 발견할 때만 참고한다. 기준은 연구에서 같은 metric 혼동, 같은 cache 실수, 같은 reviewer comment를 줄일 수 있는지다.

@@ -128,11 +128,11 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 `first_research_loop`는 처음 열 루프 하나만 고정하고, `next_smallest_actions`는
 다음 세션의 첫 행동을 남긴다.
 
-이 구조는 Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)에서 말한 session, harness, sandbox 분리를 연구 workspace에 옮긴 것이다. `project-memory.json`과 ledger는 session이고, `AGENTS.md`와 prompt template은 harness이며, repo·dataset·artifact·command는 sandbox다. 첫 AI 세션은 이 세 경계를 먼저 말한 뒤 하나의 행동만 골라야 한다.
+여기서는 Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)에서 말한 session, harness, sandbox 분리를 연구 workspace에 옮긴다. `project-memory.json`과 ledger는 session이고, `AGENTS.md`와 prompt template은 harness이며, repo·dataset·artifact·command는 sandbox다. 첫 AI 세션은 이 세 경계를 먼저 말한 뒤 하나의 행동만 골라야 한다.
 
 그다음 `notes/first-ai-session-prompt.md`의 `Prompt To Send` 블록에서 빈칸을
-채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 이 파일이 첫 AI
-세션의 실제 입력이다.
+채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 첫 AI 세션에는
+이 파일을 그대로 넣는다.
 
 ## AGENTS.md 작성
 
@@ -169,8 +169,8 @@ reviewer risk:
 durable corrections:
 ```
 
-첫 상태 체크리스트가 현재 상태 복원의 기준이다. 실험 protocol,
-reviewer risk, dataset convention도 여기에서 확인한다.
+현재 상태는 첫 상태 체크리스트로 복원한다. 실험 protocol, reviewer risk,
+dataset convention도 여기에서 확인한다.
 
 ## 첫 AI 요청을 좁힌다
 

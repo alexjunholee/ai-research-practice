@@ -50,7 +50,7 @@ AI 작업은 범위가 쉽게 커진다. 처음에는 log 분석이었는데 중
 
 ## 완료 보고는 좁게 쓴다
 
-성공 기준은 다시 확인할 수 있는 신호다. [Anthropic의 Claude Code 사용 분석](https://www.anthropic.com/research/claude-code-expertise)은 judged success와 별도로 verified success를 두고, passing test, matching commit, 목표와 맞는 command output, 사용자의 명시적 확인을 집계했다. 연구 작업에서도 같은 기준을 쓴다.
+성공 기준은 다시 확인할 수 있어야 한다. [Anthropic의 Claude Code 사용 분석](https://www.anthropic.com/research/claude-code-expertise)은 judged success와 별도로 verified success를 두고, passing test, matching commit, 목표와 맞는 command output, 사용자의 명시적 확인을 집계했다. 연구 작업에서도 같은 기준을 쓴다.
 
 | 넓은 보고 | 더 나은 보고 |
 |---|---|
