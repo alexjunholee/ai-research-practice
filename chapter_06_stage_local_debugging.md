@@ -1,4 +1,4 @@
-# Ch.6 — 디버깅은 신호가 끊긴 단계를 찾는 일이다
+# Ch.6 — 끊긴 단계를 찾아라
 
 AI는 root cause를 빨리 말한다. QoS, calibration, cache, normalization 같은 단어가 바로 나온다. 도움이 될 때도 있다. 어느 단계에서 신호가 끊겼는지 확인하기 전까지는 후보 설명으로 둔다.
 
