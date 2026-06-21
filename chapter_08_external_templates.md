@@ -4,7 +4,7 @@
 
 일반 agent repo는 코드 변경과 tool use에 강하다. 로보틱스 연구에서는 dataset, calibration, frame, metric, 실패 처리, reviewer risk가 실험 숫자의 의미를 정한다.
 
-Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 agent를 하나의 큰 실행 환경으로 묶지 않고 session, harness, sandbox를 나누는 방식을 제시했다. 연구 workspace에 옮기면 session은 다음 세션이 다시 읽을 기록이고, harness는 agent가 따라야 할 규칙이며, sandbox는 실제 파일·command·dataset이 있는 실행 경계다. 외부 repo를 가져올 때도 prompt 문구보다 이 세 경계를 먼저 옮겨야 한다.
+Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 agent 작업을 session, harness, sandbox로 나누는 방식을 제시했다. 연구 workspace에 옮기면 session은 다음 세션이 다시 읽을 기록이고, harness는 agent가 따라야 할 규칙이며, sandbox는 실제 파일·command·dataset이 있는 실행 경계다. 외부 repo를 가져올 때도 이 세 경계를 먼저 옮긴다. prompt 문구는 그다음에 조정한다.
 
 ## 참고할 repo 유형
 
