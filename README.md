@@ -4,15 +4,15 @@
 
 ## 읽을 거리
 
-- [Ch.0: 구조를 남겨라](chapter_00_intro.md)
-- [Ch.1: 후보로 받아라](chapter_01_start_here.md)
-- [Ch.2: 상태를 복원하라](chapter_02_environment.md)
-- [Ch.3: 작업을 좁혀라](chapter_03_harness.md)
-- [Ch.4: 논문과 코드를 대조하라](chapter_04_research_workflows.md)
-- [Ch.5: 숫자에 조건을 붙여라](chapter_05_experiment_protocol.md)
-- [Ch.6: 끊긴 단계를 찾아라](chapter_06_stage_local_debugging.md)
-- [Ch.7: 주장부터 검증하라](chapter_07_manuscript_rebuttal.md)
-- [Ch.8: 습관만 이식하라](chapter_08_external_templates.md)
+- [Ch.0: 작업 구조를 남긴다](chapter_00_intro.md)
+- [Ch.1: AI 답변은 후보로 둔다](chapter_01_start_here.md)
+- [Ch.2: 현재 상태부터 복원한다](chapter_02_environment.md)
+- [Ch.3: 한 번에 하나만 바꾼다](chapter_03_harness.md)
+- [Ch.4: 논문과 코드를 맞춰 본다](chapter_04_research_workflows.md)
+- [Ch.5: 숫자에는 조건이 붙는다](chapter_05_experiment_protocol.md)
+- [Ch.6: 실패 지점 찾기](chapter_06_stage_local_debugging.md)
+- [Ch.7: 주장과 근거를 먼저 본다](chapter_07_manuscript_rebuttal.md)
+- [Ch.8: 남의 repo에서 습관만 가져온다](chapter_08_external_templates.md)
 
 부록은 상황별 참고 문서로 둔다. 필요한 항목만 본다.
 

@@ -1,4 +1,4 @@
-# Ch.5 — 숫자에 조건을 붙여라
+# Ch.5 — 숫자에는 조건이 붙는다
 
 실험 숫자는 조건과 함께 비교한다. 로보틱스 metric은 이름이 같아도 dataset, split, sensor, frame, calibration, alignment, metric script, failure policy, baseline이 다르면 다른 숫자다.
 
