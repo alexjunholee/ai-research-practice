@@ -1,0 +1,2265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI와 로봇 연구하기 — 템플릿</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --bg: #ffffff; --bg-alt: #f5f5f7; --bg-sidebar: #f5f5f7; --bg-code: #f5f5f7; --bg-surface: #f5f5f7; --text: #1d1d1f; --text-body: rgba(0, 0, 0, 0.80); --text-muted: rgba(0, 0, 0, 0.56); --text-heading: #1d1d1f; --accent: #0071e3; --link: #0066cc; --border: rgba(0, 0, 0, 0.08); --border-strong: rgba(0, 0, 0, 0.16); --sidebar-width: 300px; --topbar-height: 52px; --progress-height: 3px; --shadow-elev: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; font-size: 17px; line-height: 1.47; letter-spacing: 0; color: var(--text); background: var(--bg); overflow-x: hidden; font-feature-settings: "kern", "liga", "calt"; word-break: keep-all; overflow-wrap: break-word; }
+#progress-bar { position: fixed; top: 0; left: 0; height: var(--progress-height); background: linear-gradient(90deg, #0071e3, #2997ff); z-index: 10000; transition: width 0.1s linear; width: 0%; }
+#topbar { position: fixed; top: var(--progress-height); left: 0; right: 0; height: var(--topbar-height); background: rgba(255, 255, 255, 0.72); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; z-index: 1000; }
+#topbar .menu-toggle { display: none; background: none; border: none; color: var(--text); font-size: 22px; cursor: pointer; margin-right: 12px; padding: 6px 10px; border-radius: 8px; }
+#topbar .menu-toggle:hover { background: rgba(0,0,0,0.04); }
+#topbar .title { font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; font-size: 17px; font-weight: 600; color: var(--text-heading); letter-spacing: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#topbar .back-link { margin-left: auto; color: var(--link); text-decoration: none; font-size: 13.5px; font-weight: 500; white-space: nowrap; padding: 7px 14px; border-radius: 980px; border: 1px solid var(--border); letter-spacing: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+#topbar .back-link:hover { background: rgba(0, 113, 227, 0.06); border-color: var(--accent); color: var(--accent); }
+#sidebar { position: fixed; top: calc(var(--progress-height) + var(--topbar-height)); left: 0; width: var(--sidebar-width); height: calc(100vh - var(--topbar-height) - var(--progress-height)); background: var(--bg-sidebar); border-right: 1px solid var(--border); overflow-y: auto; z-index: 999; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.16) transparent; }
+#sidebar::-webkit-scrollbar { width: 6px; } #sidebar::-webkit-scrollbar-track { background: transparent; } #sidebar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.16); border-radius: 3px; }
+#search-box { padding: 14px 16px; border-bottom: 1px solid var(--border); background: rgba(255, 255, 255, 0.6); flex-shrink: 0; }
+#search-input { width: 100%; padding: 9px 12px; background: #ffffff; border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13.5px; outline: none; font-family: inherit; letter-spacing: 0; transition: border-color 0.15s, box-shadow 0.15s; }
+#search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15); } #search-input::placeholder { color: var(--text-muted); }
+#toc-container { flex: 1; overflow-y: auto; padding: 8px 0 32px; } #toc-container::-webkit-scrollbar { width: 4px; } #toc-container::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 2px; }
+.toc-item { display: block; padding: 8px 16px 8px 20px; color: var(--text); text-decoration: none; font-size: 14px; font-weight: 500; line-height: 1.4; letter-spacing: 0; border-left: 3px solid transparent; transition: color 0.15s, background 0.15s, border-color 0.15s; cursor: pointer; }
+.toc-item.toc-h2 { padding: 5px 16px 5px 36px; font-size: 13px; font-weight: 400; color: var(--text-muted); }
+.toc-item:hover { color: var(--text); background: rgba(0, 0, 0, 0.04); } .toc-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(0, 113, 227, 0.08); font-weight: 600; } .toc-item.toc-h2.active { font-weight: 500; color: var(--accent); } .toc-item.toc-hidden { display: none; }
+.toc-no-results { padding: 20px 16px; color: var(--text-muted); font-size: 13.5px; text-align: center; display: none; }
+#main-content { margin-left: var(--sidebar-width); margin-top: calc(var(--progress-height) + var(--topbar-height)); min-height: calc(100vh - var(--topbar-height) - var(--progress-height)); padding: 56px 56px 96px; }
+#content { max-width: 820px; margin: 0 auto; }
+#content h1, #content h2, #content h3, #content h4, #content h5, #content h6 { font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', sans-serif; color: var(--text-heading); font-feature-settings: "kern"; scroll-margin-top: 72px; letter-spacing: 0; }
+#content h1 { font-size: 48px; font-weight: 600; line-height: 1.08; margin: 0 0 28px 0; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+#content h2 { font-size: 34px; font-weight: 600; line-height: 1.10; margin: 64px 0 20px 0; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+#content h3 { font-size: 24px; font-weight: 600; line-height: 1.16; margin: 44px 0 14px 0; }
+#content h4 { font-size: 19px; font-weight: 600; line-height: 1.22; margin: 32px 0 10px 0; }
+#content p { margin: 0 0 16px 0; color: var(--text-body); } #content a { color: var(--link); text-decoration: none; transition: color 0.15s; } #content a:hover { text-decoration: underline; text-underline-offset: 2px; }
+#content ul, #content ol { margin: 0 0 16px 0; padding-left: 28px; } #content li { margin-bottom: 6px; color: var(--text-body); } #content hr { border: none; border-top: 1px solid var(--border); margin: 56px 0; } #content strong { color: var(--text); font-weight: 600; }
+#content code { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace; font-size: 0.82em; letter-spacing: 0; }
+#content :not(pre) > code { background: var(--bg-code); padding: 2px 6px; border-radius: 5px; color: var(--text); } #content pre { background: var(--bg-code); border: none; border-radius: 12px; padding: 18px 20px; overflow-x: auto; margin: 0 0 20px 0; font-size: 13px; line-height: 1.55; } #content pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+#content table { width: 100%; border-collapse: collapse; margin: 0 0 20px 0; font-size: 15px; display: block; overflow-x: auto; } #content thead { background: var(--bg-surface); } #content th { padding: 12px 16px; text-align: left; color: var(--text-heading); font-weight: 600; font-size: 14px; border-bottom: 1px solid var(--border-strong); letter-spacing: 0; } #content td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text-body); letter-spacing: 0; } #content tbody tr:hover { background: rgba(0,113,227,0.04); }
+#content blockquote { border-left: 3px solid var(--accent); background: var(--bg-surface); padding: 14px 22px; margin: 0 0 20px 0; border-radius: 0 8px 8px 0; color: var(--text-body); } #content blockquote p { margin-bottom: 8px; } #content blockquote p:last-child { margin-bottom: 0; }
+.guide-overview { margin: 0 0 80px 0; padding: 0 0 48px 0; border-bottom: 1px solid var(--border); } .guide-overview .overview-header { margin-bottom: 44px; }
+.guide-overview .overview-title { font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', sans-serif; font-size: 48px; font-weight: 600; line-height: 1.08; color: var(--text-heading); margin: 0 0 10px 0; letter-spacing: 0; }
+.overview-group-label { font-size: 11px; font-weight: 700; color: rgba(0, 0, 0, 0.42); text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 18px 0; }
+.overview-chapter { margin: 0 0 22px 0; } .overview-chapter-link { font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Pretendard', sans-serif; font-size: 19px; font-weight: 600; color: var(--text-heading); text-decoration: none; display: inline-block; } .overview-chapter-link:hover { color: var(--accent); }
+.overview-chapter-num { font-size: 12px; font-weight: 700; color: var(--accent); margin-right: 10px; text-transform: uppercase; } .overview-sections { margin-top: 4px; font-size: 14px; line-height: 1.55; color: var(--text-muted); } .overview-sections a { color: var(--text-muted); text-decoration: none; } .overview-sections a:hover { color: var(--accent); } .overview-sections .sep { margin: 0 8px; color: var(--border-strong); }
+::selection { background: rgba(0,113,227,0.20); color: var(--text); }
+@media (max-width: 1024px) { #main-content { padding-left: 40px; padding-right: 40px; } }
+@media (max-width: 900px) { #topbar .menu-toggle { display: block; } #sidebar { transform: translateX(-100%); transition: transform 0.3s ease; box-shadow: none; } #sidebar.open { transform: translateX(0); box-shadow: var(--shadow-elev); } #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 998; } #sidebar-overlay.visible { display: block; } #main-content { margin-left: 0; padding: 24px 24px 56px; } #content h1, .guide-overview .overview-title { font-size: 36px; } #content h2 { font-size: 28px; margin-top: 48px; } #content h3 { font-size: 21px; } }
+@media (max-width: 600px) { body { font-size: 16px; } #content h1, .guide-overview .overview-title { font-size: 30px; } #content h2 { font-size: 24px; } #content h3 { font-size: 19px; } #main-content { padding: 20px 20px 48px; } }
+@media print { #progress-bar, #topbar, #sidebar, #sidebar-overlay, #search-box, .menu-toggle { display: none !important; } #main-content { margin: 0 !important; padding: 0 !important; } #content { max-width: 100%; color: #000; } body { background: #fff; } }
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<div id="topbar"><button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">&#9776;</button><span class="title">AI와 로봇 연구하기 — 템플릿</span><a href="../" class="back-link">← repos</a></div>
+<div id="sidebar-overlay"></div>
+<nav id="sidebar"><div id="search-box"><input type="text" id="search-input" placeholder="Search headings... (Ctrl+K)"></div><div id="toc-container"></div><div class="toc-no-results" id="toc-no-results">No matching sections</div></nav>
+<main id="main-content"><div id="content"><section class="guide-overview"><div class="overview-header"><h1 class="overview-title">템플릿과 예시</h1></div><div class="overview-group"><div class="overview-group-label">Templates</div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-workspace-readme"><span class="overview-chapter-num">FILE</span>workspace-readme.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-agents-template"><span class="overview-chapter-num">FILE</span>AGENTS.template.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-first-day-workspace-checklist"><span class="overview-chapter-num">FILE</span>first-day-workspace-checklist.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-first-ai-session-prompt"><span class="overview-chapter-num">FILE</span>first-ai-session-prompt.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-paper-code-experiment-map"><span class="overview-chapter-num">FILE</span>paper-code-experiment-map.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-dataset-archaeology-sheet"><span class="overview-chapter-num">FILE</span>dataset-archaeology-sheet.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-experiment-contract"><span class="overview-chapter-num">FILE</span>experiment-contract.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-stage-local-debugging"><span class="overview-chapter-num">FILE</span>stage-local-debugging.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-claim-evidence-map"><span class="overview-chapter-num">FILE</span>claim-evidence-map.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-codex-porting-checklist"><span class="overview-chapter-num">FILE</span>codex-porting-checklist.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-weekly-research-ledger"><span class="overview-chapter-num">FILE</span>weekly-research-ledger.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-result-provenance-tuple"><span class="overview-chapter-num">FILE</span>result-provenance-tuple.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-replay-case"><span class="overview-chapter-num">FILE</span>replay-case.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-user-reaction-prior"><span class="overview-chapter-num">FILE</span>user-reaction-prior.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-paper-reading-note"><span class="overview-chapter-num">FILE</span>paper-reading-note.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#templates-project-memory-template-json"><span class="overview-chapter-num">FILE</span>project-memory.template.json</a></div></div><div class="overview-group"><div class="overview-group-label">Example Workspace</div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-readme"><span class="overview-chapter-num">FILE</span>README.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-agents"><span class="overview-chapter-num">FILE</span>AGENTS.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-project-memory-json"><span class="overview-chapter-num">FILE</span>project-memory.json</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-notes-first-day-workspace-checklist"><span class="overview-chapter-num">FILE</span>first-day-workspace-checklist.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-notes-first-ai-session-prompt"><span class="overview-chapter-num">FILE</span>first-ai-session-prompt.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-notes-first-ai-session-message-txt"><span class="overview-chapter-num">FILE</span>first-ai-session-message.txt</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-notes-paper-code-experiment-map"><span class="overview-chapter-num">FILE</span>paper-code-experiment-map.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-notes-experiment-contract"><span class="overview-chapter-num">FILE</span>experiment-contract.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-notes-stage-local-debugging"><span class="overview-chapter-num">FILE</span>stage-local-debugging.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-notes-codex-porting-checklist"><span class="overview-chapter-num">FILE</span>codex-porting-checklist.md</a></div><div class="overview-chapter"><a class="overview-chapter-link" href="#examples-first-robotics-workspace-notes-weekly-research-ledger"><span class="overview-chapter-num">FILE</span>weekly-research-ledger.md</a></div></div></section><h1 id="templates-workspace-readme" data-source="templates/workspace-readme.md">workspace-readme.md</h1><h1>[PROJECT_NAME] Research Workspace</h1>
+<p>이 파일은 새 로보틱스/CV 연구 프로젝트의 첫 화면이다. 프로젝트 이름, 주요
+repo, dataset 위치, 첫 AI 세션 경계만 채운 뒤 시작한다.</p>
+<h2>Start Here</h2>
+<ol>
+<li><code>AGENTS.md</code>를 먼저 읽는다.</li>
+<li><code>project-memory.json</code>에서 현재 truth, source_of_truth, current_evidence,
+   first_research_loop, next_smallest_actions를 확인한다.</li>
+<li><code>notes/first-day-workspace-checklist.md</code>로 source of truth를 잠근다.</li>
+<li>기존 <code>CLAUDE.md</code>, <code>.claude/</code>, Cursor rule이 있으면
+   <code>notes/codex-porting-checklist.md</code>로 행동 원칙만 옮긴다.</li>
+<li>session, harness, sandbox 경계를 먼저 쓴다.</li>
+<li>첫 AI 세션에는 <code>notes/first-ai-session-prompt.md</code>를 채워 보낸다.</li>
+</ol>
+<h2>First Run Check</h2>
+<p>Before the first AI session, the workspace should have these files.</p>
+<pre><code class="language-text">AGENTS.md
+README.md
+project-memory.json
+notes/first-day-workspace-checklist.md
+notes/first-ai-session-prompt.md
+notes/paper-code-experiment-map.md
+notes/experiment-contract.md
+artifacts/first-ai-session-message.txt
+</code></pre>
+<p><code>project-memory.json</code> must parse as JSON. The first message in
+<code>artifacts/first-ai-session-message.txt</code> should have no bracket placeholders
+left before it is sent.</p>
+<p><code>project-memory.json</code> should also include <code>source_of_truth</code>, <code>tool_surface_map</code>,
+<code>current_evidence</code>, <code>first_research_loop</code>, and <code>next_smallest_actions</code>. These
+fields keep the next AI session from treating memory as proof.</p>
+<p>Use the workspace as a managed-agent harness.</p>
+<ul>
+<li>Session: <code>project-memory.json</code>, ledger, replay cases, and artifacts.</li>
+<li>Harness: <code>AGENTS.md</code>, prompt templates, evidence gates, and work modes.</li>
+<li>Sandbox: repos, datasets, commands, tools, and generated outputs.</li>
+</ul>
+<h2>Workspace Shape</h2>
+<pre><code class="language-text">workspace/
+├── AGENTS.md
+├── README.md
+├── project-memory.json
+├── repos/
+├── datasets/
+├── artifacts/
+├── notes/
+└── templates/
+</code></pre>
+<h2>Project Pointers</h2>
+<ul>
+<li>Main repo:</li>
+<li>Dataset root:</li>
+<li>Artifact root:</li>
+<li>Paper or manuscript:</li>
+<li>Current experiment:</li>
+</ul>
+<h2>First Research Loop</h2>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Start With</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read one paper</td>
+<td><code>notes/paper-code-experiment-map.md</code></td>
+</tr>
+<tr>
+<td>Check a dataset</td>
+<td><code>templates/dataset-archaeology-sheet.md</code></td>
+</tr>
+<tr>
+<td>Interpret a number</td>
+<td><code>notes/experiment-contract.md</code></td>
+</tr>
+<tr>
+<td>Narrow an error</td>
+<td><code>notes/stage-local-debugging.md</code></td>
+</tr>
+<tr>
+<td>Repair a claim</td>
+<td><code>templates/claim-evidence-map.md</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Evidence Gate</h2>
+<pre><code class="language-text">session record to update:
+harness rule:
+sandbox action:
+current evidence permits:
+current evidence forbids:
+next smallest action:
+verification:
+ledger update:
+</code></pre>
+<p>Fill these lines before asking for a broad answer.</p>
+<p>After the first session, copy the same boundary back into <code>project-memory.json</code>
+under <code>current_evidence</code> and <code>next_smallest_actions</code>.</p><h1 id="templates-agents-template" data-source="templates/AGENTS.template.md">AGENTS.template.md</h1><h1>Project AGENTS.md Template</h1>
+<p>This project is operated Codex-first. If older <code>CLAUDE.md</code>, <code>.claude/</code>, or
+Cursor rules exist, treat them as source material. Move durable project rules
+into this <code>AGENTS.md</code> and keep tool-specific install commands separate.</p>
+<h2>Project Truth</h2>
+<ul>
+<li>Current public artifact:</li>
+<li>Current private state file:</li>
+<li>Source of truth for code:</li>
+<li>Source of truth for experiments:</li>
+<li>Source of truth for manuscript:</li>
+<li>Source of truth for reviewer response:</li>
+<li>Source of truth for durable corrections:</li>
+</ul>
+<h2>Public / Private Boundary</h2>
+<p>Public:</p>
+<ul>
+<li>README</li>
+<li>guide or paper draft if already public</li>
+<li>templates</li>
+<li>sanitized examples</li>
+</ul>
+<p>Private:</p>
+<ul>
+<li>비공개 대화 원문</li>
+<li>심사 원문</li>
+<li>인증 정보</li>
+<li>unpublished results</li>
+<li>개인 경로</li>
+<li>raw dataset paths if they reveal private storage</li>
+</ul>
+<h2>Managed Agent Boundary</h2>
+<p>This workspace follows the managed-agent pattern at the project level.</p>
+<ul>
+<li>Session: <code>project-memory.json</code>, weekly ledger, replay cases, and artifacts.</li>
+<li>Harness: this <code>AGENTS.md</code>, evidence gate, work modes, and durable corrections.</li>
+<li>Sandbox: code repos, datasets, commands, tools, and generated outputs.</li>
+</ul>
+<p>Before starting work, state which session record will be updated, which harness
+rule controls the action, and which sandbox action is currently allowed. Leave a
+command result, file diff, or artifact path before promoting an observation into
+a research claim.</p>
+<h2>Work Modes</h2>
+<h3>Read-only audit</h3>
+<p>Allowed:</p>
+<ul>
+<li>inspect files</li>
+<li>summarize current state</li>
+<li>identify missing evidence</li>
+<li>state what current evidence permits and forbids</li>
+</ul>
+<p>Not allowed:</p>
+<ul>
+<li>edit files</li>
+<li>run destructive commands</li>
+<li>make paper claims from weak evidence</li>
+</ul>
+<h3>Code execution</h3>
+<p>Allowed:</p>
+<ul>
+<li>run listed commands</li>
+<li>collect logs</li>
+<li>update run ledger</li>
+</ul>
+<p>Required:</p>
+<ul>
+<li>command</li>
+<li>cwd</li>
+<li>expected artifact</li>
+<li>timeout</li>
+<li>verification step</li>
+</ul>
+<h3>Experiment interpretation</h3>
+<p>Allowed:</p>
+<ul>
+<li>inspect configs, logs, tables, and metric scripts</li>
+<li>compare numbers only inside a locked protocol</li>
+</ul>
+<p>Required:</p>
+<ul>
+<li>dataset</li>
+<li>split or sequence</li>
+<li>query/database direction if retrieval</li>
+<li>ground-truth frame</li>
+<li>metric definition</li>
+<li>baseline</li>
+<li>artifact path</li>
+</ul>
+<h3>Manuscript edit</h3>
+<p>Allowed:</p>
+<ul>
+<li>edit claim/evidence structure</li>
+<li>improve prose after argument is correct</li>
+</ul>
+<p>Required:</p>
+<ul>
+<li>target claim</li>
+<li>evidence source</li>
+<li>reviewer risk</li>
+<li>build or diff check</li>
+</ul>
+<h2>Evidence Gate</h2>
+<p>Before answering, state:</p>
+<pre><code class="language-text">current evidence permits:
+current evidence forbids:
+promotion requires:
+</code></pre>
+<h2>Durable Corrections</h2>
+<p>When the user corrects an assumption, add it to project memory.</p>
+<p>Record:</p>
+<ul>
+<li>wrong assumption:</li>
+<li>corrected fact:</li>
+<li>affected workflow:</li>
+<li>future gate:</li>
+<li>replay case:</li>
+</ul>
+<h2>Porting Acceptance</h2>
+<p>If this file was created from <code>CLAUDE.md</code>, <code>.claude/</code>, Cursor rules, or another
+tool-specific instruction set, do not start research action until the porting
+checklist has confirmed:</p>
+<ul>
+<li>tool-specific commands have portable replacements;</li>
+<li>local-only settings are not treated as project rules;</li>
+<li>dataset, metric, artifact, claim, reviewer risk, and replay gates exist;</li>
+<li>first AI session prompt reads this <code>AGENTS.md</code>, project memory, first-day
+  checklist, and the chosen target note.</li>
+</ul><h1 id="templates-first-day-workspace-checklist" data-source="templates/first-day-workspace-checklist.md">first-day-workspace-checklist.md</h1><h1>First-Day Workspace Checklist</h1>
+<p>Use this before asking an AI agent to work inside a robotics/CV research
+workspace.</p>
+<h2>Workspace Shape</h2>
+<ul>
+<li>Workspace root:</li>
+<li>Main code repos:</li>
+<li>Dataset storage:</li>
+<li>Artifact storage:</li>
+<li>Manuscript location:</li>
+<li>Template location:</li>
+<li>Public output location:</li>
+</ul>
+<h2>Source Of Truth</h2>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Primary source</th>
+<th>Secondary source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>project goal</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>code truth</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>dataset truth</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>experiment truth</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>manuscript truth</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>reviewer risk</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>durable corrections</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>Public / Private Boundary</h2>
+<p>Public:</p>
+<ul>
+<li>README:</li>
+<li>guide or paper draft:</li>
+<li>templates:</li>
+<li>sanitized examples:</li>
+</ul>
+<p>Private:</p>
+<ul>
+<li>private notes:</li>
+<li>reviewer material:</li>
+<li>unpublished results:</li>
+<li>credential material:</li>
+<li>machine-specific paths:</li>
+</ul>
+<h2>First Agent Read Order</h2>
+<ol>
+<li><code>AGENTS.md</code></li>
+<li><code>README.md</code></li>
+<li>status or roadmap file</li>
+<li>file tree</li>
+<li>build/test scripts</li>
+<li>recent artifacts</li>
+<li>project memory</li>
+</ol>
+<h2>First Verification Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Command</th>
+<th>Expected result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>build docs</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>run tests</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>inspect data</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>check artifacts</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>First Research Action</h2>
+<ul>
+<li>Object under truth control:</li>
+<li>Current evidence permits:</li>
+<li>Current evidence forbids:</li>
+<li>Smallest next action:</li>
+<li>Verification:</li>
+</ul><h1 id="templates-first-ai-session-prompt" data-source="templates/first-ai-session-prompt.md">first-ai-session-prompt.md</h1><h1>First AI Session Prompt</h1>
+<p>Use this as the first message in a new robotics/CV research workspace. Fill the
+brackets before sending it to an AI agent.</p>
+<h2>Session Target</h2>
+<ul>
+<li>Workspace:</li>
+<li>Research object:</li>
+<li>Current task:</li>
+<li>First research loop target:</li>
+<li>Expected artifact:</li>
+</ul>
+<h2>Read Order</h2>
+<p>Read these files before answering.</p>
+<ol>
+<li><code>AGENTS.md</code></li>
+<li><code>project-memory.json</code></li>
+<li><code>notes/first-day-workspace-checklist.md</code></li>
+<li><code>notes/weekly-research-ledger.md</code></li>
+<li>target note or source file:</li>
+<li>artifact or command output:</li>
+</ol>
+<h2>First Research Loop Target</h2>
+<p>Choose exactly one target note before the first session. The first message should
+name that target note and the expected artifact.</p>
+<p>Common first targets:</p>
+<ul>
+<li><code>notes/paper-code-experiment-map.md</code> with <code>notes/experiment-contract.md</code></li>
+<li><code>notes/stage-local-debugging.md</code></li>
+<li><code>templates/dataset-archaeology-sheet.md</code> copied into <code>notes/</code></li>
+<li><code>templates/claim-evidence-map.md</code> copied into <code>notes/</code></li>
+</ul>
+<h2>Before Answering</h2>
+<p>Map the workspace into session, harness, and sandbox first.</p>
+<pre><code class="language-text">Session record to update:
+Harness rule that controls this action:
+Sandbox action allowed now:
+Sandbox action not allowed now:
+Object under truth control:
+Current evidence permits:
+Current evidence forbids:
+Smallest next action:
+Verification:
+</code></pre>
+<h2>Allowed First Action</h2>
+<ul>
+<li>Inspect source files and named artifacts.</li>
+<li>Separate source truth from summary truth.</li>
+<li>Name missing evidence before proposing a claim.</li>
+<li>Choose one stage-local action.</li>
+<li>Leave a session record, harness rule, sandbox action, and verification record.</li>
+</ul>
+<h2>Blocked Claims</h2>
+<ul>
+<li>Do not infer project truth from summaries when source files or artifacts are
+  available.</li>
+<li>Do not claim experiment improvement before dataset, split, metric, baseline,
+  command, and artifact are known.</li>
+<li>Do not rewrite manuscript claims before allowed wording and forbidden wording
+  are separated.</li>
+<li>Do not publish raw notes, reviewer material, secret material, or machine-specific
+  storage names.</li>
+</ul>
+<h2>Promotion Requires</h2>
+<p>The session can move from orientation to research action only after these fields
+are filled.</p>
+<pre><code class="language-text">object under truth control:
+primary evidence:
+secondary evidence:
+claim allowed:
+claim blocked:
+next command or file inspection:
+ledger update:
+</code></pre>
+<h2>Prompt To Send</h2>
+<pre><code class="language-text">Read AGENTS.md, project-memory.json, notes/first-day-workspace-checklist.md, and
+notes/weekly-research-ledger.md, [target note], and [supporting note] before
+answering.
+
+My current task is: [task].
+First research loop target: [target note]
+Expected artifact: [expected artifact]
+
+Before giving advice, state:
+- Session record to update
+- Harness rule that controls this action
+- Sandbox action allowed now
+- Sandbox action not allowed now
+- Object under truth control
+- Current evidence permits
+- Current evidence forbids
+- Smallest next action
+- Verification
+
+Use source files, artifacts, and command output as primary evidence. Treat
+summaries as orientation only. If evidence is missing, say what is missing and
+choose the smallest inspection that would promote the claim.
+Do not open a second research loop in the first answer.
+</code></pre><h1 id="templates-paper-code-experiment-map" data-source="templates/paper-code-experiment-map.md">paper-code-experiment-map.md</h1><h1>Paper-Code-Experiment Map</h1>
+<h2>Paper</h2>
+<ul>
+<li>Title:</li>
+<li>Authors:</li>
+<li>Year / venue:</li>
+<li>Link:</li>
+</ul>
+<h2>Central Claim</h2>
+<ul>
+<li>What the paper claims:</li>
+<li>What problem pressure it responds to:</li>
+<li>What assumption it repairs or introduces:</li>
+</ul>
+<h2>Method Map</h2>
+<table>
+<thead>
+<tr>
+<th>Paper concept</th>
+<th>Code candidate</th>
+<th>Status</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td>unknown</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Status labels:</p>
+<ul>
+<li>implemented-active</li>
+<li>implemented-disabled</li>
+<li>configured-unused</li>
+<li>planned-only</li>
+<li>tested-failed</li>
+<li>dead</li>
+<li>unknown</li>
+</ul>
+<h2>Experiment Contract</h2>
+<ul>
+<li>Dataset:</li>
+<li>Split / sequence:</li>
+<li>Sensor / modality:</li>
+<li>Query -&gt; database direction:</li>
+<li>Ground truth:</li>
+<li>Metric:</li>
+<li>Threshold / alignment:</li>
+<li>Baseline:</li>
+<li>Artifact:</li>
+</ul>
+<h2>Agent Handoff Note</h2>
+<p>Only include issues that change how the method should be run, evaluated, or
+cited.</p>
+<ul>
+<li>Session record to update:</li>
+<li>Harness rule triggered:</li>
+<li>Sandbox file / command to inspect next:</li>
+<li>Build issue:</li>
+<li>Dataset convention issue:</li>
+<li>Metric issue:</li>
+<li>Sensor setup issue:</li>
+<li>Claim or limitation issue:</li>
+<li>Verification left for next session:</li>
+</ul>
+<h2>Reusable Research Output</h2>
+<ul>
+<li>Comparison I can reuse:</li>
+<li>Claim this paper supports:</li>
+<li>Claim this paper does not support:</li>
+<li>Next artifact to inspect:</li>
+</ul><h1 id="templates-dataset-archaeology-sheet" data-source="templates/dataset-archaeology-sheet.md">dataset-archaeology-sheet.md</h1><h1>Dataset Archaeology Sheet</h1>
+<h2>Dataset Identity</h2>
+<ul>
+<li>Dataset name:</li>
+<li>Version / release:</li>
+<li>Source link:</li>
+<li>License:</li>
+<li>Local storage class:</li>
+<li>Public or private:</li>
+</ul>
+<h2>Inventory</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Expected</th>
+<th>Observed</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequences / scenes</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>images / scans / bags</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>calibration files</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ground truth</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>metadata</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>Modality And Frame</h2>
+<ul>
+<li>Sensors:</li>
+<li>Timestamp convention:</li>
+<li>Coordinate frames:</li>
+<li>Calibration source:</li>
+<li>Known transform direction:</li>
+<li>Missing transform:</li>
+</ul>
+<h2>Split And Direction</h2>
+<ul>
+<li>Train / val / test split:</li>
+<li>Query set:</li>
+<li>Database set:</li>
+<li>Positive definition:</li>
+<li>Negative definition:</li>
+<li>Radius or exact-frame rule:</li>
+</ul>
+<h2>Data Quality Risks</h2>
+<ul>
+<li>Missing files:</li>
+<li>Duplicate files:</li>
+<li>Corrupt files:</li>
+<li>Unsynced timestamps:</li>
+<li>Sequence count mismatch:</li>
+<li>README contradiction:</li>
+</ul>
+<h2>Evidence Gate</h2>
+<p>Current evidence permits:</p>
+<p>Current evidence forbids:</p>
+<p>Promotion requires:</p><h1 id="templates-experiment-contract" data-source="templates/experiment-contract.md">experiment-contract.md</h1><h1>Experiment Contract</h1>
+<h2>Identity</h2>
+<ul>
+<li>Experiment name:</li>
+<li>Date:</li>
+<li>Repository:</li>
+<li>Branch / commit if available:</li>
+<li>Operator:</li>
+</ul>
+<h2>Protocol</h2>
+<ul>
+<li>Dataset:</li>
+<li>Split:</li>
+<li>Sequence / scene:</li>
+<li>Query / database direction:</li>
+<li>Sensor or modality:</li>
+<li>Ground truth source:</li>
+<li>Frame / transform convention:</li>
+<li>Metric:</li>
+<li>Threshold:</li>
+<li>Alignment:</li>
+<li>Baseline:</li>
+<li>Failure condition:</li>
+</ul>
+<h2>Command</h2>
+<pre><code class="language-bash">
+</code></pre>
+<h2>Expected Artifacts</h2>
+<ul>
+<li>Log:</li>
+<li>Result table:</li>
+<li>Figure:</li>
+<li>Config:</li>
+</ul>
+<h2>Evidence Gate</h2>
+<p>Current evidence permits:</p>
+<p>Current evidence forbids:</p>
+<p>Promotion requires:</p>
+<h2>Interpretation</h2>
+<ul>
+<li>If success:</li>
+<li>If failure:</li>
+<li>If partial:</li>
+</ul>
+<h2>Verification</h2>
+<ul>
+<li>Command completed:</li>
+<li>Artifact exists:</li>
+<li>Sample count checked:</li>
+<li>Metric definition checked:</li>
+<li>Baseline protocol checked:</li>
+<li>Claim boundary updated:</li>
+</ul><h1 id="templates-stage-local-debugging" data-source="templates/stage-local-debugging.md">stage-local-debugging.md</h1><h1>Stage-Local Debugging Sheet</h1>
+<h2>Debug Target</h2>
+<ul>
+<li>Object under truth control:</li>
+<li>User-visible symptom:</li>
+<li>Current stage:</li>
+<li>Expected signal:</li>
+<li>Observed signal:</li>
+</ul>
+<h2>Stage Selection</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>In scope?</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>preprocessing</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>representation</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>retrieval / matching</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>geometry / estimation</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>optimization</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>confidence / rejection</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>evaluation</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>runtime environment</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>Candidate Causes</h2>
+<table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Stage</th>
+<th>Evidence now</th>
+<th>Lowest-risk check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>Next Check</h2>
+<ul>
+<li>Command:</li>
+<li>Working directory:</li>
+<li>Expected artifact:</li>
+<li>Timeout:</li>
+<li>Success signal:</li>
+<li>Failure signal:</li>
+</ul>
+<h2>Result</h2>
+<ul>
+<li>Command completed:</li>
+<li>Artifact produced:</li>
+<li>New evidence:</li>
+<li>Claim allowed:</li>
+<li>Claim forbidden:</li>
+</ul>
+<h2>Stop Rule</h2>
+<ul>
+<li>Stop if:</li>
+<li>Escalate if:</li>
+<li>Record debt if:</li>
+</ul><h1 id="templates-claim-evidence-map" data-source="templates/claim-evidence-map.md">claim-evidence-map.md</h1><h1>Claim Evidence Map</h1>
+<h2>Manuscript Target</h2>
+<ul>
+<li>Section:</li>
+<li>Paragraph:</li>
+<li>Figure / table:</li>
+<li>Reviewer pressure:</li>
+</ul>
+<h2>Claim</h2>
+<h2>Evidence Required</h2>
+<ul>
+<li>Artifact:</li>
+<li>Script / command:</li>
+<li>Dataset / protocol:</li>
+<li>Metric:</li>
+<li>Baseline:</li>
+<li>Sample count:</li>
+</ul>
+<h2>Evidence Available</h2>
+<h2>Evidence Missing</h2>
+<h2>Allowed Wording</h2>
+<h2>Forbidden Wording</h2>
+<h2>Falsification Check</h2>
+<p>What result or counterexample would make the claim false?</p>
+<h2>Reviewer Risk</h2>
+<ul>
+<li>Likely objection:</li>
+<li>Required concession:</li>
+<li>Revision target:</li>
+<li>Remaining limitation:</li>
+</ul><h1 id="templates-codex-porting-checklist" data-source="templates/codex-porting-checklist.md">codex-porting-checklist.md</h1><h1>Codex Porting Checklist</h1>
+<p>Use this when a project already has <code>CLAUDE.md</code>, <code>.claude/</code>, Cursor rules, or
+tool-specific agent instructions.</p>
+<h2>Source Files</h2>
+<p>Run a discovery sweep before filling the table. Do not rely on memory or on the
+files already visible in the editor.</p>
+<pre><code class="language-bash">find . -maxdepth 4 \( -name 'CLAUDE.md' -o -path './.claude/*' -o -path './.cursor/*' -o -name '*command*' -o -name '*commands*' \) -print
+</code></pre>
+<p>Inventory result:</p>
+<ul>
+<li>Discovery command:</li>
+<li>Sources found:</li>
+<li>Sources intentionally ignored:</li>
+<li>Missing source types checked:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Exists?</th>
+<th>Keep?</th>
+<th>Destination</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CLAUDE.md</code></td>
+<td></td>
+<td></td>
+<td><code>AGENTS.md</code></td>
+</tr>
+<tr>
+<td><code>.claude/settings.local.json</code></td>
+<td></td>
+<td></td>
+<td>local notes only</td>
+</tr>
+<tr>
+<td><code>.claude/skills</code></td>
+<td></td>
+<td></td>
+<td>Codex skill or template</td>
+</tr>
+<tr>
+<td><code>.cursor/rules</code></td>
+<td></td>
+<td></td>
+<td><code>AGENTS.md</code> or editor rule</td>
+</tr>
+<tr>
+<td>slash commands</td>
+<td></td>
+<td></td>
+<td>script or checklist</td>
+</tr>
+<tr>
+<td>MCP/plugin config</td>
+<td></td>
+<td></td>
+<td>local notes or install guide</td>
+</tr>
+<tr>
+<td>CI/workflow commands</td>
+<td></td>
+<td></td>
+<td>verification script</td>
+</tr>
+<tr>
+<td>project memory</td>
+<td></td>
+<td></td>
+<td><code>project-memory.json</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Move Into AGENTS.md</h2>
+<ul>
+<li>Project goal:</li>
+<li>Public/private boundary:</li>
+<li>Source-of-truth read order:</li>
+<li>Stage pipeline:</li>
+<li>Allowed commands:</li>
+<li>Forbidden commands:</li>
+<li>Evidence gate:</li>
+<li>Durable corrections:</li>
+<li>Build or verification commands:</li>
+</ul>
+<h2>Convert Tool-Specific Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Original command</th>
+<th>Portable meaning</th>
+<th>Codex replacement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<ul>
+<li>plugin install command -&gt; source link plus manual install note</li>
+<li>slash command -&gt; script, template, or checklist</li>
+<li>Claude-only setting -&gt; Codex sandbox/approval note</li>
+<li>MCP/plugin config -&gt; capability note plus local setup boundary</li>
+<li>CI/workflow command -&gt; repo verification command</li>
+<li>coding rule -&gt; project <code>AGENTS.md</code> rule</li>
+</ul>
+<h2>Research Gates To Add</h2>
+<p>Claude or coding-agent rules often stop at test pass. Robotics research needs
+more gates.</p>
+<ul>
+<li>Dataset provenance:</li>
+<li>Metric protocol:</li>
+<li>Artifact path:</li>
+<li>Result provenance:</li>
+<li>Claim/evidence boundary:</li>
+<li>Reviewer risk:</li>
+<li>Replay case:</li>
+</ul>
+<h2>Do Not Publish</h2>
+<ul>
+<li>private machine paths</li>
+<li>raw conversation records</li>
+<li>credential values</li>
+<li>private reviewer text</li>
+<li>unpublished result details</li>
+</ul>
+<h2>Porting Result</h2>
+<p>Current evidence permits:</p>
+<p>Current evidence forbids:</p>
+<p>Promotion requires:</p>
+<h2>Acceptance Gate</h2>
+<p>Porting is complete only when these artifacts agree.</p>
+<ul>
+<li><code>AGENTS.md</code> contains the moved project goal, boundary, read order, evidence
+  gate, durable corrections, and verification commands.</li>
+<li>Discovery sweep was run and every found Claude/Cursor/slash-command/plugin
+  source has a keep/drop/destination decision.</li>
+<li>tool-specific commands have portable replacements in the command conversion
+  table.</li>
+<li>Claude-only, editor-only, or local-only settings are recorded as local notes, not public
+  project rules.</li>
+<li>Robotics research gates were added for dataset, metric, artifact, claim,
+  reviewer risk, and replay.</li>
+<li><code>project-memory.json</code> contains any durable correction discovered during
+  porting.</li>
+<li>First AI session prompt names <code>AGENTS.md</code>, <code>project-memory.json</code>, first-day
+  checklist, and the first target note.</li>
+</ul>
+<p>If one item is missing, the first AI session remains orientation only.</p><h1 id="templates-weekly-research-ledger" data-source="templates/weekly-research-ledger.md">weekly-research-ledger.md</h1><h1>Weekly Research Ledger</h1>
+<h2>Week</h2>
+<ul>
+<li>Dates:</li>
+<li>Main project:</li>
+</ul>
+<h2>Research Progress</h2>
+<ul>
+<li>Claim and evidence advanced:</li>
+<li>Experiment protocol verified:</li>
+<li>Paper or code result improved:</li>
+</ul>
+<h2>Setup Progress</h2>
+<ul>
+<li>Environment:</li>
+<li>Tooling:</li>
+<li>Data movement:</li>
+</ul>
+<h2>Numbers Produced</h2>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>Result file</th>
+<th>Protocol</th>
+<th>Can claim?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>Open Risks</h2>
+<ul>
+<li>Evidence risk:</li>
+<li>Runtime risk:</li>
+<li>Manuscript risk:</li>
+<li>Reviewer risk:</li>
+</ul>
+<h2>Next Smallest Action</h2><h1 id="templates-result-provenance-tuple" data-source="templates/result-provenance-tuple.md">result-provenance-tuple.md</h1><h1>Result Provenance Tuple</h1>
+<h2>Number</h2>
+<ul>
+<li>Value:</li>
+<li>Unit:</li>
+<li>Higher is better / lower is better:</li>
+<li>Table or figure target:</li>
+</ul>
+<h2>Protocol</h2>
+<ul>
+<li>Dataset:</li>
+<li>Split / sequence:</li>
+<li>Sensor / modality:</li>
+<li>Query -&gt; database direction:</li>
+<li>Ground truth:</li>
+<li>Metric:</li>
+<li>Threshold:</li>
+<li>Alignment:</li>
+<li>Baseline:</li>
+</ul>
+<h2>Execution</h2>
+<ul>
+<li>Repository:</li>
+<li>Branch / commit if available:</li>
+<li>Command:</li>
+<li>Config:</li>
+<li>Runtime environment:</li>
+<li>Date:</li>
+<li>Operator:</li>
+</ul>
+<h2>Artifact</h2>
+<ul>
+<li>Log:</li>
+<li>Raw result:</li>
+<li>Aggregated table:</li>
+<li>Plot:</li>
+<li>Checkpoint / cache:</li>
+</ul>
+<h2>Claim Boundary</h2>
+<p>Current evidence permits:</p>
+<p>Current evidence forbids:</p>
+<p>Promotion requires:</p>
+<h2>Agent Handoff Note</h2>
+<ul>
+<li>Session record to update:</li>
+<li>Harness rule triggered:</li>
+<li>Sandbox file / command to inspect next:</li>
+<li>Failure observed:</li>
+<li>Claim allowed now:</li>
+<li>Claim blocked now:</li>
+<li>Verification left for next session:</li>
+</ul><h1 id="templates-replay-case" data-source="templates/replay-case.md">replay-case.md</h1><h1>Replay Case</h1>
+<h2>Failure Name</h2>
+<h2>Trigger</h2>
+<p>What kind of user request or artifact tends to cause the mistake?</p>
+<h2>Bad AI Behavior</h2>
+<h2>Required Gate</h2>
+<ul>
+<li>Session record to update:</li>
+<li>Harness rule triggered:</li>
+<li>Sandbox file / command to inspect next:</li>
+</ul>
+<h2>Minimal Test</h2>
+<h2>Correct Behavior</h2>
+<h2>Durable Constraint</h2>
+<h2>Verification Prompt</h2>
+<p>Use this prompt to test the next AI session:</p>
+<pre><code class="language-text">Given the same trigger, state the required gate before making a claim.
+Do not infer from filenames, summaries, or memory when artifact evidence is
+required.
+</code></pre><h1 id="templates-user-reaction-prior" data-source="templates/user-reaction-prior.md">user-reaction-prior.md</h1><h1>User Reaction Prior</h1>
+<p>Use this before a substantial research-agent response, edit, command, or
+continuation.</p>
+<p>The purpose is not to predict the user as a person. The purpose is to stop the
+agent from repeating known transition failures: shallow summary, local pattern
+matching, weak evidence promotion, wrong implementation surface, non-operational
+advice, and drift from the original goal.</p>
+<h2>When To Use</h2>
+<p>Use this gate for robotics/CV research work involving code, experiments,
+datasets, metrics, paper writing, reviewer response, literature positioning,
+workspace continuation, or durable project memory.</p>
+<p>Do not use it for trivial one-line facts or mechanical formatting with no
+research-state consequence.</p>
+<h2>Pre-Response Check</h2>
+<p>Before answering, ask:</p>
+<pre><code class="language-text">reaction_risk_check:
+  likely_user_objection:
+  violated_transition:
+  required_revision:
+  revised_action:
+  remaining_risk:
+</code></pre>
+<p>If <code>likely_user_objection</code> is nonempty, change the action itself before
+answering. Do not pass this gate by adding caveats, apologies, or a displayed
+checklist.</p>
+<h2>Reaction Classes</h2>
+<table>
+<thead>
+<tr>
+<th>User correction cue</th>
+<th>Likely agent failure</th>
+<th>Required revision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"too shallow"</td>
+<td>stopped at first-order summary</td>
+<td>raise abstraction and name the reusable transition</td>
+</tr>
+<tr>
+<td>"too local"</td>
+<td>followed files, words, or counts instead of research state</td>
+<td>extract invariant failure mode and control surface</td>
+</tr>
+<tr>
+<td>"did you read it?"</td>
+<td>detached from retained artifacts</td>
+<td>name the source-of-truth artifact and bind the claim to it</td>
+</tr>
+<tr>
+<td>"why this implementation surface?"</td>
+<td>used the wrong control layer</td>
+<td>separate skill, rule, gate, workflow, and script</td>
+</tr>
+<tr>
+<td>"can this be used immediately?"</td>
+<td>descriptive but not operational</td>
+<td>convert to a gate, checklist, replay case, schema field, or workflow entry</td>
+</tr>
+<tr>
+<td>"is that sufficiently analyzed?"</td>
+<td>promoted weak evidence</td>
+<td>demote the claim and state what would promote it</td>
+</tr>
+<tr>
+<td>"do you remember the goal?"</td>
+<td>optimized a local subtask</td>
+<td>restate the higher-order objective and discard irrelevant work</td>
+</tr>
+<tr>
+<td>"stop making parallel documents"</td>
+<td>scattered state</td>
+<td>patch the active surface instead of creating another summary</td>
+</tr>
+<tr>
+<td>"proceed / resume / complete all"</td>
+<td>stopped at proposal</td>
+<td>continue through implementation and verification</td>
+</tr>
+</tbody>
+</table>
+<h2>Real Revision</h2>
+<p>A real revision changes at least one of:</p>
+<ul>
+<li>selected skill or typed action;</li>
+<li>source-of-truth artifact inspected before acting;</li>
+<li>evidence tier or blocked claim;</li>
+<li>action mode;</li>
+<li>narrowest next action;</li>
+<li>verification gate;</li>
+<li>durable control surface.</li>
+</ul>
+<p>A non-revision only changes tone, length, or confidence language while leaving
+the same flawed action intact.</p>
+<h2>Stop Condition</h2>
+<p>After the reaction-risk check, continue through the active project entrypoint:
+<code>AGENTS.md</code>, project memory, research-turn skill, issue workflow, or paper
+workflow. When a correction recurs, turn it into a reusable gate, replay case,
+skill rule, project memory entry, or bot instruction.</p>
+<p>Source model: <a href="https://github.com/alexjunholee/robotics-research-agent"><code>alexjunholee/robotics-research-agent</code></a>.</p><h1 id="templates-paper-reading-note" data-source="templates/paper-reading-note.md">paper-reading-note.md</h1><h1>Paper Reading Note</h1>
+<h2>Bibliographic</h2>
+<ul>
+<li>Title:</li>
+<li>Authors:</li>
+<li>Year:</li>
+<li>Venue:</li>
+<li>Link:</li>
+</ul>
+<h2>One-Sentence Claim</h2>
+<h2>Problem Axis</h2>
+<ul>
+<li>Task:</li>
+<li>Setting:</li>
+<li>What is hard:</li>
+</ul>
+<h2>Method Assumptions</h2>
+<ul>
+<li>Observation model:</li>
+<li>State / representation:</li>
+<li>Optimization / learning objective:</li>
+<li>Data assumptions:</li>
+</ul>
+<h2>Evidence</h2>
+<ul>
+<li>Dataset:</li>
+<li>Split:</li>
+<li>Metric:</li>
+<li>Baselines:</li>
+<li>Main result:</li>
+<li>Failure cases:</li>
+</ul>
+<h2>What This Paper Allows Me To Say</h2>
+<h2>What This Paper Does Not Allow Me To Say</h2>
+<h2>Evidence Gate</h2>
+<p>Current evidence permits:</p>
+<p>Current evidence forbids:</p>
+<p>Promotion requires:</p>
+<h2>Agent Handoff Note</h2>
+<ul>
+<li>Session record to update:</li>
+<li>Harness rule triggered:</li>
+<li>Sandbox file / command to inspect next:</li>
+<li>Claim allowed now:</li>
+<li>Claim blocked now:</li>
+<li>Verification left for next session:</li>
+</ul>
+<h2>Reusable Citation Role</h2>
+<ul>
+<li>Background:</li>
+<li>Method comparison:</li>
+<li>Limitation:</li>
+<li>Reviewer defense:</li>
+</ul><h1 id="templates-project-memory-template-json" data-source="templates/project-memory.template.json">project-memory.template.json</h1><pre><code>{
+  &quot;project&quot;: &quot;&quot;,
+  &quot;workspace_path&quot;: &quot;&quot;,
+  &quot;current_truth&quot;: &quot;&quot;,
+  &quot;source_of_truth&quot;: {
+    &quot;project_rules&quot;: &quot;AGENTS.md&quot;,
+    &quot;workspace_start&quot;: &quot;README.md&quot;,
+    &quot;current_memory&quot;: &quot;project-memory.json&quot;,
+    &quot;first_day_checklist&quot;: &quot;notes/first-day-workspace-checklist.md&quot;,
+    &quot;weekly_ledger&quot;: &quot;notes/weekly-research-ledger.md&quot;,
+    &quot;artifact_root&quot;: &quot;artifacts/&quot;
+  },
+  &quot;tool_surface_map&quot;: [
+    {
+      &quot;research_scene&quot;: &quot;&quot;,
+      &quot;tool_surface&quot;: &quot;&quot;,
+      &quot;first_gate&quot;: &quot;&quot;
+    }
+  ],
+  &quot;current_evidence&quot;: {
+    &quot;permits&quot;: [],
+    &quot;forbids&quot;: [],
+    &quot;promotion_requires&quot;: []
+  },
+  &quot;first_research_loop&quot;: {
+    &quot;target&quot;: &quot;&quot;,
+    &quot;target_note&quot;: &quot;&quot;,
+    &quot;supporting_note&quot;: &quot;&quot;,
+    &quot;expected_artifact&quot;: &quot;&quot;,
+    &quot;no_second_loop&quot;: true
+  },
+  &quot;durable_constraints&quot;: [],
+  &quot;known_artifacts&quot;: [],
+  &quot;experiment_protocols&quot;: [],
+  &quot;claim_boundaries&quot;: [],
+  &quot;replay_cases&quot;: [],
+  &quot;next_smallest_actions&quot;: [],
+  &quot;last_updated&quot;: &quot;YYYY-MM-DD&quot;
+}
+</code></pre><h1 id="examples-first-robotics-workspace-readme" data-source="examples/first-robotics-workspace/README.md">README.md</h1><h1>First Robotics Workspace</h1>
+<p>이 폴더는 첫날 로보틱스/CV 연구 프로젝트를 어떻게 채우는지 보여 주는 공개
+예시다. 실제 연구 파일, 개인 경로, 원 대화 로그는 들어 있지 않다.</p>
+<h2>Start Here</h2>
+<ol>
+<li><code>AGENTS.md</code>를 먼저 읽는다.</li>
+<li><code>project-memory.json</code>에서 현재 확인한 사실, source_of_truth, current_evidence,
+   first_research_loop, next_smallest_actions를 확인한다.</li>
+<li><code>notes/first-day-workspace-checklist.md</code>로 원 파일과 실행 결과를 정한다.</li>
+<li>기존 <code>CLAUDE.md</code>, <code>.claude/</code>, Cursor rule이 있으면
+   <code>notes/codex-porting-checklist.md</code>로 행동 원칙만 옮긴다.</li>
+<li>session, harness, sandbox 경계를 먼저 쓴다.</li>
+<li>첫 AI 세션에는 <code>notes/first-ai-session-prompt.md</code>를 채워 보낸다.</li>
+</ol>
+<h2>First Run Check</h2>
+<p>첫 세션 전에 다음 파일이 있어야 한다.</p>
+<pre><code class="language-text">AGENTS.md
+README.md
+project-memory.json
+notes/first-day-workspace-checklist.md
+notes/first-ai-session-prompt.md
+notes/paper-code-experiment-map.md
+notes/experiment-contract.md
+notes/weekly-research-ledger.md
+artifacts/first-ai-session-message.txt
+</code></pre>
+<p><code>project-memory.json</code>은 JSON으로 열려야 한다. 첫 메시지에는 <code>[task]</code>,
+<code>[target note]</code>, <code>[supporting note]</code>, <code>[expected artifact]</code>가 남아 있으면 안 된다.
+memory 안의 <code>source_of_truth</code>, <code>tool_surface_map</code>, <code>current_evidence</code>,
+<code>first_research_loop</code>, <code>next_smallest_actions</code>도 비어 있으면 안 된다.</p>
+<h2>Read Order</h2>
+<pre><code class="language-text">AGENTS.md
+project-memory.json
+notes/first-day-workspace-checklist.md
+notes/weekly-research-ledger.md
+notes/first-ai-session-prompt.md
+</code></pre>
+<h2>First Research Loop</h2>
+<p>논문 한 편은 <code>notes/paper-code-experiment-map.md</code>에 남긴다. 실험 숫자는
+<code>notes/experiment-contract.md</code>로 protocol을 확인한 뒤 말한다. 에러는
+<code>notes/stage-local-debugging.md</code>에서 stage, signal, next check로 좁힌다.</p>
+<p>첫 세션의 답은 항상 아래 경계를 포함해야 한다.</p>
+<pre><code class="language-text">session record to update:
+harness rule:
+sandbox action:
+current evidence permits:
+current evidence forbids:
+next action:
+verification:
+record update:
+</code></pre>
+<p>이 다섯 줄이 채워지면 AI는 일반 조언 대신 연구 상태 안에서 움직인다.
+세션이 끝나면 같은 경계를 <code>project-memory.json</code>의 <code>current_evidence</code>와
+<code>next_smallest_actions</code>에 다시 남긴다.</p><h1 id="examples-first-robotics-workspace-agents" data-source="examples/first-robotics-workspace/AGENTS.md">AGENTS.md</h1><h1>Example Robotics Workspace AGENTS.md</h1>
+<p>This is a sanitized example. Replace names, paths, datasets, and commands with
+your own project state before using it.</p>
+<h2>Project Truth</h2>
+<ul>
+<li>Current public artifact: project README and paper notes</li>
+<li>Current private state file: project-memory.json</li>
+<li>Source of truth for code: repos/localization-stack</li>
+<li>Source of truth for datasets: dataset inventory sheet</li>
+<li>Source of truth for experiments: notes/experiment-contract.md</li>
+<li>Source of truth for manuscript: notes/claim-evidence-map.md when created</li>
+<li>Source of truth for durable corrections: project-memory.json</li>
+</ul>
+<h2>Public / Private Boundary</h2>
+<p>Public:</p>
+<ul>
+<li>README</li>
+<li>sanitized notes</li>
+<li>empty templates</li>
+<li>public paper links</li>
+</ul>
+<p>Private:</p>
+<ul>
+<li>raw experiment logs</li>
+<li>reviewer material</li>
+<li>machine-specific storage names</li>
+<li>unpublished result tables</li>
+</ul>
+<h2>Managed Agent Boundary</h2>
+<ul>
+<li>Session: project-memory.json, weekly ledger, replay cases, and artifacts.</li>
+<li>Harness: AGENTS.md, evidence gate, work modes, and durable corrections.</li>
+<li>Sandbox: repos/localization-stack, dataset inventory, commands, and generated outputs.</li>
+</ul>
+<p>Before starting work, state the session record to update, the harness rule that
+controls the action, and the sandbox action currently allowed.</p>
+<h2>Work Modes</h2>
+<h3>Workspace Resume</h3>
+<p>Read in this order:</p>
+<ol>
+<li>AGENTS.md</li>
+<li>project-memory.json</li>
+<li>notes/first-day-workspace-checklist.md</li>
+<li>notes/codex-porting-checklist.md if legacy AI rules exist</li>
+<li>notes/weekly-research-ledger.md</li>
+<li>current target note</li>
+<li>artifacts named in the target note</li>
+</ol>
+<h3>Experiment Interpretation</h3>
+<p>Required before any performance claim:</p>
+<ul>
+<li>dataset</li>
+<li>split or sequence</li>
+<li>query/database direction if retrieval</li>
+<li>metric definition</li>
+<li>baseline</li>
+<li>artifact path</li>
+<li>failure condition</li>
+</ul>
+<h3>Debugging</h3>
+<p>Use stage-local debugging. State the stage, expected signal, observed signal,
+candidate causes, and lowest-risk check before naming a root cause.</p>
+<h2>Evidence Gate</h2>
+<p>Before answering, state:</p>
+<pre><code class="language-text">current evidence permits:
+current evidence forbids:
+promotion requires:
+</code></pre>
+<h2>Durable Corrections</h2>
+<p>If a user corrects an assumption, update project-memory.json before continuing.</p>
+<h2>Porting Acceptance</h2>
+<p>This example workspace includes a completed <code>notes/codex-porting-checklist.md</code>.
+Research action starts after the checklist confirms:</p>
+<ul>
+<li>tool-specific commands have portable replacements;</li>
+<li>local-only settings are not treated as project rules;</li>
+<li>dataset, metric, artifact, claim, reviewer risk, and replay gates exist;</li>
+<li>first AI session prompt reads this <code>AGENTS.md</code>, project memory, first-day
+  checklist, and the chosen target note.</li>
+</ul><h1 id="examples-first-robotics-workspace-project-memory-json" data-source="examples/first-robotics-workspace/project-memory.json">project-memory.json</h1><pre><code class="language-json">{
+  "project": "example-localization-workspace",
+  "current_truth": "First-day sanitized workspace for a robotics/CV AI harness. No private data is included.",
+  "source_of_truth": {
+    "project_rules": "AGENTS.md",
+    "workspace_start": "README.md",
+    "current_memory": "project-memory.json",
+    "first_day_checklist": "notes/first-day-workspace-checklist.md",
+    "weekly_ledger": "notes/weekly-research-ledger.md",
+    "artifact_root": "artifacts/"
+  },
+  "tool_surface_map": [
+    {
+      "research_scene": "connect one localization paper to code and experiment protocol",
+      "tool_surface": "coding agent plus terminal for source inspection only after AGENTS.md and memory are read",
+      "first_gate": "paper-code-experiment map names central claim, candidate code paths, missing protocol fields"
+    },
+    {
+      "research_scene": "interpret experiment number",
+      "tool_surface": "experiment operator role",
+      "first_gate": "dataset, split, metric script, baseline, command, and artifact are recorded"
+    }
+  ],
+  "current_evidence": {
+    "permits": [
+      "The workspace can open a first AI-assisted paper/code/experiment pass.",
+      "The first AI prompt can ask for one target note and one expected artifact."
+    ],
+    "forbids": [
+      "No method performance claim is allowed.",
+      "No reviewer defense claim is allowed.",
+      "No dataset comparison is allowed until split, metric script, baseline, command, and artifact are recorded."
+    ],
+    "promotion_requires": [
+      "Fill notes/paper-code-experiment-map.md with central claim, method assumption, candidate code path, and missing experiment protocol fields.",
+      "Fill notes/experiment-contract.md with dataset, split, metric, baseline, command, and artifact.",
+      "Update notes/weekly-research-ledger.md with blocked claim and next smallest action."
+    ]
+  },
+  "first_research_loop": {
+    "target": "connect one localization paper's central claim to code path candidates and missing experiment protocol fields",
+    "target_note": "notes/paper-code-experiment-map.md",
+    "supporting_note": "notes/experiment-contract.md",
+    "expected_artifact": "filled sections in notes/paper-code-experiment-map.md",
+    "no_second_loop": true
+  },
+  "durable_constraints": [
+    "Do not infer experiment success from a command finishing.",
+    "Do not compare retrieval numbers unless query/database direction and positive rule are known.",
+    "Treat prior summaries as orientation, not evidence."
+  ],
+  "known_artifacts": [
+    {
+      "name": "first-day-workspace-checklist",
+      "path": "notes/first-day-workspace-checklist.md",
+      "status": "filled"
+    },
+    {
+      "name": "codex-porting-checklist",
+      "path": "notes/codex-porting-checklist.md",
+      "status": "filled"
+    },
+    {
+      "name": "paper-code-experiment-map",
+      "path": "notes/paper-code-experiment-map.md",
+      "status": "draft"
+    },
+    {
+      "name": "experiment-contract",
+      "path": "notes/experiment-contract.md",
+      "status": "needs artifact"
+    }
+  ],
+  "experiment_protocols": [],
+  "claim_boundaries": [
+    {
+      "claim": "The workspace is ready for a first AI-assisted paper/code/experiment pass.",
+      "allowed": true,
+      "blocked_extension": "No method performance claim is allowed yet."
+    }
+  ],
+  "replay_cases": [],
+  "next_smallest_actions": [
+    "Read AGENTS.md, project-memory.json, first-day checklist, weekly ledger, and the first-session prompt.",
+    "Inspect the evaluation script and dataset split file, then fill notes/paper-code-experiment-map.md before opening any second research loop.",
+    "Update current_evidence and claim_boundaries after the first artifact is produced."
+  ],
+  "last_updated": "2026-06-16"
+}
+</code></pre><h1 id="examples-first-robotics-workspace-notes-first-day-workspace-checklist" data-source="examples/first-robotics-workspace/notes/first-day-workspace-checklist.md">first-day-workspace-checklist.md</h1><h1>First-Day Workspace Checklist</h1>
+<p>This file is filled enough for a first AI-assisted research loop. Replace every
+example name before using it in a real project.</p>
+<h2>Workspace Shape</h2>
+<ul>
+<li>Workspace root: example-localization-workspace</li>
+<li>Main code repos: repos/localization-stack</li>
+<li>Dataset storage: datasets/public-sequence-sample</li>
+<li>Artifact storage: artifacts/first-pass</li>
+<li>Manuscript location: notes/claim-evidence-map.md when created</li>
+<li>Template location: templates/</li>
+<li>Public output location: README and sanitized notes</li>
+</ul>
+<h2>Source Of Truth</h2>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Primary source</th>
+<th>Secondary source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>project goal</td>
+<td>AGENTS.md</td>
+<td>project-memory.json</td>
+</tr>
+<tr>
+<td>code truth</td>
+<td>repos/localization-stack</td>
+<td>recent command output</td>
+</tr>
+<tr>
+<td>dataset truth</td>
+<td>dataset inventory sheet</td>
+<td>notes/experiment-contract.md</td>
+</tr>
+<tr>
+<td>experiment truth</td>
+<td>notes/experiment-contract.md</td>
+<td>result provenance tuple</td>
+</tr>
+<tr>
+<td>manuscript truth</td>
+<td>notes/claim-evidence-map.md</td>
+<td>paper notes</td>
+</tr>
+<tr>
+<td>reviewer risk</td>
+<td>notes/weekly-research-ledger.md</td>
+<td>project-memory.json</td>
+</tr>
+<tr>
+<td>durable corrections</td>
+<td>project-memory.json</td>
+<td>replay cases</td>
+</tr>
+</tbody>
+</table>
+<h2>Public / Private Boundary</h2>
+<p>Public:</p>
+<ul>
+<li>README</li>
+<li>sanitized notes</li>
+<li>empty templates</li>
+<li>public paper links</li>
+</ul>
+<p>Private:</p>
+<ul>
+<li>raw experiment logs</li>
+<li>reviewer material</li>
+<li>unpublished result tables</li>
+<li>credential material</li>
+<li>machine-specific storage names</li>
+</ul>
+<h2>First Agent Read Order</h2>
+<ol>
+<li><code>AGENTS.md</code></li>
+<li><code>project-memory.json</code></li>
+<li><code>notes/first-day-workspace-checklist.md</code></li>
+<li><code>notes/weekly-research-ledger.md</code></li>
+<li>current target note</li>
+<li>artifacts named in the target note</li>
+</ol>
+<h2>First Verification Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Command</th>
+<th>Expected result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>inspect project contract</td>
+<td><code>sed -n '1,160p' AGENTS.md</code></td>
+<td>project truth and boundary are visible</td>
+</tr>
+<tr>
+<td>inspect memory</td>
+<td><code>python3 -m json.tool project-memory.json</code></td>
+<td>current truth parses as JSON</td>
+</tr>
+<tr>
+<td>inspect first loop</td>
+<td><code>sed -n '1,180p' notes/paper-code-experiment-map.md</code></td>
+<td>claim/code/protocol fields are visible</td>
+</tr>
+<tr>
+<td>inspect experiment gate</td>
+<td><code>sed -n '1,180p' notes/experiment-contract.md</code></td>
+<td>permitted and blocked claims are visible</td>
+</tr>
+</tbody>
+</table>
+<h2>First Research Action</h2>
+<ul>
+<li>Object under truth control: one paper-code-experiment map for a localization paper</li>
+<li>Current evidence permits: identifying claim, code path candidates, and missing protocol fields</li>
+<li>Current evidence forbids: claiming method performance or reviewer readiness</li>
+<li>Smallest next action: fill the paper claim and active code path candidate</li>
+<li>Verification: cite the paper section, code file, or command output used for each filled field</li>
+</ul><h1 id="examples-first-robotics-workspace-notes-first-ai-session-prompt" data-source="examples/first-robotics-workspace/notes/first-ai-session-prompt.md">first-ai-session-prompt.md</h1><h1>First AI Session Prompt</h1>
+<p>This example starts one paper-code-experiment loop for a localization project.</p>
+<h2>Session Target</h2>
+<ul>
+<li>Workspace: example-localization-workspace</li>
+<li>Research object: one paper-code-experiment map for a localization paper</li>
+<li>Current task: connect the paper claim to code path candidates and missing
+  experiment protocol fields</li>
+<li>Expected artifact: filled sections in <code>notes/paper-code-experiment-map.md</code></li>
+</ul>
+<h2>Read Order</h2>
+<p>Read these files before answering.</p>
+<ol>
+<li><code>AGENTS.md</code></li>
+<li><code>project-memory.json</code></li>
+<li><code>notes/first-day-workspace-checklist.md</code></li>
+<li><code>notes/weekly-research-ledger.md</code></li>
+<li><code>notes/paper-code-experiment-map.md</code></li>
+<li><code>notes/experiment-contract.md</code></li>
+</ol>
+<h2>Before Answering</h2>
+<p>State these fields first.</p>
+<pre><code class="language-text">Session record to update:
+Harness rule that controls this action:
+Sandbox action allowed now:
+Sandbox action not allowed now:
+Object under truth control:
+Current evidence permits:
+Current evidence forbids:
+Smallest next action:
+Verification:
+</code></pre>
+<h2>Allowed First Action</h2>
+<ul>
+<li>Inspect the paper-code-experiment map.</li>
+<li>Identify central claim and active code path candidates.</li>
+<li>Mark missing dataset, split, metric, baseline, command, and artifact fields.</li>
+<li>Choose one file or command output to inspect next.</li>
+<li>Leave a session record, harness rule, sandbox action, and verification record.</li>
+</ul>
+<h2>Blocked Claims</h2>
+<ul>
+<li>Do not claim method performance.</li>
+<li>Do not state reviewer readiness.</li>
+<li>Do not treat a file name as active implementation proof.</li>
+<li>Do not turn missing protocol fields into manuscript claims.</li>
+</ul>
+<h2>Promotion Requires</h2>
+<pre><code class="language-text">object under truth control:
+primary evidence:
+secondary evidence:
+claim allowed:
+claim blocked:
+next command or file inspection:
+ledger update:
+</code></pre>
+<h2>Prompt To Send</h2>
+<pre><code class="language-text">Read AGENTS.md, project-memory.json, notes/first-day-workspace-checklist.md,
+notes/weekly-research-ledger.md, notes/paper-code-experiment-map.md, and
+notes/experiment-contract.md before answering.
+
+My current task is to connect one localization paper's central claim to code path
+candidates and missing experiment protocol fields.
+First research loop target: notes/paper-code-experiment-map.md
+Expected artifact: filled sections in notes/paper-code-experiment-map.md
+
+Before giving advice, state:
+- Session record to update
+- Harness rule that controls this action
+- Sandbox action allowed now
+- Sandbox action not allowed now
+- Object under truth control
+- Current evidence permits
+- Current evidence forbids
+- Smallest next action
+- Verification
+
+Use source files, artifacts, and command output as primary evidence. Treat
+summaries as orientation only. If evidence is missing, say what is missing and
+choose the smallest inspection that would promote the claim.
+Do not open a second research loop in the first answer.
+</code></pre><h1 id="examples-first-robotics-workspace-notes-first-ai-session-message-txt" data-source="examples/first-robotics-workspace/notes/first-ai-session-message.txt">first-ai-session-message.txt</h1><pre><code class="language-text">Read AGENTS.md, project-memory.json, notes/first-day-workspace-checklist.md,
+notes/weekly-research-ledger.md, notes/paper-code-experiment-map.md, and
+notes/experiment-contract.md before answering.
+
+My current task is to connect one localization paper's central claim to code path
+candidates and missing experiment protocol fields.
+First research loop target: notes/paper-code-experiment-map.md
+Expected artifact: filled sections in notes/paper-code-experiment-map.md
+
+Before giving advice, state:
+- Session record to update
+- Harness rule that controls this action
+- Sandbox action allowed now
+- Sandbox action not allowed now
+- Object under truth control
+- Current evidence permits
+- Current evidence forbids
+- Smallest next action
+- Verification
+
+Use source files, artifacts, and command output as primary evidence. Treat
+summaries as orientation only. If evidence is missing, say what is missing and
+choose the smallest inspection that would promote the claim.
+Do not open a second research loop in the first answer.
+</code></pre><h1 id="examples-first-robotics-workspace-notes-paper-code-experiment-map" data-source="examples/first-robotics-workspace/notes/paper-code-experiment-map.md">paper-code-experiment-map.md</h1><h1>Paper-Code-Experiment Map</h1>
+<h2>Paper</h2>
+<ul>
+<li>Title: Example visual place recognition paper</li>
+<li>Authors: Public authors</li>
+<li>Year / venue: 2024 / public venue</li>
+<li>Link: https://example.org/public-paper</li>
+</ul>
+<h2>Central Claim</h2>
+<ul>
+<li>What the paper claims: A representation improves place recognition under a defined evaluation.</li>
+<li>What problem pressure it responds to: visual change and cross-condition retrieval.</li>
+<li>What assumption it repairs or introduces: feature space should preserve place identity under appearance change.</li>
+</ul>
+<h2>Method Map</h2>
+<table>
+<thead>
+<tr>
+<th>Paper concept</th>
+<th>Code candidate</th>
+<th>Status</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature extractor</td>
+<td>repos/localization-stack/src/features.py</td>
+<td>unknown</td>
+<td>file candidate only</td>
+</tr>
+<tr>
+<td>retrieval index</td>
+<td>repos/localization-stack/src/index.py</td>
+<td>unknown</td>
+<td>file candidate only</td>
+</tr>
+</tbody>
+</table>
+<h2>Experiment Contract</h2>
+<ul>
+<li>Dataset: example urban route dataset</li>
+<li>Split / sequence: not verified</li>
+<li>Sensor / modality: camera</li>
+<li>Query -&gt; database direction: not verified</li>
+<li>Ground truth: not verified</li>
+<li>Metric: R@K, definition not verified</li>
+<li>Threshold / alignment: not verified</li>
+<li>Baseline: not verified</li>
+<li>Artifact: not produced</li>
+</ul>
+<h2>Agent Handoff Note</h2>
+<p>Only include issues that change how the method should be run, evaluated, or
+cited.</p>
+<ul>
+<li>Session record to update: project-memory.json and weekly ledger</li>
+<li>Harness rule triggered: evidence gate before performance claim</li>
+<li>Sandbox file / command to inspect next: evaluation script and dataset split file</li>
+<li>Build issue:</li>
+<li>Dataset convention issue:</li>
+<li>Metric issue:</li>
+<li>Sensor setup issue:</li>
+<li>Claim or limitation issue:</li>
+<li>Verification left for next session: cite the file or command output used for each filled field</li>
+</ul>
+<h2>Reusable Research Output</h2>
+<ul>
+<li>Comparison I can reuse: blocked until protocol is verified.</li>
+<li>Claim this paper supports: candidate representation family for VPR.</li>
+<li>Claim this paper does not support: performance improvement in this workspace.</li>
+<li>Next artifact to inspect: evaluation script and dataset split file.</li>
+</ul><h1 id="examples-first-robotics-workspace-notes-experiment-contract" data-source="examples/first-robotics-workspace/notes/experiment-contract.md">experiment-contract.md</h1><h1>Experiment Contract</h1>
+<h2>Identity</h2>
+<ul>
+<li>Experiment name: example-vpr-baseline</li>
+<li>Date: 2026-06-16</li>
+<li>Repository: repos/localization-stack</li>
+<li>Branch / commit if available: not recorded</li>
+<li>Operator: new user</li>
+</ul>
+<h2>Protocol</h2>
+<ul>
+<li>Dataset: example urban route dataset</li>
+<li>Split: not verified</li>
+<li>Sequence / scene: not verified</li>
+<li>Query / database direction: not verified</li>
+<li>Sensor or modality: camera</li>
+<li>Ground truth source: not verified</li>
+<li>Frame / transform convention: not applicable yet</li>
+<li>Metric: R@K, definition not verified</li>
+<li>Threshold: not verified</li>
+<li>Alignment: not applicable yet</li>
+<li>Baseline: not verified</li>
+<li>Failure condition: missing split, missing artifact, or metric script mismatch</li>
+</ul>
+<h2>Command</h2>
+<pre><code class="language-bash"># fill after repository setup
+</code></pre>
+<h2>Expected Artifacts</h2>
+<ul>
+<li>Log:</li>
+<li>Result table:</li>
+<li>Figure:</li>
+<li>Config:</li>
+</ul>
+<h2>Evidence Gate</h2>
+<p>Current evidence permits:</p>
+<ul>
+<li>The experiment can be planned.</li>
+</ul>
+<p>Current evidence forbids:</p>
+<ul>
+<li>Any performance or method claim.</li>
+</ul>
+<p>Promotion requires:</p>
+<ul>
+<li>dataset split, metric script, baseline, command, and artifact.</li>
+</ul>
+<h2>Interpretation</h2>
+<ul>
+<li>If success: compare only within the locked protocol.</li>
+<li>If failure: classify tool, runtime, data, method, evaluation, or claim failure.</li>
+<li>If partial: record the blocked claim.</li>
+</ul>
+<h2>Verification</h2>
+<ul>
+<li>Command completed:</li>
+<li>Artifact exists:</li>
+<li>Sample count checked:</li>
+<li>Metric definition checked:</li>
+<li>Baseline protocol checked:</li>
+<li>Claim boundary updated:</li>
+</ul><h1 id="examples-first-robotics-workspace-notes-stage-local-debugging" data-source="examples/first-robotics-workspace/notes/stage-local-debugging.md">stage-local-debugging.md</h1><h1>Stage-Local Debugging Sheet</h1>
+<h2>Debug Target</h2>
+<ul>
+<li>Object under truth control: ROS2 camera image subscriber</li>
+<li>User-visible symptom: topic appears in graph, callback receives no image</li>
+<li>Current stage: runtime environment / ROS2 communication</li>
+<li>Expected signal: subscriber callback count increases during bag replay</li>
+<li>Observed signal: callback count remains zero</li>
+</ul>
+<h2>Stage Selection</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>In scope?</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>no</td>
+<td>bag presence not yet inspected</td>
+</tr>
+<tr>
+<td>preprocessing</td>
+<td>no</td>
+<td>subscriber has no input</td>
+</tr>
+<tr>
+<td>representation</td>
+<td>no</td>
+<td>no features computed</td>
+</tr>
+<tr>
+<td>retrieval / matching</td>
+<td>no</td>
+<td>downstream stage</td>
+</tr>
+<tr>
+<td>geometry / estimation</td>
+<td>no</td>
+<td>downstream stage</td>
+</tr>
+<tr>
+<td>optimization</td>
+<td>no</td>
+<td>downstream stage</td>
+</tr>
+<tr>
+<td>confidence / rejection</td>
+<td>no</td>
+<td>downstream stage</td>
+</tr>
+<tr>
+<td>evaluation</td>
+<td>no</td>
+<td>downstream stage</td>
+</tr>
+<tr>
+<td>runtime environment</td>
+<td>yes</td>
+<td>topic visible but callback absent</td>
+</tr>
+</tbody>
+</table>
+<h2>Candidate Causes</h2>
+<table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Stage</th>
+<th>Evidence now</th>
+<th>Lowest-risk check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QoS mismatch</td>
+<td>runtime environment</td>
+<td>publisher exists, callback absent</td>
+<td>inspect topic QoS</td>
+</tr>
+<tr>
+<td>namespace/remap mismatch</td>
+<td>runtime environment</td>
+<td>graph has image topic</td>
+<td>inspect node subscriptions</td>
+</tr>
+<tr>
+<td>simulated time issue</td>
+<td>runtime environment</td>
+<td>bag replay suspected</td>
+<td>inspect clock and use_sim_time</td>
+</tr>
+</tbody>
+</table>
+<h2>Next Check</h2>
+<ul>
+<li>Command: <code>ros2 topic info --verbose /camera/image_raw</code></li>
+<li>Working directory: repo root</li>
+<li>Expected artifact: copied command output</li>
+<li>Timeout: 10 seconds</li>
+<li>Success signal: publisher/subscriber QoS is visible</li>
+<li>Failure signal: topic missing or command cannot query graph</li>
+</ul>
+<h2>Result</h2>
+<ul>
+<li>Command completed:</li>
+<li>Artifact produced:</li>
+<li>New evidence:</li>
+<li>Claim allowed:</li>
+<li>Claim forbidden:</li>
+</ul>
+<h2>Stop Rule</h2>
+<ul>
+<li>Stop if: two consecutive checks produce no new evidence.</li>
+<li>Escalate if: ROS graph cannot be queried.</li>
+<li>Record debt if: workaround is used before root cause is verified.</li>
+</ul><h1 id="examples-first-robotics-workspace-notes-codex-porting-checklist" data-source="examples/first-robotics-workspace/notes/codex-porting-checklist.md">codex-porting-checklist.md</h1><h1>Codex Porting Checklist</h1>
+<p>This is a sanitized example of moving older Claude/Cursor-oriented project
+rules into a Codex-first robotics research workspace.</p>
+<h2>Source Files</h2>
+<p>Discovery sweep:</p>
+<pre><code class="language-bash">find . -maxdepth 4 \( -name 'CLAUDE.md' -o -path './.claude/*' -o -path './.cursor/*' -o -name '*command*' -o -name '*commands*' \) -print
+</code></pre>
+<ul>
+<li>Discovery command: ran against the old workspace root before copying rules</li>
+<li>Sources found: <code>CLAUDE.md</code>, <code>.claude/settings.local.json</code>, <code>.claude/skills</code>,
+  slash commands, project memory</li>
+<li>Sources intentionally ignored: local plugin install notes, private machine
+  paths, unsanitized conversation pointers</li>
+<li>Missing source types checked: <code>.cursor/rules</code>, MCP/plugin config,
+  CI/workflow commands</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Exists?</th>
+<th>Keep?</th>
+<th>Destination</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CLAUDE.md</code></td>
+<td>yes</td>
+<td>yes</td>
+<td><code>AGENTS.md</code></td>
+</tr>
+<tr>
+<td><code>.claude/settings.local.json</code></td>
+<td>yes</td>
+<td>partial</td>
+<td>local notes only</td>
+</tr>
+<tr>
+<td><code>.claude/skills</code></td>
+<td>yes</td>
+<td>partial</td>
+<td>template or Codex skill</td>
+</tr>
+<tr>
+<td><code>.cursor/rules</code></td>
+<td>no</td>
+<td>no</td>
+<td>none</td>
+</tr>
+<tr>
+<td>slash commands</td>
+<td>yes</td>
+<td>partial</td>
+<td>script or checklist</td>
+</tr>
+<tr>
+<td>MCP/plugin config</td>
+<td>no</td>
+<td>no</td>
+<td>none</td>
+</tr>
+<tr>
+<td>CI/workflow commands</td>
+<td>no</td>
+<td>no</td>
+<td>none</td>
+</tr>
+<tr>
+<td>project memory</td>
+<td>yes</td>
+<td>yes</td>
+<td><code>project-memory.json</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Move Into AGENTS.md</h2>
+<ul>
+<li>Project goal: maintain a localization research workspace with clear claim/evidence gates</li>
+<li>Public/private boundary: publish sanitized notes only</li>
+<li>Source-of-truth read order: AGENTS, memory, first-day checklist, target note, named artifacts</li>
+<li>Stage pipeline: resume, choose one loop, run stage-local check, update ledger</li>
+<li>Allowed commands: read files, inspect JSON, run documented verification checks</li>
+<li>Forbidden commands: delete datasets, publish raw logs, infer result quality from filenames</li>
+<li>Evidence gate: current evidence permits, forbids, and promotion requires</li>
+<li>Durable corrections: store repeated wrong assumptions in project memory</li>
+<li>Build or verification commands: commands listed in the target note</li>
+</ul>
+<h2>Convert Tool-Specific Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Original command</th>
+<th>Portable meaning</th>
+<th>Codex replacement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/resume</code></td>
+<td>reconstruct current project state</td>
+<td>read <code>AGENTS.md</code>, <code>project-memory.json</code>, and ledger</td>
+</tr>
+<tr>
+<td><code>/debug-topic</code></td>
+<td>isolate a ROS2 topic failure</td>
+<td>fill <code>stage-local-debugging.md</code></td>
+</tr>
+<tr>
+<td><code>/paper-map</code></td>
+<td>connect a paper to code and experiments</td>
+<td>fill <code>paper-code-experiment-map.md</code></td>
+</tr>
+<tr>
+<td><code>/claim-check</code></td>
+<td>stop unsupported manuscript claims</td>
+<td>fill <code>claim-evidence-map.md</code></td>
+</tr>
+<tr>
+<td>plugin install command</td>
+<td>install a local UI extension</td>
+<td>keep as private setup note, not public guide content</td>
+</tr>
+<tr>
+<td>CI/workflow command</td>
+<td>run repeatable verification</td>
+<td>keep as documented verification command if it exists</td>
+</tr>
+</tbody>
+</table>
+<h2>Research Gates To Add</h2>
+<ul>
+<li>Dataset provenance: dataset inventory or archaeology sheet</li>
+<li>Metric protocol: experiment contract</li>
+<li>Artifact path: result provenance tuple</li>
+<li>Result provenance: command, timestamp, output file, failure condition</li>
+<li>Claim/evidence boundary: claim map before manuscript wording</li>
+<li>Reviewer risk: weekly ledger or claim map</li>
+<li>Replay case: repeated wrong assumption or metric mix-up</li>
+</ul>
+<h2>Do Not Publish</h2>
+<ul>
+<li>private machine paths</li>
+<li>raw conversation records</li>
+<li>credential values</li>
+<li>private reviewer text</li>
+<li>unpublished result details</li>
+</ul>
+<h2>Porting Result</h2>
+<p>Current evidence permits:</p>
+<ul>
+<li>Claude/Cursor-era operating rules can be reused as Codex project rules.</li>
+<li>Tool-specific commands have portable meanings that can become scripts or templates.</li>
+</ul>
+<p>Current evidence forbids:</p>
+<ul>
+<li>Treating Claude-only settings as Codex permissions.</li>
+<li>Publishing local plugin install notes or private workspace paths.</li>
+<li>Claiming the workspace is experimentally validated.</li>
+</ul>
+<p>Promotion requires:</p>
+<ul>
+<li>Run the first chosen research loop.</li>
+<li>Update <code>project-memory.json</code> with any durable correction.</li>
+<li>Add a replay case if the same mistaken assumption recurs.</li>
+</ul>
+<h2>Acceptance Gate</h2>
+<ul>
+<li><code>AGENTS.md</code> contains the moved project goal, boundary, read order, evidence
+  gate, durable corrections, and verification commands.</li>
+<li>Discovery sweep was run and every found Claude/Cursor/slash-command/plugin
+  source has a keep/drop/destination decision.</li>
+<li>tool-specific commands have portable replacements in the command conversion
+  table.</li>
+<li>Claude-only, editor-only, or local-only settings are recorded as local notes, not public
+  project rules.</li>
+<li>Robotics research gates were added for dataset, metric, artifact, claim,
+  reviewer risk, and replay.</li>
+<li><code>project-memory.json</code> contains any durable correction discovered during
+  porting.</li>
+<li>First AI session prompt names <code>AGENTS.md</code>, <code>project-memory.json</code>, first-day
+  checklist, and the first target note.</li>
+</ul>
+<p>If one item is missing, the first AI session remains orientation only.</p><h1 id="examples-first-robotics-workspace-notes-weekly-research-ledger" data-source="examples/first-robotics-workspace/notes/weekly-research-ledger.md">weekly-research-ledger.md</h1><h1>Weekly Research Ledger</h1>
+<h2>Week</h2>
+<ul>
+<li>Dates: 2026-06-16 to 2026-06-22</li>
+<li>Main project: example localization workspace</li>
+</ul>
+<h2>Research Progress</h2>
+<ul>
+<li>Claim/evidence advanced: workspace boundary and first protocol created</li>
+<li>Experiment protocol verified: none</li>
+<li>Paper or code artifact improved: paper-code-experiment map started</li>
+</ul>
+<h2>Setup Progress</h2>
+<ul>
+<li>Environment: workspace skeleton created</li>
+<li>Tooling: AGENTS.md added</li>
+<li>Data movement: not started</li>
+</ul>
+<h2>Numbers Produced</h2>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>Artifact</th>
+<th>Protocol</th>
+<th>Can claim?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>none</td>
+<td>none</td>
+<td>none</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<h2>Open Risks</h2>
+<ul>
+<li>Evidence risk: dataset split and metric definition not verified</li>
+<li>Runtime risk: ROS2 communication issue not yet inspected</li>
+<li>Manuscript risk: no claim/evidence map yet</li>
+<li>Reviewer risk: no paper claim should be made</li>
+</ul>
+<h2>Next Smallest Action</h2>
+<p>Inspect the evaluation script and dataset split file, then update
+<code>notes/paper-code-experiment-map.md</code> and <code>notes/experiment-contract.md</code> before
+opening any second research loop.</p></div></main>
+<script>
+(function() {
+  var tocContainer = document.getElementById('toc-container'); var contentEl = document.getElementById('content');
+  function slugify(text) { return text.toLowerCase().trim().replace(/<[^>]+>/g, '').replace(/[^ws가-힣-]/g, '').replace(/s+/g, '-').substring(0, 80) || 'section'; }
+  function buildTOC() { var headings = contentEl.querySelectorAll('h1, h2'); var fragment = document.createDocumentFragment(); headings.forEach(function(heading) { if (heading.classList.contains('overview-title')) return; if (!heading.id) heading.id = slugify(heading.textContent); var link = document.createElement('a'); link.className = 'toc-item ' + (heading.tagName === 'H2' ? 'toc-h2' : 'toc-h1'); link.href = '#' + heading.id; link.dataset.headingId = heading.id; link.textContent = heading.textContent; fragment.appendChild(link); }); tocContainer.appendChild(fragment); }
+  function setupScrollTracking() { var headings = contentEl.querySelectorAll('h1, h2'); var ticking = false; function updateActive() { var found = null; var y = window.scrollY + 80; for (var i = headings.length - 1; i >= 0; i--) { if (headings[i].offsetTop <= y) { found = headings[i]; break; } } var active = tocContainer.querySelector('.toc-item.active'); if (active) active.classList.remove('active'); if (found) { var item = tocContainer.querySelector('[data-heading-id="' + CSS.escape(found.id) + '"]'); if (item) item.classList.add('active'); } } window.addEventListener('scroll', function() { if (!ticking) requestAnimationFrame(function() { updateActive(); ticking = false; }); ticking = true; }); updateActive(); }
+  function setupSearch() { var input = document.getElementById('search-input'); var noResults = document.getElementById('toc-no-results'); input.addEventListener('input', function() { var query = this.value.trim().toLowerCase(); var items = tocContainer.querySelectorAll('.toc-item'); var matchCount = 0; items.forEach(function(item) { var matched = !query || item.textContent.toLowerCase().indexOf(query) !== -1; item.classList.toggle('toc-hidden', !matched); if (matched) matchCount++; }); noResults.style.display = matchCount === 0 ? 'block' : 'none'; }); }
+  function setupProgressBar() { var bar = document.getElementById('progress-bar'); function update() { var max = document.documentElement.scrollHeight - window.innerHeight; var p = max > 0 ? window.scrollY / max * 100 : 0; bar.style.width = Math.min(100, p) + '%'; } window.addEventListener('scroll', update); update(); }
+  function setupMobileMenu() { var toggle = document.getElementById('menu-toggle'); var sidebar = document.getElementById('sidebar'); var overlay = document.getElementById('sidebar-overlay'); function close() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); } toggle.addEventListener('click', function() { sidebar.classList.toggle('open'); overlay.classList.toggle('visible'); }); overlay.addEventListener('click', close); tocContainer.addEventListener('click', close); }
+  function setupKeyboard() { document.addEventListener('keydown', function(e) { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); document.getElementById('search-input').focus(); } }); }
+  buildTOC(); setupScrollTracking(); setupSearch(); setupProgressBar(); setupMobileMenu(); setupKeyboard();
+})();
+</script>
+<script data-goatcounter="https://alexjunholee.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

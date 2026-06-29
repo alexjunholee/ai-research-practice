@@ -14,6 +14,7 @@ chapter_05_experiment_protocol.md
 chapter_06_stage_local_debugging.md
 chapter_07_manuscript_rebuttal.md
 chapter_08_external_templates.md
+chapter_09_robotics_runtime.md
 examples/first-robotics-workspace/AGENTS.md
 examples/first-robotics-workspace/README.md
 examples/first-robotics-workspace/notes/codex-porting-checklist.md
@@ -27,6 +28,7 @@ examples/first-robotics-workspace/notes/weekly-research-ledger.md
 examples/first-robotics-workspace/project-memory.json
 guide.html
 index.html
+templates.html
 templates/AGENTS.template.md
 templates/claim-evidence-map.md
 templates/codex-porting-checklist.md

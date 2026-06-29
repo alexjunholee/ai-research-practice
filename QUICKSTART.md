@@ -43,9 +43,9 @@ workspace/
 
 | 공개 번들 | 새 workspace |
 |---|---|
-| [`templates/workspace-readme.md`](templates/workspace-readme.md) | `README.md` |
-| [`templates/AGENTS.template.md`](templates/AGENTS.template.md) | `AGENTS.md` |
-| [`templates/project-memory.template.json`](templates/project-memory.template.json) | `project-memory.json` |
+| [`templates/workspace-readme.md`](templates.html#templates-workspace-readme) | `README.md` |
+| [`templates/AGENTS.template.md`](templates.html#templates-agents-template) | `AGENTS.md` |
+| [`templates/project-memory.template.json`](templates.html#templates-project-memory-template-json) | `project-memory.json` |
 | `templates/*.md` | `templates/` |
 | 필요한 research loop template | `notes/` |
 
@@ -136,9 +136,9 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 
 ## AGENTS.md 작성
 
-[`templates/workspace-readme.md`](templates/workspace-readme.md)를 `README.md`로
+[`templates/workspace-readme.md`](templates.html#templates-workspace-readme)를 `README.md`로
 복사하고, 프로젝트 이름과 repo, dataset, artifact 위치만 채운다. 그다음
-[`templates/AGENTS.template.md`](templates/AGENTS.template.md)에서
+[`templates/AGENTS.template.md`](templates.html#templates-agents-template)에서
 다음 항목만 먼저 채운다.
 
 - project truth
@@ -149,14 +149,14 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 - durable corrections
 
 이미 `CLAUDE.md`, `.claude/`, Cursor rule이 있으면
-[`templates/codex-porting-checklist.md`](templates/codex-porting-checklist.md)로
+[`templates/codex-porting-checklist.md`](templates.html#templates-codex-porting-checklist)로
 옮길 규칙과 버릴 명령을 나눈다. 파일 이름과 plugin 명령은 도구별 형식이다.
 먼저 규칙의 의미를 본다. assumption을 드러내라, 작게 고쳐라, 성공 기준을 검증 가능하게
 만들어라 같은 규칙은 Codex에서도 그대로 쓴다.
 
 ## 첫 상태 체크리스트를 채운다
 
-[`templates/first-day-workspace-checklist.md`](templates/first-day-workspace-checklist.md)는
+[`templates/first-day-workspace-checklist.md`](templates.html#templates-first-day-workspace-checklist)는
 현재 연구 상태의 원 파일과 실행 결과를 정한다.
 
 ```text
@@ -174,7 +174,7 @@ dataset convention도 여기에서 확인한다.
 
 ## 첫 AI 요청을 좁힌다
 
-첫 요청은 [`templates/first-ai-session-prompt.md`](templates/first-ai-session-prompt.md)를
+첫 요청은 [`templates/first-ai-session-prompt.md`](templates.html#templates-first-ai-session-prompt)를
 채워서 보낸다. 가장 작은 형태는 이렇다.
 
 ```text
@@ -199,11 +199,11 @@ available.
 
 | 상황 | 시작 템플릿 |
 |---|---|
-| 논문 한 편을 읽는다 | [`paper-code-experiment-map.md`](templates/paper-code-experiment-map.md) |
-| dataset 상태가 불명확하다 | [`dataset-archaeology-sheet.md`](templates/dataset-archaeology-sheet.md) |
-| 실험 숫자를 해석한다 | [`experiment-contract.md`](templates/experiment-contract.md) |
-| 에러를 좁힌다 | [`stage-local-debugging.md`](templates/stage-local-debugging.md) |
-| 원고 문장을 고친다 | [`claim-evidence-map.md`](templates/claim-evidence-map.md) |
+| 논문 한 편을 읽는다 | [`paper-code-experiment-map.md`](templates.html#templates-paper-code-experiment-map) |
+| dataset 상태가 불명확하다 | [`dataset-archaeology-sheet.md`](templates.html#templates-dataset-archaeology-sheet) |
+| 실험 숫자를 해석한다 | [`experiment-contract.md`](templates.html#templates-experiment-contract) |
+| 에러를 좁힌다 | [`stage-local-debugging.md`](templates.html#templates-stage-local-debugging) |
+| 원고 문장을 고친다 | [`claim-evidence-map.md`](templates.html#templates-claim-evidence-map) |
 
 한 번에 여러 루프를 열면 요청 범위가 다시 넓어진다. 처음에는 작은 성공 하나가
 좋다. 요청은 이렇게 좁힌다. "이 논문의 central claim, active code path
