@@ -14,7 +14,7 @@ c5f3c0c126217de3bcb6f47fc084fc0e31dbd0a8751456ea24fcf0cde35421dd        2483  ch
 82c8ed092325c71fed128b4ce1b775687cea4276c92e918e49f53bdfcac415c5        2337  chapter_06_stage_local_debugging.md
 e8271e65851f9974b0bee534d1c40dfbe412d5705bcdddac85236ed330bd4b25        2543  chapter_07_manuscript_rebuttal.md
 9dddd7918876b738927a70c72b950e5681b133022453af53d5755e0416d02b4b        2821  chapter_08_external_templates.md
-de617099b3b81848f3fec4082d03a0b29804d1a0dec6e2cc47dcac8e8125adac       25745  chapter_09_robotics_runtime.md
+4cda7f701c1dcc5e2fb586bd1e8f1f92db9247384ec5df54d58e5a74ece26290       25375  chapter_09_robotics_runtime.md
 a59a1418a98059619b92981c241bc276a7b2075888b27884793df05ef297207b        2586  examples/first-robotics-workspace/AGENTS.md
 7a59a9145b35a1819d1ccbcddf45e5f6356e567c86bdccb399c381dac6f0032c        2332  examples/first-robotics-workspace/README.md
 92301d5bbfe576ce6967735ae8ede04c5ed5bef672f3ed18077a7494e83243a9        4647  examples/first-robotics-workspace/notes/codex-porting-checklist.md
@@ -26,7 +26,7 @@ a59a1418a98059619b92981c241bc276a7b2075888b27884793df05ef297207b        2586  ex
 c45d0c57e9e9d0b04f59bbfab3ab57eeab4891316a7556605985d96eaf5f804b        1843  examples/first-robotics-workspace/notes/stage-local-debugging.md
 c96c5fa8c9b7dd26cf724b8bd7e80b2045ebd421488e384ef08028238d6570d4         988  examples/first-robotics-workspace/notes/weekly-research-ledger.md
 b04dbc281bd894f761cdafd2a127c4a2489793bf371f5fe9e020048a12d12bfd        3759  examples/first-robotics-workspace/project-memory.json
-9feb38e5c05232dfa144c35747705b9335faed4a8c6a14675e1d4cfa5b7a34f9      133508  guide.html
+c4d20ebf15d3bdd5175650b038787c525c654ec55d238dd840e7f9743a2a55f7      133059  guide.html
 4591b7279e097c12d0759a582e3ebe699ff13a2b141f1eb00a8be973a4257c6a         267  index.html
 8e889e87cfc4b960a5e50bdc082c3ac9e958503ce8297990d57b08226de68c68       87739  templates.html
 e9f475f6d5f95c5d73977bb2f9ac281363349a2d0f68a70c55d653160ae99aa3        3120  templates/AGENTS.template.md
