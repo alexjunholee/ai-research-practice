@@ -1,7 +1,7 @@
 # 부록 B — 빠른 시작 파일
 
-본문을 읽은 뒤 새 연구 workspace에 옮길 파일을 정리한다. AI가 잘하는 일과 자주 틀리는 일,
-사람이 감당하는 위험, 하네스가 확인하는 경계를 먼저 이해하고 그다음 이 부록을 본다.
+본문에서 AI가 잘하는 일과 자주 틀리는 일, 사람이 감당할 위험, 하네스가 확인할 경계를
+먼저 이해한다. 새 연구 작업 공간으로 옮길 파일은 이 부록에 정리했다.
 
 ## 도구 역할을 먼저 나눈다
 
@@ -9,19 +9,17 @@
 
 | 연구 장면 | 먼저 열 도구 | 첫 확인 |
 |---|---|---|
-| repo를 읽고 작은 수정을 한다 | coding agent | `AGENTS.md`와 원 파일을 먼저 읽었는가 |
-| 논문 주장을 code와 experiment에 연결한다 | chat model 또는 coding agent | 논문-코드-실험 표가 남는가 |
-| ROS2, Docker, CUDA, dataset 오류를 좁힌다 | coding agent와 terminal | stage별 command output이 있는가 |
-| 외부 repo나 논문을 찾는다 | browser/search tool | 출처 URL과 주장 범위가 분리됐는가 |
-| 원고와 답변서를 고친다 | manuscript operator role | 쓸 문장과 보류할 문장이 분리됐는가 |
-| 반복 실패를 막는다 | harness operator role | 변경 기록이나 반복 확인 사례로 남겼는가 |
+| 저장소를 읽고 작은 수정을 한다 | 코딩 에이전트 | `AGENTS.md`와 원본 파일을 먼저 읽었는가 |
+| 논문 주장을 코드와 실험에 연결한다 | 대화 모델 또는 코딩 에이전트 | 논문-코드-실험 표가 남는가 |
+| ROS2, Docker, CUDA, 데이터셋 오류를 좁힌다 | 코딩 에이전트와 터미널 | 단계별 명령 출력이 있는가 |
+| 외부 저장소나 논문을 찾는다 | 브라우저·검색 도구 | 출처 URL과 주장 범위가 분리됐는가 |
+| 원고와 답변서를 고친다 | 원고 담당 역할 | 쓸 문장과 보류할 문장이 분리됐는가 |
+| 반복 실패를 막는다 | 하네스 담당 역할 | 실패를 변경 기록이나 반복 확인 사례로 남겼는가 |
 
-같은 AI 제품이 여러 역할을 할 수 있다. 한 turn 안에서 역할이 바뀌면
+같은 AI 제품이 여러 역할을 할 수 있다. 한 요청 안에서 역할이 바뀌면
 확인 기준도 다시 적는다.
 
-## Workspace를 나눈다
-
-처음에는 단순하게 둔다.
+## 작업 공간을 나눈다
 
 ```text
 workspace/
@@ -35,22 +33,22 @@ workspace/
 └── templates/
 ```
 
-동기화 폴더, 외장 디스크, 원격 서버를 쓰면 git metadata와 dataset 저장 위치를
-먼저 정한다. 코드 이력, raw data, 실험 결과물, 비공개 메모는 처음부터
+동기화 폴더, 외장 디스크, 원격 서버를 쓰면 Git 메타데이터와 데이터셋 저장 위치를
+먼저 정한다. 코드 이력, 원시 데이터, 실험 결과물, 비공개 메모는 처음부터
 나눠 둔다.
 
-새 workspace를 처음 만들 때는 공개 번들에서 다음 파일을 먼저 복사한다.
+새 작업 공간을 처음 만들 때는 공개 번들에서 다음 파일을 먼저 복사한다.
 
-| 공개 번들 | 새 workspace |
+| 공개 번들 | 새 작업 공간 |
 |---|---|
 | [`templates/workspace-readme.md`](templates.html#templates-workspace-readme) | `README.md` |
 | [`templates/AGENTS.template.md`](templates.html#templates-agents-template) | `AGENTS.md` |
 | [`templates/project-memory.template.json`](templates.html#templates-project-memory-template-json) | `project-memory.json` |
 | `templates/*.md` | `templates/` |
-| 필요한 research loop template | `notes/` |
+| 필요한 연구 루프 템플릿 | `notes/` |
 
-번들을 내려받아 풀어 둔 상태라면 다음처럼 시작할 수 있다. `GUIDE`는 이 가이드
-bundle의 루트, `WORKSPACE`는 새 연구 workspace 위치다.
+번들을 내려받아 풀었다면 다음과 같이 시작한다. `GUIDE`는 가이드
+묶음의 루트, `WORKSPACE`는 새 연구 작업 공간의 위치다.
 
 ```bash
 GUIDE="$PWD"
@@ -87,8 +85,8 @@ Copy-Item "$Guide\templates\experiment-contract.md" "$Workspace\notes\"
 Copy-Item "$Guide\templates\weekly-research-ledger.md" "$Workspace\notes\"
 ```
 
-복사 직후에는 workspace 루트에서 첫 실행 전 확인을 한다. POSIX shell에서는
-다음 항목만 통과하면 첫 AI 세션을 열 수 있다.
+복사 직후에는 작업 공간 루트에서 첫 실행 전에 확인한다. POSIX 셸에서는
+다음 항목을 모두 통과한 뒤 첫 AI 세션을 연다.
 
 ```bash
 cd "$WORKSPACE"
@@ -125,10 +123,10 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 `project-memory.json`에는 다섯 묶음이 있어야 한다. `source_of_truth`는 AI가
 다시 읽을 파일을 가리키고, `tool_surface_map`은 연구 장면별 도구 역할을
 나눈다. `current_evidence`는 지금 쓸 수 있는 말과 보류할 말을 분리한다.
-`first_research_loop`는 처음 열 루프 하나만 고정하고, `next_smallest_actions`는
+`first_research_loop`는 처음 시작할 연구 루프 하나를 고정하고 `next_smallest_actions`는
 다음 세션의 첫 행동을 남긴다.
 
-여기서는 Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)에서 말한 session, harness, sandbox 분리를 연구 workspace에 옮긴다. `project-memory.json`과 ledger는 session이고, `AGENTS.md`와 prompt template은 harness이며, repo·dataset·artifact·command는 sandbox다. 첫 AI 세션은 이 세 경계를 먼저 말한 뒤 하나의 행동만 골라야 한다.
+Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 세션(session)을 사건의 append-only log, 하네스(harness)를 모델 호출과 도구 전달을 맡는 loop, 샌드박스(sandbox)를 실행 환경으로 정의한다. 이 부록의 파일은 그 구현 자체가 아니라 세 역할을 작은 연구 작업 공간에 대응한 것이다. `project-memory.json`과 기록 장부는 세션 기록을 보완하고, `AGENTS.md`와 프롬프트 템플릿은 하네스 규칙을 담는다. 저장소·데이터셋·결과물·명령은 샌드박스에서 다룰 대상을 적는다. 첫 AI 세션에서는 이 세 경계를 먼저 밝히고 행동 하나만 고른다.
 
 그다음 `notes/first-ai-session-prompt.md`의 `Prompt To Send` 블록에서 빈칸을
 채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 첫 AI 세션에는
@@ -137,7 +135,7 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 ## AGENTS.md 작성
 
 [`templates/workspace-readme.md`](templates.html#templates-workspace-readme)를 `README.md`로
-복사하고, 프로젝트 이름과 repo, dataset, artifact 위치만 채운다. 그다음
+복사해 프로젝트 이름과 저장소, 데이터셋, 결과물 위치만 채운다. 그다음
 [`templates/AGENTS.template.md`](templates.html#templates-agents-template)에서
 다음 항목만 먼저 채운다.
 
@@ -148,16 +146,16 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 - evidence gate
 - durable corrections
 
-이미 `CLAUDE.md`, `.claude/`, Cursor rule이 있으면
+이미 `CLAUDE.md`, `.claude/`, Cursor 규칙이 있으면
 [`templates/codex-porting-checklist.md`](templates.html#templates-codex-porting-checklist)로
-옮길 규칙과 버릴 명령을 나눈다. 파일 이름과 plugin 명령은 도구별 형식이다.
-먼저 규칙의 의미를 본다. assumption을 드러내라, 작게 고쳐라, 성공 기준을 검증 가능하게
-만들어라 같은 규칙은 Codex에서도 그대로 쓴다.
+옮길 규칙과 버릴 명령을 나눈다. 파일 이름과 플러그인 명령은 도구별 형식이므로
+규칙의 의미를 먼저 본다. “가정을 드러내라”, “작게 고쳐라”, “성공 기준을 검증 가능하게
+만들어라” 같은 규칙은 Codex에서도 그대로 쓴다.
 
 ## 첫 상태 체크리스트를 채운다
 
-[`templates/first-day-workspace-checklist.md`](templates.html#templates-first-day-workspace-checklist)는
-현재 연구 상태의 원 파일과 실행 결과를 정한다.
+[`templates/first-day-workspace-checklist.md`](templates.html#templates-first-day-workspace-checklist)에서
+현재 연구 상태의 원본 파일과 실행 결과를 정한다.
 
 ```text
 project goal:
@@ -169,8 +167,8 @@ reviewer risk:
 durable corrections:
 ```
 
-현재 상태는 첫 상태 체크리스트로 복원한다. 실험 protocol, reviewer risk,
-dataset convention도 여기에서 확인한다.
+첫 상태 체크리스트로 현재 상태를 복원한다. 실험 절차, 심사 위험,
+데이터셋 규약도 여기에서 확인한다.
 
 ## 첫 AI 요청을 좁힌다
 
@@ -189,24 +187,22 @@ Do not infer project truth from summaries when source files or artifacts are
 available.
 ```
 
-이 요청은 후보 설명이 연구 행동으로 바뀌기 전에 증거 상태를 확인한다.
-첫 메시지는 `artifacts/first-ai-session-message.txt`처럼 파일로 남겨 두면
-다음 세션에서 같은 읽기 순서를 다시 쓸 수 있다.
+후보 설명을 연구 행동으로 옮기기 전에 근거 상태부터 확인한다.
+첫 메시지는 `artifacts/first-ai-session-message.txt`처럼 파일로 남겨 두고
+다음 세션에서도 같은 읽기 순서로 사용한다.
 
 ## 연구 루프를 하나만 고른다
-
-처음에는 하나만 고른다.
 
 | 상황 | 시작 템플릿 |
 |---|---|
 | 논문 한 편을 읽는다 | [`paper-code-experiment-map.md`](templates.html#templates-paper-code-experiment-map) |
-| dataset 상태가 불명확하다 | [`dataset-archaeology-sheet.md`](templates.html#templates-dataset-archaeology-sheet) |
+| 데이터셋 상태가 불명확하다 | [`dataset-archaeology-sheet.md`](templates.html#templates-dataset-archaeology-sheet) |
 | 실험 숫자를 해석한다 | [`experiment-contract.md`](templates.html#templates-experiment-contract) |
-| 에러를 좁힌다 | [`stage-local-debugging.md`](templates.html#templates-stage-local-debugging) |
+| 오류를 좁힌다 | [`stage-local-debugging.md`](templates.html#templates-stage-local-debugging) |
 | 원고 문장을 고친다 | [`claim-evidence-map.md`](templates.html#templates-claim-evidence-map) |
 
-한 번에 여러 루프를 열면 요청 범위가 다시 넓어진다. 처음에는 작은 성공 하나가
-좋다. 요청은 이렇게 좁힌다. "이 논문의 central claim, active code path
+한 번에 여러 루프를 열면 요청 범위가 다시 넓어지므로 첫 요청의 성공 기준은 하나만
+둔다. 요청은 이렇게 좁힌다. "이 논문의 central claim, active code path
 확인 대상, experiment protocol 빈칸을 분리하라."
 
 ## 결과를 기록에 남긴다
@@ -220,9 +216,9 @@ available.
 다음 행동:
 ```
 
-AI가 틀린 assumption을 했다면 `replay-case.md`에 반복 확인 사례로 적는다. 같은 실수를
+AI가 잘못된 가정을 세웠다면 `replay-case.md`에 반복 확인 사례로 적는다. 같은 실수를
 다음 세션에서 다시 설명하지 않기 위해서다.
 
 첫 세션이 끝난 뒤 `project-memory.json`의 `current_evidence`,
 `first_research_loop`, `claim_boundaries`, `next_smallest_actions`를 함께 고친다.
-memory를 바꾸면 다음 AI 세션이 같은 근거 범위를 이어받는다.
+이 기록을 바꾸면 다음 AI 세션이 같은 근거 범위를 이어받는다.

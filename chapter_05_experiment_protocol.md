@@ -1,8 +1,8 @@
 # Ch.5 — 숫자에는 조건이 붙는다
 
-실험 숫자는 조건과 함께 비교한다. 로보틱스 metric은 이름이 같아도 dataset, split, sensor, frame, calibration, alignment, metric script, failure policy, baseline이 다르면 다른 숫자다.
+실험 수치는 조건과 함께 비교한다. 로보틱스 metric은 이름이 같아도 dataset, split, sensor, frame, calibration, alignment, metric script, failure policy, baseline이 다르면 같은 의미로 비교할 수 없다.
 
-로보틱스 benchmark는 숫자만 두지 않고 evaluation script, dataset protocol, failure policy를 함께 둔다. 낮은 error, 높은 success rate, 빠른 latency를 원고에 쓰려면 그 숫자가 어떤 조건에서 나왔는지 같이 적어야 한다.
+로보틱스 benchmark에는 수치뿐 아니라 evaluation script, dataset protocol, failure policy도 함께 제시된다. 낮은 error, 높은 success rate, 짧은 latency를 원고에 쓰려면 그 수치가 나온 조건도 함께 적어야 한다.
 
 ## 최소 기록
 
@@ -24,7 +24,7 @@ timeout:
 failure policy:
 ```
 
-## 로보틱스 task에서 볼 항목
+## 로보틱스 과제에서 볼 항목
 
 | 항목 | 확인 내용 |
 |---|---|
@@ -55,6 +55,6 @@ failure policy:
 
 > 성능이 향상되었다.
 
-표 caption도 같은 규칙을 따른다. metric 표에는 수치와 비교 조건이 있어야 한다. event count 표는 센 횟수만 말한다. downstream task 영향까지 말하려면 추가 근거가 필요하다. 표 아래 한 문장도 표가 직접 보여 준 범위 안에서만 쓴다.
+표 caption에도 같은 규칙을 적용한다. metric 표에는 수치와 비교 조건이 있어야 한다. event count 표가 직접 보여 주는 것은 센 횟수까지다. downstream task에 미친 영향까지 말하려면 추가 근거가 필요하다. 표 아래의 설명도 표가 직접 보여 주는 범위 안에서 쓴다.
 
-실패도 결과다. timeout, OOM, sensor dropout, tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험 조건을 정하는 자료가 된다.
+실패한 실행도 기록할 결과다. timeout, OOM, sensor dropout, tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험의 조건을 정하는 자료가 된다.

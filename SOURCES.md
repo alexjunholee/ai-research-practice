@@ -1,11 +1,12 @@
 # 부록 E — 출처
 
-확인일: 2026-06-18
+기존 목록 확인일: 2026-06-18
+로보틱스 실행 환경 자료 확인일: 2026-07-17
 
-이 목록에는 공개 가이드에서 언급한 외부 repo와 이론 출처의 공개 링크를 모았다.
-확인 범위는 링크 접근성, 제목·저자·repo 역할, 본문에서 인용한 최소 주장이다.
+이 목록에는 공개 가이드에서 언급한 외부 저장소와 이론 자료의 공개 링크를 모았다.
+링크 접근성, 제목·저자·저장소 역할, 본문에서 인용한 최소 주장만 확인했다.
 
-## External Agent And Skills Repos
+## 외부 에이전트·스킬 저장소
 
 - [`multica-ai/andrej-karpathy-skills`](https://github.com/multica-ai/andrej-karpathy-skills)
 - [`datawhalechina/hello-agents`](https://github.com/datawhalechina/hello-agents)
@@ -17,7 +18,7 @@
 - [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/)
 - [`alexjunholee/robotics-research-agent`](https://github.com/alexjunholee/robotics-research-agent)
 
-## Human-AI Action Theory Sources
+## 인간-AI 행동 이론
 
 - [Bainbridge, *Ironies of Automation*](https://doi.org/10.1016/0005-1098(83)90046-8)
 - [Parasuraman & Riley, *Humans and Automation: Use, Misuse, Disuse, Abuse*](https://doi.org/10.1518/001872097778543886)
@@ -25,7 +26,7 @@
 - [Suchman, *Plans and Situated Actions* / Lancaster profile](https://www.lancaster.ac.uk/humanities-arts-and-social-sciences/people/lucy-suchman)
 - [Hutchins, *Cognition in the Wild*](https://mitpress.mit.edu/9780262581462/cognition-in-the-wild/)
 
-## LLM Agent And Grounding Sources
+## LLM 에이전트와 근거 확인
 
 - [Yao et al., *ReAct: Synergizing Reasoning and Acting in Language Models*](https://arxiv.org/abs/2210.03629)
 - [Schick et al., *Toolformer: Language Models Can Teach Themselves to Use Tools*](https://arxiv.org/abs/2302.04761)
@@ -41,7 +42,7 @@
 - [Borgeaud et al., *Improving language models by retrieving from trillions of tokens*](https://arxiv.org/abs/2112.04426)
 - [Izacard et al., *Atlas: Few-shot Learning with Retrieval Augmented Language Models*](https://arxiv.org/abs/2208.03299)
 
-## Model Serving And Product-Layer Sources
+## 모델 서빙과 제품 계층
 
 - [Anthropic, *Models overview*](https://platform.claude.com/docs/en/about-claude/models/overview)
 - [Anthropic, *Model IDs and versioning*](https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions)
@@ -52,12 +53,19 @@
 - [Business Insider, *Meet the people who pay $2,400 a year for Anthropic's top-of-the-line Claude plan*](https://www.businessinsider.com/claude-max-20x-ai-plan-subscribers-2026-6)
 - [The Times / Wall Street Journal, *Anthropic Sued Over Limits on Its $200-a-Month AI Plans*](https://www.thetimes.com/business/wsj/article/anthropic-sued-limits-ai-plans-f95f2wjcx)
 
-## Evaluation And Reproducibility Sources
+## 평가와 재현성
 
 - [Pineau et al., *Improving Reproducibility in Machine Learning Research*](https://arxiv.org/abs/2003.12206)
 
-## Argument And Manuscript Sources
+## 로보틱스 실행 환경
+
+- [ROS 2 Humble, *Quality of Service settings*](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html)
+- [Docker, *Running containers*](https://docs.docker.com/engine/containers/run/)
+- [Docker, *Host network driver*](https://docs.docker.com/engine/network/drivers/host/)
+- [NVIDIA, *JetPack release notes*](https://docs.nvidia.com/jetson/jetpack/release-notes/index.html)
+
+## 논증과 원고 작성
 
 - [Toulmin, *The Uses of Argument*](https://www.cambridge.org/core/books/uses-of-argument/26CF801BC12004587B66778297D5567C)
 
-로컬 근거 자료, 대화 로그, 내부 작업 경로는 로컬 기록에 둔다.
+로컬 근거 자료와 대화 로그, 내부 작업 경로는 로컬 기록에만 둔다.

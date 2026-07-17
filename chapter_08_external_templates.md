@@ -1,10 +1,10 @@
 # Ch.8 — 남의 repo에서 습관만 가져온다
 
-공개 agent repo에는 가져올 습관이 있다. 작은 수정, 가정 명시, 실패 보고, 역할 분리, tool 호출 기록 같은 습관은 연구에도 도움이 된다. 그 규칙을 로봇 연구에 그대로 옮기면 빠지는 항목이 많다.
+공개된 agent 저장소에는 재사용할 만한 작업 습관이 있다. 작은 단위의 수정, 가정 명시, 실패 보고, 역할 분리, tool 호출 기록은 연구에도 도움이 된다. 다만 그 규칙을 로봇 연구에 그대로 옮기면 실험에 필요한 항목이 빠질 수 있다.
 
-일반 agent repo는 코드 변경과 tool use에 강하다. 로보틱스 연구에서는 dataset, calibration, frame, metric, 실패 처리, reviewer risk가 실험 숫자의 의미를 정한다.
+일반적인 agent 저장소는 코드 변경과 tool use를 중심으로 규칙을 구성한다. 로보틱스 연구에서는 dataset, calibration, frame, metric, 실패 처리, reviewer risk까지 알아야 실험 수치의 의미를 판단할 수 있다.
 
-Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 agent 작업을 session, harness, sandbox로 나누는 방식을 제시했다. 연구 workspace에 옮기면 session은 다음 세션이 다시 읽을 기록이고, harness는 agent가 따라야 할 규칙이며, sandbox는 실제 파일·command·dataset이 있는 실행 경계다. 외부 repo를 가져올 때도 이 세 경계를 먼저 옮긴다. prompt 문구는 그다음에 조정한다.
+Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 session을 사건의 append-only log, harness를 모델 호출과 tool routing을 맡는 loop, sandbox를 코드 실행과 파일 편집이 일어나는 환경으로 구분한다. 이 가이드는 구현을 그대로 복제하지 않고 역할만 연구 workspace에 옮긴다. 다음 작업에서 다시 읽을 기록은 session, agent가 따를 규칙은 harness, 실제 파일·command·dataset이 놓인 경계는 sandbox에 대응한다. 외부 저장소를 참고할 때는 먼저 이 세 경계를 대응시키고 prompt 문구는 그다음에 조정한다.
 
 ## 참고할 repo 유형
 
@@ -48,4 +48,4 @@ Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agen
 
 해당 항목이 하나라도 있으면 다음 행동을 바꾼다.
 
-GitHub star 수는 발견할 때만 참고한다. 기준은 연구에서 같은 metric 혼동, 같은 cache 실수, 같은 reviewer comment를 줄일 수 있는지다.
+GitHub star 수는 참고할 저장소를 처음 찾을 때만 보조 지표로 쓴다. 실제 채택 여부는 같은 metric 혼동과 cache 실수, 반복되는 reviewer comment를 줄이는 데 도움이 되는지로 판단한다.

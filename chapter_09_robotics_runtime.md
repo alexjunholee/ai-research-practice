@@ -2,22 +2,22 @@
 
 ## 로봇 실험에서 먼저 확인할 것
 
-AI 코딩 에이전트(Claude, Copilot, ChatGPT 등)는 일반 소프트웨어 개발에서는 강력한 도구다. 함수 하나 짜달라고 하면 꽤 쓸만한 코드가 나오고, 에러 메시지를 붙여넣으면 원인을 잘 짚어준다. 하지만 로보틱스는 다르다. 하드웨어, OS, 네트워크, 실시간성이 복잡하게 얽혀 있고, "코드는 맞는데 안 되는" 상황이 일상이다. AI는 이런 영역에서 자주 틀리거나, 자신 있게 엉뚱한 방향을 제시하거나, 아예 포기한다.
+AI 코딩 에이전트(Claude, Copilot, ChatGPT 등)는 함수의 초안을 만들고 에러 메시지에서 원인 후보를 찾는 데 유용하다. 로보틱스에서는 하드웨어, OS, 네트워크, 실시간 조건이 함께 작동하므로 코드만 보고 원인을 정하기 어렵다. 현재 장치와 실행 상태를 보여 주지 않으면 에이전트도 그럴듯하지만 맞지 않는 설명을 내놓기 쉽다.
 
-그래서 질문보다 관측값이 먼저다. topic, device, clock, network, 권한, architecture가 확인되어야 에이전트의 답도 쓸모가 생긴다.
+따라서 질문을 만들기 전에 토픽, 장치, 시계, 네트워크, 권한, 시스템 구조의 현재 상태를 기록한다. 이 관측값이 있어야 에이전트의 답도 구체적인 확인 절차로 이어진다.
 
 ## ROS에서 자주 막히는 지점
 
 ### QoS 설정
 
-AI에게 ROS2 subscriber를 짜달라고 하면 QoS(Quality of Service)를 default(RELIABLE)로 놓는다. 센서 토픽(카메라, LiDAR)은 BEST_EFFORT로 퍼블리시되는 경우가 대부분인데, subscriber가 RELIABLE이면 데이터가 아예 안 들어온다. 에러 메시지도 안 뜨고 그냥 조용히 안 되니까, AI는 "토픽이 없나?" 하고 엉뚱한 방향으로 디버깅을 시작한다.
+[ROS2의 기본 publisher·subscription profile](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html)은 RELIABLE이고, sensor data profile은 BEST_EFFORT다. 카메라와 LiDAR driver가 sensor data profile을 쓰는데 subscriber가 기본 profile을 쓰면 reliability가 호환되지 않아 메시지가 전달되지 않을 수 있다. 이 상태를 토픽이나 driver 문제로 오인하지 않으려면 실제 QoS부터 확인한다.
 
 ```bash
 # 토픽의 QoS 프로파일 확인
 ros2 topic info /camera/image_raw --verbose
 ```
 
-출력에서 `Reliability: BEST_EFFORT`, `Durability: VOLATILE` 같은 정보를 확인하고, subscriber의 QoS를 맞춰야 한다.
+출력에서 `Reliability: BEST_EFFORT`, `Durability: VOLATILE` 같은 정보를 확인하고 subscriber의 QoS를 맞춘다.
 
 ```python
 from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
@@ -30,23 +30,26 @@ qos = QoSProfile(
 self.subscription = self.create_subscription(Image, '/camera/image_raw', self.callback, qos)
 ```
 
-AI에게 코드를 요청할 때는 "이 토픽의 QoS는 BEST_EFFORT / SENSOR_DATA다"라고 명시적으로 알려줘야 한다. 안 그러면 기본값으로 만들어서 데이터가 안 들어오는데, AI는 원인을 못 찾는다.
+코드를 요청할 때는 "이 토픽의 QoS는 BEST_EFFORT / SENSOR_DATA다"처럼 확인한 profile을 함께 제공한다. 생성된 코드에서도 그 값이 반영됐는지 다시 확인한다.
 
 ### use_sim_time과 tf2 타이밍
 
-rosbag 재생 시 `use_sim_time:=true`를 안 하면 tf lookup이 전부 실패한다. AI는 "tf2 lookup failed" 에러를 보면 `static_transform_publisher`를 추가하라고 한다. 엉뚱한 방향이다.
+rosbag을 재생하면서 `use_sim_time:=true`를 설정하지 않으면 tf lookup이 실패할 수 있다. `tf2 lookup failed`가 보인다고 바로 `static_transform_publisher`를 추가하기 전에 clock 설정을 확인한다.
 
-실제 원인은 시뮬레이션 클럭과 시스템 클럭의 불일치다. bag 파일의 타임스탬프는 과거 시점인데, 노드는 현재 시스템 시간을 기준으로 tf를 조회하니까 당연히 못 찾는다.
+이 경우에는 시뮬레이션 clock과 시스템 clock의 불일치가 원인이다. Bag 파일의 timestamp는 기록 시점을 가리키지만 노드가 현재 시스템 시간을 기준으로 tf를 조회하면 해당 변환을 찾을 수 없다.
 
 ```bash
-# 올바른 rosbag 재생
+# bag clock을 publish하는 재생 예
 ros2 bag play my_bag --clock
 
 # 노드 실행 시 sim_time 활성화
 ros2 launch my_package my_launch.py use_sim_time:=true
+
+# 실제 노드에 적용됐는지 확인
+ros2 param get /my_node use_sim_time
 ```
 
-tf2 lookup에는 timeout과 try/except가 필요한데, AI는 이걸 빠뜨린다.
+생성된 tf2 lookup 코드에는 timeout과 예외 처리가 빠질 수 있으므로 두 항목을 확인한다.
 
 ```python
 from rclpy.duration import Duration
@@ -63,25 +66,27 @@ except tf2_ros.LookupException as e:
 
 ### Workspace 소싱 순서
 
-ROS2 workspace의 소싱 순서가 중요하다. `/opt/ros/humble/setup.bash`를 먼저 source하고, 그다음에 `~/ros2_ws/install/setup.bash`를 source해야 한다. AI는 하나만 source하거나 순서를 뒤집는다. overlay workspace 개념을 아예 모르는 경우도 있다.
+ROS2 workspace에서는 `/opt/ros/humble/setup.bash`를 먼저 source하고 `~/ros2_ws/install/setup.bash`를 이어서 source한다. 생성된 실행 절차가 base와 overlay workspace를 모두 포함하는지, 순서가 맞는지 확인한다.
 
 ```bash
-# 올바른 순서
+# base를 먼저, overlay를 나중에 source
 source /opt/ros/humble/setup.bash
 source ~/ros2_ws/install/setup.bash
 ```
 
-`.bashrc`에 넣었는데 새 터미널에서 패키지를 못 찾으면, AI는 패키지 재설치를 권한다. `source` 문제다. `echo $AMENT_PREFIX_PATH`로 현재 소싱된 workspace를 확인하자.
+`.bashrc`에 경로를 넣었는데 새 terminal에서 package를 찾지 못한다면 재설치보다 source 상태를 먼저 살핀다. `echo $AMENT_PREFIX_PATH`로 현재 적용된 workspace를 확인한다.
 
 ### 커스텀 메시지와 빌드
 
-AI는 `.msg` 파일은 잘 만든다. 하지만 `CMakeLists.txt`와 `package.xml`의 의존성 추가를 빠뜨린다.
+`.msg` 파일을 생성할 때는 `CMakeLists.txt`와 `package.xml`의 dependency도 함께 수정해야 한다. 생성된 변경안에서 이 두 파일이 빠지지 않았는지 확인한다.
 
-`rosidl_generate_interfaces` 설정이 빠지면 빌드는 되는데 Python에서 import할 때 실패한다. 이 에러가 나면 AI는 "패키지가 설치 안 됐다"고 오진하기 쉽다.
+`rosidl_generate_interfaces` 설정이 빠지면 build 이후 Python import 단계에서 실패할 수 있다. Package 설치 문제로 판단하기 전에 interface 생성 설정을 확인한다.
 
 ```cmake
 # CMakeLists.txt에 반드시 추가
 find_package(rosidl_default_generators REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/MyCustomMsg.msg"
@@ -93,10 +98,12 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 <!-- package.xml에 반드시 추가 -->
 <buildtool_depend>rosidl_default_generators</buildtool_depend>
 <exec_depend>rosidl_default_runtime</exec_depend>
+<depend>std_msgs</depend>
+<depend>geometry_msgs</depend>
 <member_of_group>rosidl_interface_packages</member_of_group>
 ```
 
-또 하나: `--symlink-install` 없이 빌드하면 Python 코드 수정이 반영되지 않는다. AI는 이걸 "캐시 문제"라고 오진한다.
+`--symlink-install` 없이 build하면 Python 코드 수정이 바로 반영되지 않는다. 이를 cache 문제와 혼동하지 않도록 build option도 기록한다.
 
 ```bash
 # Python 패키지 수정이 바로 반영되려면
@@ -105,7 +112,7 @@ colcon build --symlink-install
 
 ### 네임스페이스와 리매핑
 
-`ros2 topic echo /camera/image_raw` 했는데 데이터가 안 오면, AI는 드라이버 문제라고 진단한다. 네임스페이스 때문에 토픽 이름이 `/robot1/camera/image_raw`일 수 있는데도.
+`ros2 topic echo /camera/image_raw`에 데이터가 없더라도 driver 문제라고 바로 단정할 수는 없다. namespace가 적용되어 실제 topic이 `/robot1/camera/image_raw`일 수 있다.
 
 ```bash
 # 토픽 목록부터 확인하라
@@ -115,20 +122,21 @@ ros2 topic list
 ros2 topic list | grep camera
 ```
 
-AI에게 디버깅을 시킬 때는 `ros2 topic list`와 `ros2 node list` 출력을 먼저 제공해야 한다. 이 정보 없이 "토픽이 안 들어와요"라고 하면 AI는 추측으로 답할 수밖에 없다.
+디버깅을 요청할 때는 `ros2 topic list`와 `ros2 node list` 출력을 함께 제공한다. "토픽이 안 들어온다"는 설명만으로는 namespace와 node 상태를 구분할 수 없다.
 
 ### Launch 파일
 
-AI가 ROS2 Python launch 파일을 쓸 때 반복적으로 하는 실수들:
+생성된 ROS2 Python launch 파일에서는 다음 오류가 섞이지 않았는지 확인한다.
 
-- ROS1 XML 문법을 섞는다 (ROS2 launch는 Python이 기본이다)
-- `LaunchDescription`의 action 순서를 잘못 잡는다 (노드 의존성 고려 필요)
-- `ComposableNode` vs 일반 `Node` 구분을 못 한다
-- `PushRosNamespace`를 빠뜨려서 multi-robot 설정이 꼬인다
+- ROS1 XML 문법과 ROS2 Python 문법의 혼용
+- 노드 의존성을 고려하지 않은 `LaunchDescription` action 순서
+- `ComposableNode`와 일반 `Node`의 혼동
+- multi-robot 구성에서 `PushRosNamespace` 누락
 
 ```python
 # multi-robot launch 파일에서 네임스페이스 적용
-from launch.actions import GroupAction, PushRosNamespace
+from launch.actions import GroupAction
+from launch_ros.actions import Node, PushRosNamespace
 
 robot1_group = GroupAction([
     PushRosNamespace('robot1'),
@@ -136,51 +144,50 @@ robot1_group = GroupAction([
 ])
 ```
 
-AI에게 launch 파일을 요청할 때는 "ROS2 Python launch 파일", "multi-robot이면 네임스페이스 적용", "ComposableNode 사용 여부" 등을 명시해야 한다.
+Launch 파일을 요청할 때는 ROS2 Python 형식인지, multi-robot namespace가 필요한지, `ComposableNode`를 사용할지를 명시한다.
 
 ## Docker에서 자주 빠지는 설정
 
 ### GUI/시각화 문제
 
-Docker 안에서 RViz나 Gazebo 같은 GUI 도구를 띄우려면 X11 포워딩이 필요하다. AI는 `xhost +local:docker`를 권하는데, 이는 모든 로컬 연결에 X 서버 접근을 허용하는 것이라 보안상 위험하다.
+Docker 안에서 RViz나 Gazebo 같은 GUI 도구를 X11·XWayland 경로로 실행할 때는 display socket과 인증을 전달해야 한다. 흔히 제시되는 `xhost +local:docker`는 local X server 접근 범위를 넓히므로 그대로 쓰지 않는다.
 
-제대로 하려면 다음과 같이 설정한다:
+다음은 X11 socket을 넘기는 최소 예다. X server 인증은 host 설정에 따라 별도로 연결해야 하며, 접근 제어를 끄는 `xhost +`는 쓰지 않는다.
 
 ```bash
 docker run -it \
   --env DISPLAY=$DISPLAY \
   --env QT_X11_NO_MITSHM=1 \
   -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-  --ipc=host \
   my_image
 ```
 
-각 옵션의 역할:
-- `QT_X11_NO_MITSHM=1` — AI는 이 옵션을 거의 모른다. 없으면 RViz가 segfault로 죽는다. MIT-SHM(공유 메모리) 확장이 Docker 환경에서 제대로 동작하지 않기 때문이다.
-- `--ipc=host` — 호스트와 IPC 네임스페이스를 공유한다. 없으면 shared memory 문제로 시각화 도구가 죽는 경우가 많다.
-- Wayland 환경(Ubuntu 22.04+ 기본)에서는 X11 소켓 마운트만으로 안 되는 경우가 있다. `XDG_SESSION_TYPE=x11`로 X11 세션을 강제하거나, XWayland를 거쳐야 할 수 있다.
+각 옵션의 역할은 다음과 같다.
+- `QT_X11_NO_MITSHM=1` — Docker 환경에서 MIT-SHM(공유 메모리) 확장 때문에 RViz가 종료되는 경우 이를 비활성화한다.
+- `--ipc=host`가 필요한 프로그램도 있지만, 이 옵션은 host의 IPC namespace를 공유한다. 오류를 재현해 필요성을 확인한 경우에만 추가한다.
+- Wayland session에서는 X11 socket mount만으로 부족할 수 있다. 로그인할 때 Xorg session을 선택하거나, host의 XWayland·Wayland 권한 설정에 맞춘다. `XDG_SESSION_TYPE` 환경 변수만 바꿔 현재 display server가 전환되지는 않는다.
 
 ### USB 디바이스 패스스루
 
-카메라, LiDAR, IMU 등 USB 장치를 Docker 안에서 쓰려면 디바이스를 명시적으로 매핑해야 한다. AI는 이걸 모르고 "드라이버 설치하라"고 한다.
+카메라, LiDAR, IMU 같은 USB 장치를 Docker 안에서 쓰려면 device를 명시적으로 매핑해야 한다. Driver를 다시 설치하기 전에 container 안에 device가 보이는지 확인한다.
 
 ```bash
-# 특정 디바이스만 매핑 (권장)
+# 필요한 디바이스만 매핑
 docker run -it --device=/dev/ttyUSB0 --device=/dev/video0 my_image
 
 # 모든 디바이스 접근 허용 (보안상 비추, 디버깅용으로만)
 docker run -it --privileged my_image
 ```
 
-`--privileged`는 편하지만 컨테이너에 호스트의 거의 모든 권한을 주는 것이므로, 프로덕션에서는 필요한 device만 매핑하는 게 맞다.
+[Docker 문서](https://docs.docker.com/engine/containers/run/)에 따르면 `--privileged`는 모든 host device 접근과 확장된 capability를 컨테이너에 준다. 상시 운용할 때는 필요한 device만 `--device`로 매핑한다.
 
-한 가지 더: USB 장치가 Docker 컨테이너 시작 후에 꽂히면 인식이 안 된다. AI는 이 상황을 전혀 고려하지 못한다. 컨테이너를 재시작하거나, `--privileged` + `-v /dev:/dev` 조합을 써야 한다.
+Container를 시작한 뒤 USB 장치를 연결하면 기존 device mapping에 반영되지 않을 수 있다. 이 경우 container를 다시 시작하거나, 디버깅할 때만 `--privileged`와 `-v /dev:/dev` 조합을 검토한다.
 
 ### ROS 네트워킹
 
-Docker 컨테이너 간 ROS2 통신에서 `--network=host`가 가장 간단하지만, 호스트의 포트를 전부 공유하므로 포트 충돌 위험이 있다.
+Docker 컨테이너 간 ROS2 통신에서 `--network=host`는 설정이 단순하지만 [host의 network namespace를 공유해 network isolation을 없앤다](https://docs.docker.com/engine/network/drivers/host/). 포트 충돌과 노출 범위를 함께 확인한다.
 
-AI는 bridge 네트워크에서 ROS2가 왜 안 되는지 설명하지 못한다. 원인은 DDS(Data Distribution Service)가 multicast를 사용하는데, Docker bridge 네트워크에서는 multicast가 기본적으로 안 되기 때문이다.
+ROS2가 bridge network에서 통신하지 못한다면 DDS(Data Distribution Service) discovery에 쓰이는 multicast가 container 경계를 통과하는지 확인한다. Docker bridge 설정에 따라 discovery packet이 전달되지 않을 수 있다.
 
 ```bash
 # 가장 간단한 방법 (개발 환경에서)
@@ -190,7 +197,7 @@ docker run -it --network=host my_ros2_image
 docker run -it --network=host -e ROS_DOMAIN_ID=42 my_ros2_image
 ```
 
-`ROS_DOMAIN_ID`가 같은 네트워크의 다른 사람 ROS2와 충돌할 수 있다. 연구실에서 여러 명이 동시에 ROS2를 쓰면 서로의 토픽이 보이는 상황이 생긴다.
+같은 네트워크에서 `ROS_DOMAIN_ID`가 겹치면 다른 시스템의 ROS2 graph와 연결될 수 있다. 연구실에서 여러 명이 동시에 ROS2를 쓸 때 서로의 토픽이 보이는 이유다.
 
 DDS 설정을 세밀하게 해야 할 때는 Cyclone DDS config XML로 특정 네트워크 인터페이스만 사용하게 제한한다:
 
@@ -211,14 +218,14 @@ export CYCLONEDDS_URI=file:///path/to/cyclone_dds.xml
 
 ### 파일 권한 문제
 
-Docker 안에서 생성된 파일은 기본적으로 root 소유다. 호스트에서 편집하거나 삭제하려면 `sudo`가 필요하다.
+Docker 안에서 생성된 파일은 기본적으로 root 소유가 될 수 있다. 이 경우 호스트에서 편집하거나 삭제할 때 `sudo`가 필요하다.
 
 ```bash
-# 호스트 유저 권한으로 실행
+# 호스트 사용자 권한으로 실행
 docker run -it --user $(id -u):$(id -g) my_image
 ```
 
-하지만 일부 ROS 패키지가 root 권한을 필요로 해서 `--user` 옵션을 쓰면 또 안 되는 경우가 있다. AI는 이런 상황에서 `chmod 777`을 남발하는데, 실무에서는 이러면 안 된다. Dockerfile에서 non-root 유저를 만들고 필요한 디렉토리 권한만 설정하는 것이 올바른 방법이다.
+Device나 directory 권한 때문에 `--user` 옵션을 적용한 뒤 ROS package가 동작하지 않는 경우도 있다. 이때 `chmod 777`로 범위를 넓히기보다 Dockerfile에 non-root user를 만들고 필요한 group과 directory 권한만 부여한다.
 
 ```dockerfile
 # Dockerfile에서 non-root 유저 설정
@@ -231,9 +238,9 @@ USER rosuser
 
 ### 시리얼 포트 권한
 
-`/dev/ttyUSB0` 접근 시 `Permission denied`가 뜨면, AI는 `sudo chmod 666 /dev/ttyUSB0`을 권한다. 되긴 되지만, 재부팅하면 리셋된다. 매번 이걸 치고 있을 수는 없다.
+`/dev/ttyUSB0` 접근 시 `Permission denied`가 뜨면 `sudo chmod 666 /dev/ttyUSB0` 같은 일회성 조치를 제안받기 쉽다. 이 설정은 재부팅하거나 장치를 다시 연결하면 사라진다.
 
-올바른 방법은 udev rule을 작성하는 것이다:
+재연결 뒤에도 유지할 설정은 udev rule로 만든다.
 
 ```bash
 # 벤더/프로덕트 ID 확인
@@ -242,32 +249,33 @@ udevadm info -a -n /dev/ttyUSB0 | grep -E 'idVendor|idProduct'
 
 ```bash
 # /etc/udev/rules.d/99-sensors.rules
-SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a9", MODE="0666", SYMLINK+="gps"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a9", GROUP="dialout", MODE="0660", SYMLINK+="gps"
 ```
 
 ```bash
 # udev rule 적용
 sudo udevadm control --reload-rules && sudo udevadm trigger
+sudo usermod -aG dialout "$USER"  # 다시 로그인한 뒤 group 적용
 ```
 
-이렇게 하면 해당 USB 장치가 항상 `/dev/gps`라는 고정 이름으로 잡히고, 권한도 자동으로 설정된다. 여러 개의 동일 장치를 구분해야 할 때(예: IMU 2개)도 시리얼 넘버로 구분할 수 있다. AI는 udev를 모른다.
+이렇게 하면 해당 USB 장치를 `/dev/gps`라는 고정 이름으로 연결하고 권한도 자동으로 설정할 수 있다. 같은 모델의 장치를 여러 개 쓸 때도 시리얼 번호를 규칙에 넣으면 서로 구분할 수 있다.
 
 ### USB 대역폭
 
-USB3 카메라 3대를 같은 USB 허브에 꽂으면 대역폭 부족으로 프레임 드롭이 발생한다. AI는 "드라이버 업데이트하라" 또는 "해상도를 낮춰라"고 하지만, 실제 원인은 USB 컨트롤러의 대역폭 한계다.
+USB3 카메라 여러 대를 같은 허브에 연결했을 때 프레임이 끊긴다면 드라이버뿐 아니라 USB 컨트롤러의 대역폭도 확인해야 한다.
 
 ```bash
 # 어떤 카메라가 어떤 USB 컨트롤러에 붙어있는지 확인
 lsusb -t
 ```
 
-이 문제는 소프트웨어로 해결할 수 없다. 물리적으로 다른 USB 컨트롤러에 카메라를 분산 연결해야 한다. 데스크탑 PC의 앞면 USB와 뒷면 USB는 다른 컨트롤러에 연결된 경우가 많으니, `lsusb -t`의 Bus 번호를 확인하고 분산 배치하자.
+컨트롤러의 대역폭이 원인이라면 설정 변경만으로는 해결되지 않는다. `lsusb -t`의 Bus 번호를 확인한 뒤 카메라를 서로 다른 USB 컨트롤러에 나누어 연결한다. 데스크톱 PC에서는 앞면과 뒷면 포트가 다른 컨트롤러에 연결된 경우도 있다.
 
 ### LiDAR 연결 (IP 설정)
 
-Velodyne이나 Ouster LiDAR에서 "데이터가 안 온다"는 문제의 90%는 네트워크 설정이 원인이다. AI는 드라이버 재설치나 ROS 패키지 재빌드를 권하지만, 그 전에 확인해야 할 것이 있다.
+Velodyne이나 Ouster LiDAR에서 데이터가 들어오지 않을 때는 드라이버를 다시 설치하기 전에 네트워크 설정부터 확인한다. 고정 IP와 서브넷 불일치는 이 증상의 흔한 원인이다.
 
-LiDAR는 고정 IP(예: `192.168.1.201`)를 사용한다. 호스트 PC의 이더넷 인터페이스를 같은 서브넷(예: `192.168.1.100`)으로 설정해야 통신이 된다.
+많은 Ethernet LiDAR는 고정 IP나 지정된 subnet 설정을 사용한다. 장치가 예를 들어 `192.168.1.201/24`라면 host interface도 충돌하지 않는 `192.168.1.x/24` 주소로 맞춘다. 실제 주소와 UDP port는 장치 설정과 제조사 문서를 우선한다.
 
 ```bash
 # 1단계: LiDAR에 ping이 되는지 확인
@@ -281,11 +289,11 @@ sudo ip link set eth0 up
 sudo tcpdump -i eth0 udp port 2368 -c 10
 ```
 
-`ping`부터 해보면 대부분 여기서 걸린다. Wireshark(또는 tcpdump)로 UDP 패킷이 오는지 확인하는 게 가장 확실한 디버깅 방법이다. 패킷이 오는데 ROS에서 안 보이면 그때 드라이버를 의심해도 늦지 않다.
+장치가 ICMP에 응답한다면 `ping`으로 연결을 확인하고, 응답하지 않더라도 Wireshark나 `tcpdump`로 지정된 UDP port의 패킷이 들어오는지 살핀다. 패킷은 들어오는데 ROS 토픽에서 보이지 않을 때 드라이버와 ROS 설정으로 조사 범위를 좁힌다.
 
 ### 카메라 드라이버 (v4l2)
 
-AI는 `cv2.VideoCapture(0)`만 알지, `/dev/video*`가 여러 개일 때 어떤 게 실제 카메라인지 구분하지 못한다. USB 카메라 하나를 꽂아도 `/dev/video0`, `/dev/video1`이 생기는 경우가 흔한데(metadata용 디바이스), AI는 이걸 모른다.
+간단한 예제는 흔히 `cv2.VideoCapture(0)`만 보여준다. 그러나 USB 카메라 하나가 영상과 메타데이터용으로 `/dev/video0`, `/dev/video1`을 함께 만들기도 하므로 장치 번호를 먼저 확인해야 한다.
 
 ```bash
 # 카메라 디바이스 매핑 확인
@@ -293,9 +301,12 @@ v4l2-ctl --list-devices
 
 # 지원하는 포맷과 해상도 확인
 v4l2-ctl -d /dev/video0 --list-formats-ext
+
+# 이 장치가 지원하는 control 확인
+v4l2-ctl -d /dev/video0 --list-ctrls
 ```
 
-자동 노출(auto exposure), 자동 화이트밸런스 — 이런 자동 설정이 SLAM 성능을 망치는 경우가 많다. 밝기가 계속 변하면 특징점 추출이 불안정해진다.
+자동 노출(auto exposure)과 자동 화이트밸런스가 frame 사이의 밝기를 크게 바꾸면 특징점 추출과 추적이 불안정해질 수 있다. 지원하는 control 이름과 범위는 driver마다 다르므로 먼저 확인한다.
 
 ```bash
 # 수동 노출 설정 (SLAM용)
@@ -306,66 +317,64 @@ v4l2-ctl -d /dev/video0 --set-ctrl=exposure_absolute=100
 v4l2-ctl -d /dev/video0 --set-ctrl=white_balance_automatic=0
 ```
 
-AI는 이런 low-level 카메라 제어를 모른다. "SLAM이 불안정하다"고 하면 알고리즘 파라미터 튜닝을 권하지만, 카메라 자동 설정을 끄는 것만으로 크게 개선되는 경우가 있다.
+SLAM이 불안정하다고 해서 곧바로 알고리즘 매개변수만 조정하지는 않는다. 자동 노출과 화이트밸런스를 고정했을 때 영상 밝기와 특징점 추출이 안정되는지도 함께 확인한다.
 
 ### Jetson (ARM) 환경
 
-AI가 생성한 코드나 Docker 설정은 x86 기준이다. NVIDIA Jetson(ARM64)에서는 안 돌아가는 경우가 많다.
+생성된 코드나 Docker 설정에는 x86 환경을 전제로 한 의존성이 섞일 수 있다. NVIDIA Jetson은 ARM64와 JetPack의 버전 제약을 함께 고려해야 한다.
 
 주의해야 할 점:
-- `pip install`로 설치할 때 pre-built 바이너리(wheel)가 ARM용으로 없는 패키지가 많다. 특히 `scipy`, `opencv-python`은 소스에서 빌드해야 해서 수십 분이 걸린다.
-- JetPack 버전에 따라 CUDA, cuDNN, TensorRT 버전이 고정된다. AI가 최신 버전을 설치하라고 권하면 전체 시스템이 꼬인다.
-- Docker를 쓸 때는 NVIDIA에서 제공하는 `l4t`(Linux for Tegra) 기반 이미지를 써야 한다.
+- package와 version 조합에 따라 ARM64 wheel이 없을 수 있다. 이때는 source build를 시작하기 전에 JetPack package, NVIDIA container, 배포판 package 중 호환되는 배포물이 있는지 확인한다.
+- JetPack 버전에 따라 CUDA, cuDNN, TensorRT의 호환 범위가 정해진다. 개별 패키지를 최신 버전으로 올리기 전에 JetPack 호환표를 확인한다.
+- Docker image는 장치의 L4T·JetPack release와 호환되는 ARM64 image를 고른다. [NVIDIA JetPack release notes](https://docs.nvidia.com/jetson/jetpack/release-notes/index.html)에서 현재 조합을 먼저 확인한다.
 
 ```bash
-# Jetson에서 Docker 이미지 — x86 이미지 쓰면 안 된다
-docker pull nvcr.io/nvidia/l4t-pytorch:r35.2.1-pth2.0-py3
-
 # JetPack 버전 확인
 cat /etc/nv_tegra_release
+
+# NVIDIA 문서의 r36.3 예시. 실제 장치에서는 확인한 L4T와 맞는 tag를 선택
+docker pull nvcr.io/nvidia/l4t-jetpack:r36.3.0
 ```
 
-AI에게 코드를 요청할 때는 "Jetson Orin, JetPack 5.1.2, CUDA 11.4 환경이다"라고 명시해야 한다.
+코드를 요청할 때는 "Jetson Orin, JetPack 5.1.2, CUDA 11.4 환경이다"처럼 실제 장치에서 확인한 조합을 명시한다. 이 숫자는 형식 예시이며 최신 권장 버전을 뜻하지 않는다.
 
 ### 실시간 제어와 타이밍
 
-AI는 `time.sleep(0.01)`로 100Hz 루프를 만들라고 하지만, 정확하지 않다. `time.sleep()`의 정밀도는 OS 스케줄러에 의존하며, 일반 Linux 커널에서는 수 밀리초의 jitter가 발생한다.
+`time.sleep(0.01)`을 넣었다고 해서 루프가 정확히 100Hz로 실행되는 것은 아니다. `time.sleep()` 이후 실제로 다시 실행되는 시점은 계산 시간과 운영체제 스케줄링의 영향을 받는다.
 
 ```python
-# AI가 주로 권하는 방법 (정확하지 않음)
+# 주기 검증이 필요한 단순한 구현
 import time
 while True:
     do_control()
-    time.sleep(0.01)  # 실제로는 10~15ms가 될 수 있다
+    time.sleep(0.01)  # 실제 주기는 계산 시간과 시스템 부하에 따라 달라진다
 ```
 
-Python의 GIL(Global Interpreter Lock) 때문에 멀티스레드 타이밍은 더 보장이 안 된다. 진짜 실시간 제어가 필요하면 C++과 RT(Real-Time) 커널(PREEMPT_RT)을 써야 한다.
+Python의 GIL(Global Interpreter Lock)과 운영체제 스케줄링도 멀티스레드의 실행 시점에 영향을 준다. 엄격한 실시간성이 필요하다면 C++과 RT(Real-Time) 커널(PREEMPT_RT) 같은 구성을 검토한다.
 
 ```bash
-# 실제 퍼블리시 주파수 확인 — 항상 이걸로 검증하라
+# 실제 퍼블리시 주파수 확인
 ros2 topic hz /cmd_vel
 ```
 
-AI가 "100Hz로 제어하면 된다"고 해도, `ros2 topic hz`로 실제 주파수를 확인해야 한다. 기대한 주파수와 실제 주파수가 다르면 제어가 제대로 안 된다.
+목표 주파수를 코드에 적는 데서 끝내지 말고 `ros2 topic hz`로 실제 퍼블리시 주기를 측정한다. 기대한 주파수와 실제 주파수가 다르면 계산 시간, 스케줄링, 통신 지연을 차례로 점검한다.
 
 ## 반복해서 막히는 패턴
 
 ### "It works in simulation"
 
-Gazebo에서 잘 되는데 실제 로봇에서 안 되는 상황. AI는 "시뮬레이션에서 되니까 코드는 맞고 하드웨어 문제"라고 결론 낸다. 실제 원인은 sim-to-real gap이다:
+Gazebo에서 동작한 코드가 실제 로봇에서는 실패할 수 있다. 이때 코드와 하드웨어 중 하나만 탓하기보다 다음과 같은 시뮬레이션과 현실의 차이를 확인한다.
 
-- **센서 노이즈**: 시뮬레이션의 가우시안 노이즈와 실제 센서 노이즈는 분포가 다르다
-- **통신 지연**: Gazebo 안에서는 토픽 전달이 즉시 이뤄지지만, 실제로는 수~수십 ms의 지연이 있다
-- **타이밍 불일치**: 시뮬레이션은 완벽한 동기화를 보장하지만, 실제로는 센서 간 타임스탬프가 어긋난다
+- **센서 노이즈**: 시뮬레이터에 넣은 노이즈 모델과 실제 센서의 분포가 다를 수 있다
+- **통신 지연**: 시뮬레이션과 실제 시스템의 transport·queue·network 지연이 다르다
+- **타이밍 불일치**: 시뮬레이터의 clock·timestamp 조건과 실제 센서 간 동기화 오차가 다르다
 - **좌표계 불일치**: URDF와 실제 로봇의 센서 위치/각도가 미세하게 다르면 tf가 틀어진다
 
-AI에게는 "시뮬레이션에서는 되는데 실제 로봇에서 안 된다. 센서 노이즈 수준은 X이고, 통신 지연은 Y ms이고, 좌표계 캘리브레이션은 Z 방법으로 했다"처럼 sim-to-real의 차이를 구체적으로 알려줘야 한다.
+에이전트에게 질문할 때도 "시뮬레이션에서는 되지만 실제 로봇에서는 실패한다. 센서 노이즈 수준은 X이고, 통신 지연은 Y ms이며, 좌표계는 Z 방법으로 보정했다"처럼 관측한 차이를 구체적으로 제공한다.
 
 ### 하드웨어 문제를 소프트웨어로 고치려 함
 
-케이블 불량, 접촉 불량, 전원 부족 — AI는 이런 물리적 문제를 진단할 수 없다.
-
-"센서 데이터가 간헐적으로 끊긴다"고 하면 AI는 버퍼 크기 조절, 타임아웃 설정, QoS 변경 등을 권한다. USB 케이블이 느슨하거나 USB 허브의 전원이 부족한 것인데도.
+케이블 불량, 접촉 불량, 전원 부족은 로그와 장치 상태를 직접 보지 않으면 판단하기 어렵다. 센서 데이터가 간헐적으로 끊길 때는 버퍼 크기, 타임아웃, QoS뿐 아니라 케이블과 USB 허브의 전원도 함께 점검한다.
 
 ```bash
 # 커널 로그에서 하드웨어 문제 단서 찾기
@@ -375,35 +384,35 @@ dmesg | tail -20
 dmesg | grep -i usb | tail -20
 ```
 
-`dmesg`에 `USB disconnect`, `device descriptor read/64, error -71` 같은 메시지가 보이면 소프트웨어 문제가 아니다. 케이블을 교체하거나, 유전원 USB 허브를 쓰거나, 다른 포트에 꽂아보는 게 먼저다.
+`dmesg`에 `USB disconnect`, `device descriptor read/64, error -71` 같은 메시지가 보이면 물리적 연결이나 전원 문제부터 확인한다. 케이블을 바꾸고, 유전원 USB 허브를 쓰거나, 다른 포트에 연결해 증상이 달라지는지 비교한다.
 
-### 환경 문제 진단 포기
+### 재설치 전에 충돌 범위 좁히기
 
-라이브러리 버전 충돌이 복잡하게 얽히면 AI는 "전부 재설치하라"고 한다. `pip show package_name`으로 버전을 확인하고 어떤 것이 충돌하는지 좁히는 게 먼저다.
+라이브러리 버전 충돌이 복잡해도 곧바로 환경 전체를 다시 설치하지는 않는다. 먼저 `pip show package_name`으로 버전을 확인하고 충돌하는 패키지의 범위를 좁힌다.
 
-특히 OpenCV 관련 충돌은 로보틱스의 클래식이다:
+OpenCV에서는 다음 패키지가 한 환경에 섞이면서 충돌하는 경우가 잦다.
 
 - `opencv-python` (기본)
 - `opencv-python-headless` (GUI 없는 서버용)
 - `opencv-contrib-python` (추가 모듈 포함)
 - `cv_bridge` (ROS 패키지, 자체 OpenCV를 참조)
 
-이 네 가지가 동시에 설치되면 서로 충돌한다.
+세 PyPI package는 같은 `cv2` namespace를 제공하므로 한 환경에 함께 설치하지 않는다. `cv_bridge`는 system OpenCV와 연결될 수 있어 pip OpenCV를 섞으면 version·ABI 충돌이 생길 수 있다. 현재 ROS package와 Python import 경로를 확인한 뒤 한 배포 경로를 고른다.
 
 ```bash
 # 현재 설치된 OpenCV 확인
 pip show opencv-python opencv-python-headless opencv-contrib-python
 
-# 해결: ROS 환경에서는 pip opencv를 설치하지 않는다
-pip uninstall opencv-python opencv-python-headless opencv-contrib-python
-sudo apt install ros-humble-cv-bridge
+# ROS Humble system package 상태와 실제 import 경로 확인
+apt policy ros-humble-cv-bridge
+python3 -c 'import cv2; print(cv2.__version__, cv2.__file__)'
 ```
 
-ROS 환경에서는 `apt install ros-humble-cv-bridge`만 쓰고, pip으로 opencv를 따로 설치하지 않는 것이 가장 깔끔하다.
+ROS Humble의 system OpenCV와 `ros-humble-cv-bridge`를 쓰기로 했다면 별도의 pip OpenCV가 import 경로를 가로채지 않도록 구성한다. Package 제거는 의존하는 project를 확인한 뒤 한다.
 
-### "2-3번 시도 후 포기"
+### 반복 시도에서 원인 추적으로 전환하기
 
-AI는 같은 접근을 두세 번 반복하다 안 되면 "다른 방법을 시도해 보세요"라며 넘긴다. 엔지니어는 여기서 포기하지 않는다. 로그를 뒤지고, strace를 걸고, 패킷을 캡처한다.
+같은 처방을 반복해도 증상이 달라지지 않으면 접근법의 수를 늘리기보다 관측 수준을 낮춘다. 시스템 로그를 읽고, `strace`로 호출을 추적하며, 필요하면 패킷을 캡처한다.
 
 더 나은 답을 얻으려면, 에러 메시지뿐 아니라 low-level 정보를 함께 줘야 한다:
 
@@ -419,86 +428,86 @@ strace -f -e trace=open,read,write ros2 run my_pkg my_node 2>&1 | head -100
 sudo tcpdump -i eth0 -w capture.pcap
 ```
 
-이런 정보를 AI에게 제공하면, "재설치하세요" 대신 실제 원인에 가까운 답을 받을 수 있다.
+이 정보를 에이전트에게 제공하면 일반적인 재설치 처방보다 현재 시스템의 증거에 맞춘 분석을 받기 쉽다.
 
 ## 에이전트에게 줄 정보
 
-*논문 읽기와 글쓰기에서 에이전트를 쓰는 법은 [「연구노트」 Ch.7 — 논문을 세 번에 나누어 읽기](../research-notes/guide.html#ch7-논문을-세-번에-나누어-읽기) + [「연구노트」 Ch.16 — 마음가짐](../research-notes/guide.html#ch16-마음가짐) 에서 다룬다. 여기서는 코드와 하드웨어 쪽 입력을 본다.*
+*논문 읽기와 글쓰기에서 에이전트를 쓰는 법은 [「연구노트」 Ch.7 — 논문을 세 번에 나누어 읽기](../research-notes/guide.html#chapter-7)와 [「연구노트」 Ch.16 — 마음가짐](../research-notes/guide.html#chapter-16)에서 다룬다. 여기서는 코드와 하드웨어를 다룰 때 필요한 입력에 집중한다.*
 
-### 컨텍스트를 충분히 제공하라
+### 환경과 증상을 함께 제공한다
 
-AI에게 질문할 때 가장 중요한 것은 컨텍스트의 양과 질이다.
+에이전트의 답은 질문에 포함된 환경 정보와 관측 자료에 크게 좌우된다.
 
-틀린 예: "카메라가 안 돼요"
+정보가 부족한 예: "카메라가 안 돼요"
 
-맞는 예: "Ubuntu 22.04, ROS2 Humble, Intel RealSense D435, `rs-enumerate-devices`에서는 보이는데 `ros2 launch realsense2_camera rs_launch.py`하면 `Could not open device` 에러가 난다. Docker 안에서 실행 중이고, `--device=/dev/video0`은 매핑했다."
+조사 범위를 좁힐 수 있는 예: "Ubuntu 22.04, ROS2 Humble, Intel RealSense D435를 쓴다. `rs-enumerate-devices`에서는 보이지만 `ros2 launch realsense2_camera rs_launch.py`를 실행하면 `Could not open device` 오류가 난다. Docker 안에서 실행 중이고, `--device=/dev/video0`은 매핑했다."
 
-**AI에게 제공해야 할 정보 체크리스트**:
+**함께 제공할 정보**:
 - OS 버전, ROS 버전
 - 하드웨어 플랫폼 (x86 vs ARM/Jetson)
 - 센서 모델명
-- 에러 메시지 전문 (일부만 복사하지 말고 전체를 줘라)
+- 오류 메시지 전문
 - `ros2 topic list`, `ros2 node list` 출력
 - Docker 사용 여부와 실행 옵션 (`docker run` 명령 전체)
 - 네트워크 구성 (유선/무선, IP 대역)
 
-### AI의 답을 검증하는 방법
+### 답을 실행하기 전에 검증하는 방법
 
-AI의 답을 그대로 실행하기 전에 다음을 확인하라:
+제안받은 명령이나 설정을 적용하기 전에 다음을 확인한다.
 
-- **"이 패키지를 설치하라"** → 해당 패키지가 자기 ROS 버전과 Ubuntu 버전을 지원하는지 먼저 확인. `apt search ros-humble-<패키지명>`으로 존재 여부를 체크한다.
-- **"이 설정을 바꿔라"** → 바꾸기 전에 현재 설정을 백업하고, 왜 바꿔야 하는지 근거를 AI에게 물어본다. 근거를 설명하지 못하면 의심하라.
-- **"재설치하라"** → 90%는 재설치 안 해도 된다. 먼저 정확한 에러 원인을 좁혀라. `pip show`, `dpkg -l | grep`, `apt policy` 등으로 현재 상태를 확인하는 게 먼저다.
-- **AI가 코드를 줄 때** → 하드코딩된 경로(`/home/user/...`), 하드코딩된 IP(`192.168.1.100`), x86 전용 패키지(`amd64` wheel) 등이 포함되어 있는지 확인한다.
+- **패키지 설치** → 해당 패키지가 현재 ROS와 Ubuntu 버전을 지원하는지 `apt search ros-humble-PACKAGE_NAME` 등으로 확인한다.
+- **설정 변경** → 현재 설정을 백업하고, 제안이 어떤 관측 결과를 설명하는지 확인한다.
+- **환경 재설치** → 먼저 `pip show`, `dpkg -l | grep`, `apt policy` 등으로 현재 상태와 충돌 범위를 기록한다.
+- **생성된 코드** → 하드코딩된 경로(`/home/user/...`), IP(`192.168.1.100`), x86 전용 패키지(`amd64` wheel)가 포함되어 있는지 확인한다.
 
-### AI가 잘하는 것과 약한 것
+### 맡기기 좋은 일과 직접 측정할 일
 
-| AI가 잘하는 것 | AI가 못하는 것 |
+| 에이전트로 초안을 만들기 좋은 일 | 현장에서 측정값을 확보해야 하는 일 |
 |---|---|
 | 알고리즘 구현 (SLAM, detection 등) | 하드웨어 디버깅 |
-| ROS2 노드/서비스 코드 작성 | QoS/DDS 설정 최적화 |
-| Python/C++ 코드 리팩토링 | USB/시리얼 권한 문제 |
-| 논문 읽기/요약 | 네트워크 설정 (LiDAR IP 등) |
-| CMakeLists.txt 작성 | 실시간 타이밍 문제 |
-| 데이터 전처리 파이프라인 | Docker 안에서의 하드웨어 접근 |
+| ROS2 노드/서비스 코드 작성 | QoS/DDS 설정의 실제 성능 확인 |
+| Python/C++ 코드 리팩토링 | USB/시리얼 장치 상태 확인 |
+| 논문 읽기/요약 | LiDAR 연결과 네트워크 패킷 확인 |
+| CMakeLists.txt 작성 | 실시간 주기와 지터 측정 |
+| 데이터 전처리 파이프라인 | Docker 안팎의 장치 접근 확인 |
 | 시각화 코드 (matplotlib, Open3D) | 센서 간 시간 동기화 실전 |
-| 에러 메시지 해석 (일반적인) | dmesg/커널 로그 기반 디버깅 |
+| 일반적인 오류 메시지의 해석 | `dmesg`와 커널 로그를 현장 증상과 대조하는 일 |
 
-AI는 "순수 소프트웨어" 영역에서는 강하지만, 하드웨어와 소프트웨어가 만나는 경계에서 약하다. 로보틱스 문제의 대부분이 그 경계에서 발생한다. AI가 강한 영역은 맡기고, AI가 약한 영역에서는 직접 디버깅한 결과를 AI에게 먹여서 분석하게 하는 게 맞다.
+에이전트는 코드 초안과 일반적인 오류 해석에 유용하다. 반면 하드웨어와 소프트웨어의 경계에서는 장치 상태, 타이밍, 패킷처럼 현장에서만 얻을 수 있는 정보가 필요하다. 먼저 직접 측정한 뒤 그 결과를 분석 입력으로 제공하는 편이 낫다.
 
 ## 연구 루틴에 붙이는 법
 
-로보틱스 연구자의 하루 일과에서 AI가 어디에 쓰이는지 구체적으로 본다.
+앞의 원칙은 논문 읽기, 코드 작성, 실험 설계, 원고 작성에 각각 다르게 적용된다.
 
 ### 논문 읽기
 
-*논문 읽기 워크플로우 (3-pass + AI layer cameo)는 [「연구노트」 Ch.7 — 논문을 세 번에 나누어 읽기](../research-notes/guide.html#ch7-논문을-세-번에-나누어-읽기) 의 AI layer cameo에서 본격 다룬다.*
+*논문 읽기 워크플로우(3-pass + AI layer)는 [「연구노트」 Ch.7 — 논문을 세 번에 나누어 읽기](../research-notes/guide.html#chapter-7)에서 다룬다.*
 
-분야 적용은 분야 핵심 논문에 3-pass + AI summary 결합 — abstract 읽고 contribution 3줄 요청, Eq. 단계별 유도 요청.
+중요한 논문은 3-pass 방식으로 읽으면서 에이전트의 요약을 보조 자료로 쓴다. 초록을 읽은 뒤 기여를 세 문장으로 정리하게 하고, 이해하기 어려운 식은 단계별 유도를 요청한다.
 
 ### 코드 작성
 
 - 프로토타이핑: "KITTI 데이터셋에서 ORB 특징점 뽑아서 매칭하는 코드 짜줘. OpenCV 쓰고, Lowe's ratio test 0.75로" — 이런 식으로 구체적으로 지시
-- 디버깅: 에러 메시지 + 코드 + "이 에러의 원인이 뭐야" — AI가 잘하는 영역
+- 디버깅: 오류 메시지와 관련 코드를 함께 주고 가능한 원인과 확인 순서를 요청
 - 리팩토링: "이 코드를 PyTorch Dataset 클래스로 바꿔줘" — 구조 변환에 강함
 - 직접 확인할 것: ROS QoS, 하드웨어 권한, 네트워크 설정, 실시간 타이밍
 
 ### 실험 설계
 
-*실험 설계·ablation·결과 해석에 AI 부려먹기 frame은 [「연구노트」 Ch.32 — Revision/Rebuttal](../research-notes/guide.html#ch32-revision-rebuttal) (또는 [「연구노트」 Ch.27 — Figures](../research-notes/guide.html#ch27-figures-안티패턴과-좋은-패턴)) 에 cameo로 담겼다.*
+*실험 설계·ablation·결과 해석에 AI를 쓰는 방법은 [「연구노트」 Ch.32 — Revision/Rebuttal](../research-notes/guide.html#chapter-32)과 [「연구노트」 Ch.27 — Figures](../research-notes/guide.html#chapter-27)에서 다룬다.*
 
-분야 적용은 baseline 비교 표를 AI에게 던지고 *내가 놓친 비교 축*을 묻는 워크플로우.
+실험을 설계할 때는 baseline 비교 표를 제공하고 *내가 놓친 비교 축*을 묻는다.
 
 ### 논문 쓰기
 
-- 초고 작성: 핵심 아이디어와 실험 결과를 AI에게 주고 "Introduction 초고를 써줘" — 구조 잡기에 유용
-- 문법/표현 교정: 영어 논문의 어색한 표현 수정. Grammarly보다 AI가 context를 더 잘 이해한다
-- 주의: AI가 쓴 문장을 그대로 제출하면 안 된다. 본인의 voice로 다시 써야 한다. 리뷰어는 AI 생성 문체를 알아본다
-- BibTeX 생성: "이 논문의 BibTeX를 만들어줘" — Google Scholar에서 복사하는 것보다 빠를 때가 있다. 단, AI가 year이나 venue를 틀리는 경우가 있으니 반드시 검증
+- 초고 작성: 핵심 아이디어와 실험 결과를 제공하고 Introduction의 논리 구조를 제안받기
+- 문법·표현 교정: 영어 문장의 문법과 문맥을 함께 검토하기
+- 문체 검토: 생성된 문장을 그대로 쓰지 않고 자신의 논지와 어조에 맞게 다시 읽기
+- BibTeX 생성: 서지 항목의 초안을 받은 뒤 논문 원문이나 출판사 페이지에서 연도, 학회·저널명, 권·호를 확인하기
 
 ### 일상 워크플로우 예시
 
-하루 일과에서 AI를 어떻게 쓰는지 구체적 시나리오:
+다음은 이 작업들을 하루 일정에 배치한 예다.
 
 ```
 09:00 — 새 논문 3편 arXiv에서 확인. AI에게 각각 1문장 요약 요청

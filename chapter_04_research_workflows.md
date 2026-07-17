@@ -2,9 +2,9 @@
 
 논문 요약은 시작일 뿐이다. 로봇 논문을 실제 연구에 쓰려면 논문 문장, 공개 코드, 현재 환경에서 돌릴 실험을 따로 확인해야 한다.
 
-논문 method 문장은 주장을 담고, 공개 코드는 구현 상태를 드러내며, runtime은 현재 환경에서 실제로 나온 결과를 남긴다. 이 셋은 따로 확인한다. [NeurIPS 2019 Reproducibility Program 보고서](https://arxiv.org/abs/2003.12206)도 결과의 신뢰성을 확인하려면 같은 code와 data, 실행 조건으로 다시 돌려 보는 일이 필요하다고 썼다. 논문에 적힌 component가 repo에 있어도 그 component가 config를 거쳐 실행되고 결과에 영향을 줬는지는 따로 확인해야 한다.
+논문에서 방법을 설명하는 문장은 저자의 주장을 담고, 공개 코드는 구현 상태를 보여 주며, runtime 기록은 현재 환경에서 나온 결과를 남긴다. 이 셋은 따로 확인한다. [NeurIPS 2019 Reproducibility Program 보고서](https://arxiv.org/abs/2003.12206)도 결과의 신뢰성을 확인하려면 같은 code와 data, 실행 조건으로 다시 돌려 보는 일이 필요하다고 썼다. 논문에 적힌 component가 저장소에 있더라도 config를 거쳐 실제로 호출되고 결과에 영향을 주는지는 별도로 확인해야 한다.
 
-논문을 연구에 쓰려면 abstract 요약 다음에 주장의 실험 조건을 찾는다.
+논문을 연구에 활용하려면 초록을 요약하는 데서 그치지 않고 각 주장이 성립하는 실험 조건을 찾아야 한다.
 
 ## 남길 항목
 
@@ -42,6 +42,6 @@ metric script:
 | dead | 남아 있으나 현재 경로 밖에 있다 |
 | unknown | 확인 전 |
 
-AI에게는 paper에서 method component를 뽑고, repo에서 관련 function, class, config를 찾고, issue thread와 README의 convention 변화를 모으는 일을 맡기기 좋다. 실제 호출 여부, config가 runtime에 도달하는지, 같은 dataset과 metric 조건인지, 원고에서 어디까지 말할 수 있는지는 실행 결과로 확인한다.
+AI에는 논문에서 방법의 구성요소를 뽑고, 저장소에서 관련 function, class, config를 찾으며, issue thread와 README에 기록된 convention 변화를 모으는 일을 맡기기 좋다. 실제 호출 여부, config가 runtime에 도달하는지, dataset과 metric 조건이 같은지, 원고에서 어디까지 말할 수 있는지는 실행 결과로 확인한다.
 
-abstract 다음에는 YAML, launch command, issue comment, failed sequence, table caption까지 내려간다.
+초록을 읽은 뒤에는 YAML, launch command, issue comment, 실패한 sequence, table caption까지 내려가 주장을 뒷받침하는 실행 조건을 찾는다.
