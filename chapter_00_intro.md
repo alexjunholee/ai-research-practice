@@ -8,13 +8,13 @@ AI는 큰 저장소에서 관련 파일을 찾고, 긴 로그에서 원인 후�
 
 ## 최신 모델을 자체 서버에서 돌리면 어떤가?
 
-성능이 좋은 모델을 자체 서버에 올리면 공급자의 routing이나 quota 변화에는 덜 영향을 받는다. 다만 상용 서비스의 품질에는 LLM 가중치뿐 아니라 모델 선택, system prompt, context 압축, cache, tool 호출, retrieval, 권한, 실행 환경이 모두 관여한다. 연구실에서도 논문 PDF, code path, 실험 로그, dataset convention, reviewer comment를 검색 가능한 단위로 정리하고 질문마다 사용할 근거를 정해야 일관된 작업 조건을 마련할 수 있다.
+성능이 좋은 모델을 자체 서버에 올리면 공급자의 routing이나 quota 변화의 영향은 덜 받는다. 다만 상용 서비스의 품질에는 LLM 가중치뿐 아니라 모델 선택, system prompt, context 압축, cache, tool 호출, retrieval, 권한, 실행 환경이 모두 관여한다. 연구실에서도 자료를 검색 가능한 단위로 정리하고 질문마다 사용할 근거를 정해야 일관된 작업 조건을 마련할 수 있다.
 
 Retrieval을 모델 구조에 결합하는 연구는 이 문제의 일부를 다뤘다. [REALM](https://arxiv.org/abs/2002.08909)은 pre-training 단계부터 retriever를 붙였고, [DPR](https://arxiv.org/abs/2004.04906)은 질문과 passage를 같은 dense representation 공간에 맞추도록 dual encoder를 학습했다. [RAG](https://arxiv.org/abs/2005.11401)는 seq2seq model의 parametric memory와 Wikipedia dense index를 결합해 factuality, provenance, knowledge update 문제를 줄이려 했다. [FiD](https://arxiv.org/abs/2007.01282), [RETRO](https://arxiv.org/abs/2112.04426), [Atlas](https://arxiv.org/abs/2208.03299)는 retrieved passage를 generator가 읽거나, 큰 text database에서 chunk를 가져오거나, few-shot setting에 retrieval을 적용하는 방식을 탐구했다.
 
 연구실에서는 web-scale index를 만들기보다 먼저 자료의 경계를 정해야 한다. 어느 논문 PDF, code path, 실험 로그, dataset convention, reviewer comment를 어떤 단위로 나눌지 정하고 질문별로 찾아볼 자료를 연결한다. 답의 품질은 모델의 parameter뿐 아니라 외부 자료를 얼마나 정확히 찾아 쓰는지에도 달려 있다.
 
-Anthropic의 [2026년 Claude Code 사용 분석](https://www.anthropic.com/research/claude-code-expertise)은 실제 세션에서 이런 분업을 관찰했다. 사용자는 목표, 접근 방식, 완료 기준을 정하는 데 더 많이 개입했고, Claude는 파일 수정과 명령 실행을 더 많이 맡았다. 사용자의 전문성은 문제를 구체적으로 설정하고, 검증할 대상을 짚으며, 에이전트의 잘못된 판단을 바로잡는 데서 드러났다. 이 판단을 매번 즉석에서 반복하지 않으려면 에이전트가 따라갈 작업 지침이 필요하다. 이 글의 절차는 저장소의 `AGENTS.md`, project memory, 실험 기록, 주장·근거 표로 옮겨 적을 수 있다.
+Anthropic의 [2026년 Claude Code 사용 분석](https://www.anthropic.com/research/claude-code-expertise)은 실제 세션에서 이런 분업을 관찰했다. 사용자는 목표, 접근 방식, 완료 기준을 정하는 데 더 많이 개입했고, Claude는 파일 수정과 명령 실행을 더 많이 맡았다. 이 판단을 매번 즉석에서 반복하지 않으려면 에이전트가 따라갈 작업 지침이 필요하다. 이 글의 절차는 저장소의 `AGENTS.md`, project memory, 실험 기록, 주장·근거 표로 옮겨 적을 수 있다.
 
 ## 무엇을 남겨야 하는가?
 

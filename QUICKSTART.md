@@ -1,11 +1,11 @@
 # 부록 B — 빠른 시작 파일
 
-본문에서 AI가 잘하는 일과 자주 틀리는 일, 사람이 감당할 위험, 하네스가 확인할 경계를
-먼저 이해한다. 새 연구 작업 공간으로 옮길 파일은 이 부록에 정리했다.
+본문에서 AI가 잘하는 일과 틀리는 일, 사람이 감당할 위험, 하네스가 확인할 경계를
+먼저 읽는다. 새 연구 작업 공간으로 옮길 파일은 여기 모았다.
 
 ## 도구 역할을 먼저 나눈다
 
-처음에는 연구 상태와 도구 역할을 함께 정한다. 모델명은 그다음 문제다.
+처음에는 연구 상태와 도구 역할을 함께 정한다. 모델명은 이어서 문제다.
 
 | 연구 장면 | 먼저 열 도구 | 첫 확인 |
 |---|---|---|
@@ -20,6 +20,8 @@
 확인 기준도 다시 적는다.
 
 ## 작업 공간을 나눈다
+
+루트에는 AI가 먼저 읽을 파일 셋을 두고 나머지는 성격별 폴더로 가른다.
 
 ```text
 workspace/
@@ -85,7 +87,7 @@ Copy-Item "$Guide\templates\experiment-contract.md" "$Workspace\notes\"
 Copy-Item "$Guide\templates\weekly-research-ledger.md" "$Workspace\notes\"
 ```
 
-복사 직후에는 작업 공간 루트에서 첫 실행 전에 확인한다. POSIX 셸에서는
+복사가 끝나면 작업 공간 루트에서 파일이 제자리에 있는지 짚어 본다. POSIX 셸에서는
 다음 항목을 모두 통과한 뒤 첫 AI 세션을 연다.
 
 ```bash
@@ -121,14 +123,14 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 ```
 
 `project-memory.json`에는 다섯 묶음이 있어야 한다. `source_of_truth`는 AI가
-다시 읽을 파일을 가리키고, `tool_surface_map`은 연구 장면별 도구 역할을
-나눈다. `current_evidence`는 지금 쓸 수 있는 말과 보류할 말을 분리한다.
-`first_research_loop`는 처음 시작할 연구 루프 하나를 고정하고 `next_smallest_actions`는
-다음 세션의 첫 행동을 남긴다.
+다시 읽을 파일을 가리킨다. 연구 장면별 도구 역할은 `tool_surface_map`에 나눠
+적는다. 지금 쓸 수 있는 말과 보류할 말은 `current_evidence`에서 가른다.
+처음 시작할 연구 루프 하나를 `first_research_loop`에 고정하고, 다음 세션의
+첫 행동은 `next_smallest_actions`에 남긴다.
 
-Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 세션(session)을 사건의 append-only log, 하네스(harness)를 모델 호출과 도구 전달을 맡는 loop, 샌드박스(sandbox)를 실행 환경으로 정의한다. 이 부록의 파일은 그 구현 자체가 아니라 세 역할을 작은 연구 작업 공간에 대응한 것이다. `project-memory.json`과 기록 장부는 세션 기록을 보완하고, `AGENTS.md`와 프롬프트 템플릿은 하네스 규칙을 담는다. 저장소·데이터셋·결과물·명령은 샌드박스에서 다룰 대상을 적는다. 첫 AI 세션에서는 이 세 경계를 먼저 밝히고 행동 하나만 고른다.
+Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 세션(session)을 사건의 append-only log, 하네스(harness)를 모델 호출과 도구 전달을 맡는 loop, 샌드박스(sandbox)를 실행 환경으로 정의한다. 여기 있는 파일은 그 세 역할을 작은 연구 작업 공간에 대응한 것이다. 세션 기록은 `project-memory.json`과 기록 장부가 받쳐 준다. 하네스 규칙은 `AGENTS.md`와 프롬프트 템플릿에 담고, 저장소·데이터셋·결과물·명령은 샌드박스에서 다룬다. 첫 AI 세션에서는 이 세 경계를 먼저 밝히고 행동 하나만 고른다.
 
-그다음 `notes/first-ai-session-prompt.md`의 `Prompt To Send` 블록에서 빈칸을
+그러고 나서 `notes/first-ai-session-prompt.md`의 `Prompt To Send` 블록에서 빈칸을
 채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 첫 AI 세션에는
 이 파일을 그대로 넣는다.
 
@@ -167,9 +169,6 @@ reviewer risk:
 durable corrections:
 ```
 
-첫 상태 체크리스트로 현재 상태를 복원한다. 실험 절차, 심사 위험,
-데이터셋 규약도 여기에서 확인한다.
-
 ## 첫 AI 요청을 좁힌다
 
 첫 요청은 [`templates/first-ai-session-prompt.md`](templates.html#templates-first-ai-session-prompt)를
@@ -187,7 +186,7 @@ Do not infer project truth from summaries when source files or artifacts are
 available.
 ```
 
-후보 설명을 연구 행동으로 옮기기 전에 근거 상태부터 확인한다.
+돌아온 설명을 연구 행동으로 옮기기 전에 근거 상태부터 짚어 본다.
 첫 메시지는 `artifacts/first-ai-session-message.txt`처럼 파일로 남겨 두고
 다음 세션에서도 같은 읽기 순서로 사용한다.
 
@@ -201,7 +200,7 @@ available.
 | 오류를 좁힌다 | [`stage-local-debugging.md`](templates.html#templates-stage-local-debugging) |
 | 원고 문장을 고친다 | [`claim-evidence-map.md`](templates.html#templates-claim-evidence-map) |
 
-한 번에 여러 루프를 열면 요청 범위가 다시 넓어지므로 첫 요청의 성공 기준은 하나만
+한 번에 여러 루프를 열면 요청이 다시 넓어지므로 첫 요청의 성공 기준은 하나만
 둔다. 요청은 이렇게 좁힌다. "이 논문의 central claim, active code path
 확인 대상, experiment protocol 빈칸을 분리하라."
 
@@ -216,8 +215,8 @@ available.
 다음 행동:
 ```
 
-AI가 잘못된 가정을 세웠다면 `replay-case.md`에 반복 확인 사례로 적는다. 같은 실수를
-다음 세션에서 다시 설명하지 않기 위해서다.
+AI가 잘못된 가정을 세웠다면 `replay-case.md`에 반복 확인 사례로 적는다. 적어 두면
+다음 세션은 그 사례를 읽고 시작한다.
 
 첫 세션이 끝난 뒤 `project-memory.json`의 `current_evidence`,
 `first_research_loop`, `claim_boundaries`, `next_smallest_actions`를 함께 고친다.
