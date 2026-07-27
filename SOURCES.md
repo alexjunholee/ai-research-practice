@@ -2,6 +2,8 @@
 
 기존 목록 확인일: 2026-06-18
 로보틱스 실행 환경 자료 확인일: 2026-07-17
+2장 자료 확인일: 2026-07-26
+맥락 관리·에이전트 운영 자료 확인일: 2026-07-26
 
 이 목록에는 공개 가이드에서 언급한 외부 저장소와 이론 자료의 공개 링크를 모았다.
 링크 접근성, 제목·저자·저장소 역할, 본문에서 인용한 최소 주장만 확인했다.
@@ -23,6 +25,7 @@
 - [Bainbridge, *Ironies of Automation*](https://doi.org/10.1016/0005-1098(83)90046-8)
 - [Parasuraman & Riley, *Humans and Automation: Use, Misuse, Disuse, Abuse*](https://doi.org/10.1518/001872097778543886)
 - [Endsley, *Toward a Theory of Situation Awareness in Dynamic Systems*](https://doi.org/10.1518/001872095779049543)
+- [Endsley, *Automation and Situation Awareness* (Endsley & Kiris 1995 실험을 저자가 정리한 장)](https://maritimesafetyinnovationlab.org/wp-content/uploads/2019/12/Automation-and-Situation-Awareness-Endsley.pdf)
 - [Suchman, *Plans and Situated Actions* / Lancaster profile](https://www.lancaster.ac.uk/humanities-arts-and-social-sciences/people/lucy-suchman)
 - [Hutchins, *Cognition in the Wild*](https://mitpress.mit.edu/9780262581462/cognition-in-the-wild/)
 
@@ -63,6 +66,24 @@
 - [Docker, *Running containers*](https://docs.docker.com/engine/containers/run/)
 - [Docker, *Host network driver*](https://docs.docker.com/engine/network/drivers/host/)
 - [NVIDIA, *JetPack release notes*](https://docs.nvidia.com/jetson/jetpack/release-notes/index.html)
+
+## 맥락 관리와 에이전트 운영
+
+- [Anthropic, *Effective context engineering for AI agents*](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
+- [Anthropic, *Context engineering: memory, compaction, and tool clearing*](https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools)
+- [Anthropic, *Equipping agents for the real world with Agent Skills*](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
+- [Anthropic, *How we built our multi-agent research system*](https://www.anthropic.com/engineering/multi-agent-research-system)
+- [Anthropic, *Writing tools for agents*](https://www.anthropic.com/engineering/writing-tools-for-agents)
+- [Anthropic, *Code execution tool*](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)
+- [Anthropic, *Extended thinking*](https://platform.claude.com/docs/en/build-with-claude/extended-thinking)
+- [Anthropic, *Prompt caching*](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)
+- [Anthropic, *Structured outputs*](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)
+- [Claude Code, *Hooks*](https://code.claude.com/docs/en/hooks)
+- [Model Context Protocol, *Architecture*](https://modelcontextprotocol.io/docs/learn/architecture)
+
+이 묶음은 본문이 인용한 정의와 수치를 원문에서 확인했다. cookbook 문서의 측정값
+(최대 맥락 335,279 토큰, 파일 읽기 결과 96.3%, 메모리 사용 세션 5K 대 미사용 332K)은
+그 문서가 돌린 실행의 값이고 이 책이 잰 것이 아니다.
 
 ## 논증과 원고 작성
 

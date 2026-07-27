@@ -5,7 +5,8 @@
 
 ## 도구 역할을 먼저 나눈다
 
-처음에는 연구 상태와 도구 역할을 함께 정한다. 모델명은 이어서 문제다.
+처음에는 연구 상태와 도구 역할을 함께 정한다. 모델명은 이어서 문제다. 역할을 먼저
+정해 두면 그 자리를 맡을 제품은 나중에 갈아 끼울 수 있다.
 
 | 연구 장면 | 먼저 열 도구 | 첫 확인 |
 |---|---|---|
@@ -19,8 +20,17 @@
 같은 AI 제품이 여러 역할을 할 수 있다. 한 요청 안에서 역할이 바뀌면
 확인 기준도 다시 적는다.
 
+도구를 새로 붙일 때도 같은 가름이 필요하다.
+[Model Context Protocol](https://modelcontextprotocol.io/docs/learn/architecture)에서
+host는 server마다 client를 하나씩 만들어 전용 연결을 유지하고, 서버는 세 가지를 함께
+내놓는다. 실행되는 것은 tool, 맥락으로 읽히는 자료는 resource, 다시 쓰는 틀은 prompt다.
+서버 하나를 붙이면 셋이 한꺼번에 들어오므로 무엇을 어느 역할로 쓸지 붙이는 자리에서
+갈라 둔다. 클라이언트 쪽에는 sampling과 elicitation, logging이 있고, elicitation은
+서버가 사용자에게 추가 정보나 확인을 요청하는 통로다. 사람이 확인을 맡는 자리가 여기다.
+
 ## 작업 공간을 나눈다
 
+역할과 확인 기준은 파일로 남아야 다음 세션이 이어받는다.
 루트에는 AI가 먼저 읽을 파일 셋을 두고 나머지는 성격별 폴더로 가른다.
 
 ```text
@@ -35,10 +45,12 @@ workspace/
 └── templates/
 ```
 
+이 폴더들은 서로 다른 디스크에 둘 수 있다.
 동기화 폴더, 외장 디스크, 원격 서버를 쓰면 Git 메타데이터와 데이터셋 저장 위치를
 먼저 정한다. 코드 이력, 원시 데이터, 실험 결과물, 비공개 메모는 처음부터
 나눠 둔다.
 
+공개 번들은 이 책의 가이드 묶음이다. 옮길 파일은 그 묶음 안 `templates/` 아래에 모여 있다.
 새 작업 공간을 처음 만들 때는 공개 번들에서 다음 파일을 먼저 복사한다.
 
 | 공개 번들 | 새 작업 공간 |
@@ -122,6 +134,7 @@ Get-Content .\project-memory.json | ConvertFrom-Json | Out-Null
 New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 ```
 
+복사만 마친 파일에는 빈칸이 남아 있다.
 `project-memory.json`에는 다섯 묶음이 있어야 한다. `source_of_truth`는 AI가
 다시 읽을 파일을 가리킨다. 연구 장면별 도구 역할은 `tool_surface_map`에 나눠
 적는다. 지금 쓸 수 있는 말과 보류할 말은 `current_evidence`에서 가른다.
@@ -130,12 +143,13 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 
 Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 세션(session)을 사건의 append-only log, 하네스(harness)를 모델 호출과 도구 전달을 맡는 loop, 샌드박스(sandbox)를 실행 환경으로 정의한다. 여기 있는 파일은 그 세 역할을 작은 연구 작업 공간에 대응한 것이다. 세션 기록은 `project-memory.json`과 기록 장부가 받쳐 준다. 하네스 규칙은 `AGENTS.md`와 프롬프트 템플릿에 담고, 저장소·데이터셋·결과물·명령은 샌드박스에서 다룬다. 첫 AI 세션에서는 이 세 경계를 먼저 밝히고 행동 하나만 고른다.
 
-그러고 나서 `notes/first-ai-session-prompt.md`의 `Prompt To Send` 블록에서 빈칸을
-채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 첫 AI 세션에는
-이 파일을 그대로 넣는다.
+이 세 경계를 적을 자리가 `notes/first-ai-session-prompt.md`의 `Prompt To Send`
+블록이다. 빈칸을 채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 첫 AI
+세션에는 이 파일을 그대로 넣는다.
 
 ## AGENTS.md 작성
 
+루트의 `README.md`와 `AGENTS.md`에도 같은 빈칸이 남아 있다.
 [`templates/workspace-readme.md`](templates.html#templates-workspace-readme)를 `README.md`로
 복사해 프로젝트 이름과 저장소, 데이터셋, 결과물 위치만 채운다. 그다음
 [`templates/AGENTS.template.md`](templates.html#templates-agents-template)에서
@@ -154,8 +168,19 @@ Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agen
 규칙의 의미를 먼저 본다. “가정을 드러내라”, “작게 고쳐라”, “성공 기준을 검증 가능하게
 만들어라” 같은 규칙은 Codex에서도 그대로 쓴다.
 
+한 가지 작업에서만 쓰는 절차는 폴더 하나로 떼어 `AGENTS.md` 옆에 둔다. Anthropic의
+[Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)는
+skill을 특정 작업을 더 잘 해내도록 에이전트가 찾아내 필요할 때 불러 쓰는 지시·스크립트·자료의
+폴더로 정의한다. `SKILL.md`는 YAML frontmatter로 열고 `name`과 언제 쓰는지 적는
+`description`이 필수다. 이 부록이 파일마다 물어 온 `이 파일을 언제 여나`가 그
+`description` 칸에 들어간다. 단계적 공개는 세 층이다. 1층은 이름과 description만
+system prompt에 올리고, 2층은 관련 있다고 판단하면 `SKILL.md` 본문을 읽고, 3층은
+같은 폴더의 다른 파일을 필요할 때 읽는다. 폴더를 여러 개 두어도 1층에 올라가는 것은
+이름과 description뿐이다.
+
 ## 첫 상태 체크리스트를 채운다
 
+`AGENTS.md`의 `project truth`와 `durable corrections`에 채울 내용은 여기서 나온다.
 [`templates/first-day-workspace-checklist.md`](templates.html#templates-first-day-workspace-checklist)에서
 현재 연구 상태의 원본 파일과 실행 결과를 정한다.
 
@@ -171,6 +196,7 @@ durable corrections:
 
 ## 첫 AI 요청을 좁힌다
 
+첫 요청이 읽을 것은 방금 채운 두 파일이다.
 첫 요청은 [`templates/first-ai-session-prompt.md`](templates.html#templates-first-ai-session-prompt)를
 채워서 보낸다. 가장 작은 형태는 이렇다.
 
@@ -192,6 +218,8 @@ available.
 
 ## 연구 루프를 하나만 고른다
 
+`project-memory.json`의 `first_research_loop`에 고정할 루프를 여기서 고른다.
+
 | 상황 | 시작 템플릿 |
 |---|---|
 | 논문 한 편을 읽는다 | [`paper-code-experiment-map.md`](templates.html#templates-paper-code-experiment-map) |
@@ -201,12 +229,12 @@ available.
 | 원고 문장을 고친다 | [`claim-evidence-map.md`](templates.html#templates-claim-evidence-map) |
 
 한 번에 여러 루프를 열면 요청이 다시 넓어지므로 첫 요청의 성공 기준은 하나만
-둔다. 요청은 이렇게 좁힌다. "이 논문의 central claim, active code path
+둔다. 표 첫 줄을 골랐다면 요청은 이렇게 좁힌다. "이 논문의 central claim, active code path
 확인 대상, experiment protocol 빈칸을 분리하라."
 
 ## 결과를 기록에 남긴다
 
-작업이 끝나면 `project-memory.template.json`이나
+작업이 끝나면 `project-memory.json`이나
 `weekly-research-ledger.md`에 세 줄을 남긴다.
 
 ```text
@@ -215,9 +243,10 @@ available.
 다음 행동:
 ```
 
-AI가 잘못된 가정을 세웠다면 `replay-case.md`에 반복 확인 사례로 적는다. 적어 두면
-다음 세션은 그 사례를 읽고 시작한다.
+AI가 잘못된 가정을 세웠다면 `templates/`에 함께 복사된 `replay-case.md`에 반복 확인
+사례로 적는다. 적어 두면 다음 세션은 그 사례를 읽고 시작한다.
 
+세 줄 가운데 아직 말하면 안 되는 주장은 `claim_boundaries`가 받는다.
 첫 세션이 끝난 뒤 `project-memory.json`의 `current_evidence`,
 `first_research_loop`, `claim_boundaries`, `next_smallest_actions`를 함께 고친다.
 이 기록을 바꾸면 다음 AI 세션이 같은 근거 범위를 이어받는다.
