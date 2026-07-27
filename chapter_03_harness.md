@@ -4,13 +4,13 @@ AI와 작업하다 보면 한 번에 바뀌는 자리가 쉽게 늘어난다. �
 
 번짐은 요청 하나가 도는 동안 일어난다. 그 안에서 도구를 언제 부를지 정하는 절차는 연구에서 먼저 나왔다. [ReAct](https://arxiv.org/abs/2210.03629)는 reasoning trace와 task-specific action을 번갈아 생성하게 해, 지식 베이스나 환경에서 새 정보를 얻으며 plan을 고치게 했다. [Toolformer](https://arxiv.org/abs/2302.04761)는 calculator, QA, search, translation, calendar API를 언제 부를지, 어떤 인자를 넘길지 모델이 학습하게 했다. 두 연구에서 도구를 부른 쪽은 모델이었다. 돌아온 출력은 모델이 다음 행동을 정하는 재료가 됐다. 연구 작업에서는 그 출력을 사람이 한 번 더 써서 원고 문장의 근거로 대고 심사 의견에 답한다. 출력은 모델이 만든 설명과 같은 자리에 문장으로 돌아오므로, 도구를 불렀다는 것과 그 출력으로 어디까지 말할 수 있는지는 따로 센다. `git diff`, `ros2` 출력, metric CSV, PDF build 결과가 각각 어떤 말을 허용하는지 하나씩 짚어 둔다.
 
-도구를 부르는 자리를 늘리는 쪽으로 더 밀면 에이전트를 여럿 세우게 된다. Anthropic의 [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)은 orchestrator-worker 짜임을 적었다. lead agent가 조율하고 subagent가 병렬로 돈다. Opus 4 lead에 Sonnet 4 subagent를 붙인 구성은 내부 연구 평가에서 단일 Opus 4보다 90.2% 높았고, 병렬 도구 호출은 복잡한 질의 시간을 최대 90% 줄였다. 값도 같은 문서에 적혀 있다. 에이전트 하나는 대화보다 약 4배 토큰을 쓴다. 여럿을 병렬로 세우면 그 값이 약 15배로 올라간다. 문서는 `token usage by itself explains 80% of the variance`라고 적었다. 안 맞는 자리도 문서가 적어 두었다 — 맥락을 공유해야 하는 일, 에이전트끼리 의존이 깊은 일, 대부분의 코딩 작업, 실시간 조율이다. 연구실에서 코드를 고치고 그 결과를 실험 해석과 원고 문장에 대는 일이 그 목록 안에 있다.
+도구를 부르는 자리를 늘리는 쪽으로 더 밀면 에이전트를 여럿 세우게 된다. Anthropic의 [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)은 orchestrator-worker 짜임을 적었다. lead agent가 조율하고 subagent가 병렬로 돈다. Opus 4 lead에 Sonnet 4 subagent를 붙인 구성은 내부 연구 평가에서 단일 Opus 4보다 90.2% 높았고, 병렬 도구 호출은 복잡한 질의 시간을 최대 90% 줄였다. 그 값을 내는 데 드는 것도 같은 문서에 적혀 있다. 에이전트 하나는 대화보다 약 4배 토큰을 쓴다. 여럿을 병렬로 세우면 그 값이 약 15배로 올라간다. 같은 평가에서 성과가 갈린 폭을 놓고 문서는 `token usage by itself explains 80% of the variance`라고 적었다. 토큰을 얼마나 썼는지가 결과 차이의 대부분을 설명했다는 뜻이다. 안 맞는 자리도 문서가 적어 두었다 — 맥락을 공유해야 하는 일, 에이전트끼리 의존이 깊은 일, 대부분의 코딩 작업, 실시간 조율이다. 연구실에서 코드를 고치고 그 결과를 실험 해석과 원고 문장에 대는 일은 넷 가운데 앞의 둘에 걸린다. 같은 dataset과 같은 config를 여럿이 함께 봐야 하고, 뒤 판단이 앞 판단의 결과를 받아 서기 때문이다.
 
 에이전트를 하나로 세워도 돌아온 것을 짚는 일은 사람 몫이다. [Bainbridge가 1983년에 적은 automation의 역설](https://doi.org/10.1016/0005-1098(83)90046-8)은 AI 작업에도 나타난다. 자동 제어 장치는 사람보다 그 일을 잘하기 때문에 들어갔는데, 사람에게는 그 장치가 제대로 도는지 지켜보는 일이 남았다. 규칙을 온전히 적을 수 있으면 컴퓨터가 더 빨리 판단하므로, 사람이 실시간으로 확인할 방법은 없다고 Bainbridge는 적었다. 감시는 작업이 끝난 뒤 남은 것을 놓고 하고, 한 번에 바뀐 자리가 여럿이면 그 여럿을 모두 짚어야 한다. 짚을 자리를 한 곳으로 두려면 한 번의 AI 작업이 어디까지 바꿀지를 좁게 잡아야 한다.
 
 ## 손대기 전에 적어 둔다
 
-어디까지인지는 작업을 시작하기 전에 적는다. 비중 있는 작업은 아래 여섯 줄을 먼저 둔다.
+어디까지인지는 작업을 시작하기 전에 적는다. 앞 장의 다섯 줄이 답을 받은 뒤에 붙는 기록이라면, 아래 여섯 줄은 요청을 보내기 전에 두는 것이다. 비중 있는 작업은 이 여섯 줄을 먼저 둔다.
 
 ```text
 지금 실제로 본 것:
@@ -25,7 +25,7 @@ AI와 작업하다 보면 한 번에 바뀌는 자리가 쉽게 늘어난다. �
 
 ## 지금 어느 갈래에 서 있나
 
-둘째 줄의 `바꾸려는 대상`은 지금 하는 일이 어느 갈래인지에 따라 달라진다. 연구 작업의 갈래는 여덟 줄로 나눠 적어 두었다.
+둘째 줄의 `바꾸려는 대상`은 지금 하는 일이 어느 갈래인지에 따라 달라진다. 부록 D가 연구 작업의 갈래를 여덟 줄로 나눠 두었다.
 
 | 작업 | 적용 상황 |
 |---|---|
@@ -54,13 +54,13 @@ AI와 작업하다 보면 한 번에 바뀌는 자리가 쉽게 늘어난다. �
 
 권한을 적어 두면 요청과 행동이 같은 것을 가리킨다. 파일을 읽기만 해야 하는 자리에는 `읽기만`을, 실행 결과가 있어야 다음 말이 나오는 자리에는 `실행 요청`을 적는다.
 
-적어 둔 권한을 지키는 쪽은 사람이다. 그렇게 지키던 줄 하나는 기계에도 걸어 둘 수 있다. Claude Code의 [hook](https://code.claude.com/docs/en/hooks)은 수명주기의 정해진 지점에서 도는 셸 명령이나 HTTP 엔드포인트, LLM 프롬프트다. 지점은 세 주기로 나뉜다 — 세션당 한 번(`SessionStart`·`SessionEnd`), 턴당 한 번(`UserPromptSubmit`·`Stop`), 도구 호출마다(`PreToolUse`·`PostToolUse`). `PreToolUse`에서 종료 코드 2가 나오면 그 도구 호출이 막힌다. `읽기만`이라고 적어 둔 자리에서 편집 도구가 불리면 호출은 그 자리에서 멈추고, JSON으로 `{"decision": "block", "reason": ...}`를 내면 막은 이유가 함께 기록에 남는다.
+적어 둔 권한을 지키는 쪽은 사람이다. 그렇게 지키던 줄 하나는 기계에도 걸어 둘 수 있다. Claude Code의 [hook](https://code.claude.com/docs/en/hooks)은 수명주기의 정해진 지점에서 도는 셸 명령이나 HTTP 엔드포인트, LLM 프롬프트다. 지점은 세 주기로 나뉜다 — 세션당 한 번(`SessionStart`·`SessionEnd`), 턴당 한 번(`UserPromptSubmit`·`Stop`), 도구 호출마다(`PreToolUse`·`PostToolUse`). `PreToolUse`에서 종료 코드 2가 나오면 그 도구 호출이 막힌다. 무엇을 막을지 정하는 것은 우리가 거기 걸어 두는 스크립트다. 이번 작업에 `읽기만`이라고 적어 두었으면 편집 도구가 불릴 때 2를 내게 써 두고, 그러면 호출이 그 자리에서 멈춘다. JSON으로 `{"decision": "block", "reason": ...}`를 내면 막은 이유가 함께 기록에 남는다.
 
 ## 나중에 읽을 사람은 나다
 
 막은 이유든 실행한 결과든, 작업이 끝나면 파일에 적힌 것으로 남는다. [Anthropic의 Claude Code 사용 분석](https://www.anthropic.com/research/claude-code-expertise)은 judged success와 별도로 verified success를 두고, passing test, matching commit, 목표와 맞는 command output, 사용자의 명시적 확인을 집계했다. 약 40만 세션을 놓고 성공을 세는 쪽에는 나중에 다시 볼 수 있는 자국이 있어야 했다. 작업 하나를 끝내고 쓰는 완료 보고에도 같은 조건이 붙는다. 그 보고를 나중에 읽는 쪽은 나다. 그때 손에 남는 것은 보고에 적힌 자국뿐이다.
 
-에이전트를 여럿 두는 쪽에도 같은 조건이 걸린다. Anthropic이 [긴 작업의 context를 다루는 방법](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)으로 든 것은 compaction과 structured note-taking, 그리고 sub-agent였다. sub-agent는 각자 좁은 일을 하고 1,000~2,000 토큰짜리 요약만 돌려준다. 그 일에서 무엇을 봤든 lead agent 쪽으로 건너가는 것은 그 요약이다. 같은 글은 좋은 context engineering을 "finding the *smallest* *possible* set of high-signal tokens that maximize the likelihood of some desired outcome"이라고 적었다. 완료 보고에 어느 낱말을 적느냐가 다음 세션이 받는 전부를 정한다.
+에이전트를 여럿 두는 쪽에도 같은 조건이 걸린다. Anthropic이 [긴 작업의 context를 다루는 방법](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)으로 든 것은 compaction과 structured note-taking, 그리고 sub-agent였다. sub-agent는 각자 좁은 일을 하고 1,000~2,000 토큰짜리 요약만 돌려준다. 그 일에서 무엇을 봤든 lead agent 쪽으로 건너가는 것은 그 요약이다. 같은 글은 좋은 context engineering을 "finding the *smallest* *possible* set of high-signal tokens that maximize the likelihood of some desired outcome"이라고 적었다. 완료 보고에 어느 낱말을 적느냐가 다음에 그 자리를 열 사람이 무엇을 손에 쥐는지를 정한다.
 
 | 넓은 보고 | 더 나은 보고 |
 |---|---|
@@ -69,6 +69,6 @@ AI와 작업하다 보면 한 번에 바뀌는 자리가 쉽게 늘어난다. �
 | 논문 답변이 준비됐다 | Table 2 조건과 response scope를 맞췄다 |
 | repo를 이해했다 | 파일 A/B/C와 남은 질문 D를 확인했다 |
 
-오른쪽 칸의 command X, 조건 P, Table 2, 파일 A/B/C는 다음에 열어 짚어 볼 수 있는 이름이다. command X를 다시 돌리고 조건 P를 다시 맞춰 보면 보고에 적힌 말과 실제가 벌어진 자리가 드러난다. 이렇게 적힌 보고가 쌓이면 같은 어긋남이 두 번째로 나온 자리도 이름으로 드러난다. 다음 작업은 새 세션에서 시작하고 그 세션으로 건너가는 것은 파일에 적힌 것이므로, 두 번 나온 어긋남은 다음 세션이 시작할 때 확인할 규칙 한 줄로 옮겨 적는다. 그 줄을 `SessionStart`에 걸어 두면 세션이 열릴 때마다 다시 올라온다.
+오른쪽 칸의 command X, 조건 P, Table 2, 파일 A/B/C는 다음에 열어 짚어 볼 수 있는 이름이다. command X를 다시 돌리고 조건 P를 다시 맞춰 보면 보고에 적힌 말과 실제가 벌어진 자리가 드러난다. 이렇게 적힌 보고가 쌓이면 같은 어긋남이 두 번째로 나온 자리도 이름으로 드러난다. 다음 작업은 새 세션에서 시작하고 그 세션으로 건너가는 것은 파일에 적힌 것이므로, 두 번 나온 어긋남은 다음 세션이 시작할 때 확인할 규칙 한 줄로 옮겨 적는다. `SessionStart`가 세션당 한 번 도는 자리라, 그 줄을 읽어 오는 일을 여기 걸어 둘 수 있다.
 
 요약을 원본 대신 읽고 답했다면 원본부터 열게 하는 규칙을 남긴다. 저장소에 코드가 있다는 것을 지금 그 방법이 돌아간다는 뜻으로 받았으면 구현 상태 라벨이 그 규칙이 된다. reviewer comment를 문장 다듬기로 처리한 자국이 남았다면 다음 세션은 주장·근거 표부터 연다. 논문 문장과 공개 코드와 runtime 결과가 각각 어디까지를 허락하는지는 이어지는 장에서 하나씩 가른다.

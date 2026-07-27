@@ -4,7 +4,7 @@
 
 이 항목들이 같은지는 수치를 내놓은 쪽이 무엇을 함께 냈는지에서 갈린다. benchmark는 수치와 함께 evaluation script, dataset protocol, failure policy를 낸다. 그 수치를 받아 쓰는 쪽이 같은 수를 다시 얻으려면 그것들이 있어야 하기 때문이다. Pineau 등은 [NeurIPS 2019 재현성 프로그램](https://arxiv.org/abs/2003.12206)에서, 논문이나 발표에 제시된 것과 비슷한 결과를 같은 코드와, 구할 수 있으면 같은 데이터로 다시 얻는 일을 연구 결과의 신뢰성을 확인하는 데 필요한 단계로 적었다. 로보틱스에서는 코드와 데이터에 sensor 입력, frame, calibration, alignment이 더 붙는다. 낮은 error, 높은 success rate, 짧은 latency를 원고에 쓰려면 그 수치가 나온 조건도 함께 적어야 한다.
 
-조건을 숫자로 적어 둔 실행 환경도 있다. Anthropic의 [code execution tool 문서](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)는 Claude가 Bash command를 돌리고 파일을 다루는 sandbox를 두고 Python 3.11, 리눅스 컨테이너, x86_64, 메모리 5 GiB, 디스크 5 GiB, CPU 1개를 적었다. 프로그램적 도구 호출에서는 REPL 셀마다 90초 벽시계 제한이 걸린다. 어떤 수치를 이 sandbox에서 뽑았다면 CPU 1개와 5 GiB와 셀당 90초가 latency를 재는 순간 그대로 그 수치의 조건이 된다. 연구실 기계에서 잰 값에는 그 기계의 경계값이 같은 자리에 들어간다.
+조건을 숫자로 적어 둔 실행 환경도 있다. Anthropic의 [code execution tool 문서](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)는 Claude가 Bash command를 돌리고 파일을 다루는 sandbox를 두고 Python 3.11, 리눅스 컨테이너, x86_64, 메모리 5 GiB, 디스크 5 GiB, CPU 1개를 적었다. 코드를 셀 단위로 넘겨 돌리는 쪽에서는 셀 하나가 90초 벽시계 안에서 끝나야 한다. 어떤 수치를 이 sandbox에서 뽑았다면 CPU 1개와 메모리 5 GiB가 latency를 재는 순간 그대로 그 수치의 조건이 되고, 셀 단위로 돌린 것이면 90초도 함께 붙는다. 연구실 기계에서 잰 값에는 그 기계의 경계값이 같은 자리에 들어간다.
 
 어느 기계에서 어느 dataset으로 잰 값인지를 수치마다 되짚으려면 물음이 한 벌 정해져 있어야 한다. 부록 D에 숫자를 다시 마주쳤을 때 던질 물음이 여섯 줄로 있다.
 
@@ -57,7 +57,7 @@ dataset, split, baseline, output path 줄이 여섯 줄에 그대로 답한다. 
 | cache/checkpoint | 현재 model과 config에서 나온 결과물인가 |
 | failure policy | 실패 구간을 평균이나 집계에서 어떻게 처리했는가 |
 
-`cache/checkpoint` 줄은 `현재 model과 config에서 나온 결과물인가`를 묻는다. 실행 환경이 요청 사이에 상태를 이어 주면 이 물음이 걸린다. 앞의 code execution tool 문서는 컨테이너가 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아나고, `code_execution_20260120` 이후로는 변수 바인딩도 요청 사이에 남는다고 적었다. 앞 요청에서 정한 값이 이번 요청에도 그대로 살아 있을 수 있으니 결과물을 열어 이 줄을 짚는다. 컨테이너는 30일 뒤 만료되므로 그 상태가 남는 기간은 30일까지다.
+`cache/checkpoint` 줄은 `현재 model과 config에서 나온 결과물인가`를 묻는다. 실행 환경이 요청 사이에 상태를 이어 주면 이 물음이 걸린다. 앞의 code execution tool 문서는 컨테이너가 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다고 적었다. 도구 판을 `code_execution_20260120` 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 요청에서 정한 값이 이번 요청에도 그대로 살아 있을 수 있으니 결과물을 열어 이 줄을 짚는다. 같은 문서는 컨테이너가 30일 뒤 만료된다고도 적었다.
 
 한 항목이 어긋나면 그 수치는 보류하고, 어긋난 자리를 최소 기록에 적는다.
 
@@ -76,7 +76,7 @@ dataset, split, baseline, output path 줄이 여섯 줄에 그대로 답한다. 
 
 metric script, baseline, output path는 여섯 줄이 묻던 것이다. 실행할 때 적어 둔 값과 지금 읽는 값이 같으면 두 수치가 한 표에 들어간다.
 
-`metric script` 줄에는 script 이름 말고 그 script가 돌아간 라이브러리 판도 걸린다. 앞의 code execution tool 문서는 이 sandbox의 인터넷이 완전히 막혀 있어 미리 깔린 패키지만 돈다고 적었다 — pandas, numpy, scipy, scikit-learn, matplotlib, pyarrow, pypdf 등이다. 이 sandbox에서는 어느 판에서 돌았는지가 문서에 적힌 목록으로 고정돼 있다. 같은 물음을 연구실 기계에서 돌린 script에 걸면, 그 판을 적은 줄이 같은 자리에 들어간다.
+`metric script` 줄에는 script 이름 말고 그 script가 돌아간 라이브러리 판도 걸린다. 앞의 code execution tool 문서는 이 sandbox의 인터넷이 완전히 막혀 있어 미리 깔린 패키지만 돈다고 적었다 — pandas, numpy, scipy, scikit-learn, matplotlib, pyarrow, pypdf 등이다. 이 sandbox에서 쓸 수 있는 패키지는 그 목록으로 정해져 있다. 어느 판인지까지는 문서가 적어 두지 않았다. 같은 물음을 연구실 기계에서 돌린 script에 걸면, 그 판을 적은 줄이 같은 자리에 들어간다.
 
 ## 원고 문장에 조건을 단다
 
@@ -92,4 +92,4 @@ metric script, baseline, output path는 여섯 줄이 묻던 것이다. 실행�
 
 ## 실패한 실행도 기록할 결과다
 
-최소 기록의 칸은 결과 파일이 나온 실행을 받는다. output path와 metric 칸이 결과 파일에서 채워지기 때문이다. 실패한 실행도 기록할 결과다. timeout, OOM, sensor dropout, tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험의 조건을 정하는 자료가 된다. 목록의 failure policy 칸은 집계에서 실패 구간을 어떻게 다뤘는지를 받고, 멈춘 실행에는 목록을 한 벌 따로 적어 어디까지 갔는지를 남긴다. 실패 하나가 실행의 어느 지점에서 나왔는지에 따라 다음에 고칠 자리가 갈린다. 어느 단계에서 끊겼는지를 가르는 일은 다음 장이 맡는다.
+최소 기록의 칸은 결과 파일이 나온 실행을 받는다. output path와 metric 칸이 결과 파일에서 채워지기 때문이다. 실패한 실행도 기록할 결과다. timeout, OOM, sensor dropout, tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험의 조건을 정하는 자료가 된다. 최소 기록의 failure policy 칸은 집계에서 실패 구간을 어떻게 다뤘는지를 받고, 멈춘 실행에는 그 한 벌을 따로 적어 어디까지 갔는지를 남긴다. 실패 하나가 실행의 어느 지점에서 나왔는지에 따라 다음에 고칠 자리가 갈린다. 어느 단계에서 끊겼는지를 가르는 일은 다음 장이 맡는다.

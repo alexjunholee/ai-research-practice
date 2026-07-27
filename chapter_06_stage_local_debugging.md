@@ -33,7 +33,7 @@ evaluation
 
 1부터 5까지 다섯 줄의 `stage:`는 모두 `input`이다. 1에서 topic 이름이 목록에 보이는데도 callback이 빈 채로 있으면 다음에 볼 것은 profile이다. ROS2 기본 profile은 RELIABLE이고 sensor data profile은 BEST_EFFORT라 driver와 받는 쪽이 어긋나면 메시지가 안 온다. 2가 보는 것이 이 어긋남이다. topic이 오는 것을 눈으로 본 뒤에야 `next stage:`에 `preprocessing`을 적는다. 5가 보는 container device와 network와 volume은 실행 환경 쪽에 속한다. 실행 환경 쪽 증상 하나하나를 어디서 볼지는 Ch.9에서 참조표로 세운다.
 
-1의 `ros2 topic list`를 AI가 대신 찍고 결과를 옮겨 줄 때는 자리가 하나 더 생긴다. 빈 목록과 잘린 응답이 같은 모양으로 오기 때문이다. Anthropic의 [도구 작성 지침](https://www.anthropic.com/engineering/writing-tools-for-agents)은 도구가 high signal information만 에이전트에 돌려주게 하라고 적었다. Claude Code는 도구 응답을 기본 25,000 토큰으로 제한한다. 같은 문서는 그 한계에 맞춰 도구 응답에 pagination, 범위 선택, 필터, 잘라내기를 두라고 적었다. 옮겨 받은 목록을 그대로 적어 두기 전에 그 응답이 25,000 토큰에서 끊겼는지를 먼저 본다. 끊긴 응답이면 topic 이름을 좁혀 다시 찍은 결과를 받는다.
+1의 `ros2 topic list`를 AI가 대신 찍고 결과를 옮겨 줄 때는 자리가 하나 더 생긴다. 도구 응답에는 길이 제한이 걸린다. Anthropic의 [도구 작성 지침](https://www.anthropic.com/engineering/writing-tools-for-agents)은 도구가 high signal information만 에이전트에 돌려주게 하라고 적었고, 응답에 pagination과 범위 선택과 필터와 잘라내기를 두라고 적었다. Claude Code는 도구 응답을 기본 25,000 토큰으로 제한한다. 이 제한이 걸린 응답은 뒤가 잘린 채로 온다. 짧게 온 목록을 그대로 적어 두기 전에 그것이 빈 목록인지 잘린 목록인지를 먼저 가른다. 잘린 것이면 topic 이름을 좁혀 다시 찍은 결과를 받는다.
 
 ## 떨어진 숫자는 맨 위부터
 
@@ -47,7 +47,7 @@ evaluation
 6. metric script와 failure policy 확인
 7. 그다음 model architecture, training 설정, control parameter 수정
 
-1과 2는 `input`에 들어온 것과 거기 붙은 조건을 본다. 3은 `preprocessing`, 4는 `representation`, 5는 `matching`·`geometry`·`optimization`, 6은 `evaluation`이다. 앞 장에서 숫자마다 dataset과 split과 metric script를 적어 두었다면 1과 6은 그 기록을 다시 읽는 일이 된다. 7은 일곱 이름을 다 지나온 뒤에 남는다.
+일곱 이름은 데이터가 지나가는 차례다. `input`으로 들어온 것을 `preprocessing`이 손질하고, `representation`이 그것을 다루기 좋은 꼴로 바꿔 두면 `matching`이 짝을 찾고 `geometry`가 위치를 세우고 `optimization`이 전체를 맞춘다. 마지막 `evaluation`이 그 결과를 숫자로 잰다. 1과 2는 `input`에 들어온 것과 거기 붙은 조건을 본다. 3은 `preprocessing`, 4는 `representation`, 5는 `matching`·`geometry`·`optimization`, 6은 `evaluation`이다. 앞 장에서 숫자마다 dataset과 split과 metric script를 적어 두었다면 1과 6은 그 기록을 다시 읽는 일이 된다. 7은 일곱 이름을 다 지나온 뒤에 남는다.
 
 ## 본 것을 적어 두는 형식
 
@@ -73,7 +73,7 @@ next stage:
 
 ## 도구 탓인지 방법 탓인지
 
-같은 이름이 두 번 들어간 줄에서는 그 단계 안을 한 번 더 가른다. 같은 `stage:`에 적힌 실패라도 종류가 갈리면 다음에 할 일이 갈린다. 종류를 가르는 근거는 그 줄의 `observed signal:`에 이미 적혀 있다.
+같은 이름이 두 번 들어간 줄에서는 그 단계 안을 한 번 더 가른다. 같은 `stage:`에 적힌 실패라도 종류가 갈리면 다음에 할 일이 갈린다. 앞의 세 종류는 그 줄의 `observed signal:`에 적힌 것으로 갈린다.
 
 | 실패 종류 | 예 |
 |---|---|
@@ -84,7 +84,7 @@ next stage:
 
 첫 줄은 여러 자리를 한꺼번에 받는다. 빌드 성공은 첫 줄에서 한 자리를 지운다. 소스가 컴파일됐다는 사실이 그 한 자리고, `pip install`과 CUDA driver와 Docker volume과 dataset path는 그대로 남는다.
 
-같은 확인을 AI가 code execution tool 안에서 돌렸다면 첫 줄이 받는 자리가 달라진다. Anthropic의 [code execution tool 문서](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)는 그 컨테이너의 인터넷이 완전히 막혀 있다고 적었다. 이 실행에서 `pip install` 자리는 확인 전에 먼저 지워진다. 같은 문서가 적은 두 가지는 첫 줄에 자리를 하나 더 붙인다. 컨테이너는 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아나고, `code_execution_20260120` 이후로는 변수 바인딩도 요청 사이에 남는다. 앞 실행의 상태가 남아 있는 것이 그 자리다.
+같은 확인을 AI가 code execution tool 안에서 돌렸다면 첫 줄이 받는 자리가 달라진다. Anthropic의 [code execution tool 문서](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)는 그 컨테이너의 인터넷이 완전히 막혀 있어 런타임에 패키지를 받지 못한다고 적었다. 미리 깔린 것만 도는 자리라 `pip install`은 후보에서 빠지고, 대신 필요한 패키지가 그 목록에 있는지가 첫 줄의 자리로 들어온다. 같은 문서가 적은 두 가지는 첫 줄에 자리를 하나 더 붙인다. 컨테이너는 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다. 도구 판을 `code_execution_20260120` 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 실행의 상태가 남아 있는 것이 그 자리다.
 
 첫 줄의 자리들을 지우고 나면 둘째 줄이 선다. callback 없음과 tf lookup 실패는 둘째 줄에서 따로 본다. wrong metric script는 셋째 줄에서 따로 본다. output이 쓸 데에 맞는지는 `output path:`에 적은 파일을 열어 본다. 넷째 줄은 앞의 세 줄을 지운 뒤에 남는 자리다. 도구 실패를 넷째 줄에 적으면 아직 남아 있는 자리가 지워진 것으로 기록되고, 다음 확인이 같은 `stage:`로 돌아온다. 도구 실패와 방법 실패가 한 기록에 섞이면 부록 D가 적은 대로 멈춘다.
 

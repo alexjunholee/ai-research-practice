@@ -19,9 +19,9 @@ tool 호출 쪽으로는 논문이 정해 둔 것이 있다. Yao 등은 reasonin
 | framework 문서 | LangGraph, CrewAI, AutoGen, OpenAI Agents SDK | workflow, role 분리, tool handoff, tracing |
 | local research agent repo | `alexjunholee/robotics-research-agent` | user reaction prior, 연구 증거 확인 규칙 |
 
-첫 줄의 skill repo는 그 습관이 주고받을 수 있는 단위로 묶인 꼴이다. Anthropic은 [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)를 agent가 찾아 필요할 때 올려 쓰는, 지시와 스크립트와 자료를 담은 폴더로 적었다. `SKILL.md`는 YAML frontmatter로 열고 `name`과 언제 쓰는지를 적는 `description`이 필수다. 언제 쓰는지가 폴더 안에 함께 적혀 오므로, 그 습관이 이쪽 작업의 어느 자리에서 걸리는지도 같이 온다.
+첫 줄의 skill repo는 그 습관이 주고받을 수 있는 단위로 묶인 꼴이다. Anthropic은 [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)를 agent가 찾아 필요할 때 올려 쓰는, 지시와 스크립트와 자료를 담은 폴더로 적었다. `SKILL.md`는 YAML frontmatter로 열고 `name`과 언제 쓰는지를 적는 `description`이 필수다. 언제 쓰는지가 폴더 안에 함께 적혀 온다. 그 칸이 적는 것은 에이전트가 언제 이 폴더를 열지까지다. 이쪽 연구 작업의 어느 자리에서 걸리는지는 옮겨 오는 사람이 적는다.
 
-표의 `볼 것` 칸을 세 자리에 나눠 보면 어느 줄이 무엇을 주는지 갈린다. 작은 수정과 가정 명시와 실패 보고, role 분리와 tool handoff는 agent가 걸음마다 따를 문장이라 harness 자리에 붙는다. tracing과 user reaction prior는 다음 작업에서 다시 읽을 것이라 session 자리로 간다. 네 줄이 채우는 자리는 여기까지다.
+표의 `볼 것` 칸을 세 자리에 나눠 보면 어느 줄이 무엇을 주는지 갈린다. 작은 수정과 가정 명시와 실패 보고, role 분리와 tool handoff는 agent가 걸음마다 따를 문장이라 harness 자리에 붙는다. tracing과 user reaction prior는 다음 작업에서 다시 읽을 것이라 session 자리로 간다. 표의 `볼 것` 칸이 세 자리에 닿는 데까지가 여기다.
 
 ## 남의 규칙에 없는 것
 
@@ -58,7 +58,7 @@ tool 호출 쪽으로는 논문이 정해 둔 것이 있다. Yao 등은 reasonin
 
 다섯째 걸음의 실행 경계는 로봇을 돌리는 자리에서 하나 더 늘어난다. 로봇은 코드가 도는 기계 밖에서 움직인다. 장치와 시계와 네트워크의 현재 상태가 같은 경계 위에 놓인다. 그 상태를 적어 두는 일은 다음 장이 맡는다.
 
-일곱 걸음을 마치면 그 규칙은 `AGENTS.md`와 template 안에 놓이고, 다음 요청부터 agent가 그것을 읽는다. 규칙이 지켜졌는지는 agent가 답을 내놓는 자리에서 드러난다. 부록 B(`QUICKSTART.md`)의 첫 AI 요청 블록이 마지막 줄에서 요약으로 프로젝트의 참을 정하지 말라고 못 박은 것도 그 자리다. 그 블록은 답하기 전에 무엇을 밝힐지를 요청 안에 미리 적어 둔다. 옮겨 온 규칙에도 같은 자리를 하나 둔다. 연구자가 건 요청 하나에 agent가 답을 쓴다. 답변 전에 아래 항목을 확인한다.
+일곱 걸음을 마치면 그 규칙은 `AGENTS.md`와 template 안에 놓이고, 다음 요청부터 agent가 그것을 읽는다. 규칙이 지켜졌는지는 agent가 답을 내놓는 자리에서 드러난다. 부록 B(`QUICKSTART.md`)의 첫 AI 요청 블록이 마지막 줄에서 원문 파일이나 산출물이 손에 있는 자리에서는 요약으로 프로젝트의 참을 정하지 말라고 못 박은 것도 그 자리다. 그 블록은 답하기 전에 무엇을 밝힐지를 요청 안에 미리 적어 둔다. 옮겨 온 규칙에도 같은 자리를 하나 둔다. 연구자가 건 요청 하나에 agent가 답을 쓴다. 답변 전에 아래 항목을 확인한다.
 
 ```text
 읽지 않은 파일을 읽은 것처럼 말했는가:
