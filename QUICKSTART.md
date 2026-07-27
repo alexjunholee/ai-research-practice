@@ -5,7 +5,7 @@
 
 ## 도구 역할을 먼저 나눈다
 
-처음에는 연구 상태와 도구 역할을 함께 정한다. 모델명은 이어서 문제다. 역할을 먼저
+처음에는 연구 상태와 도구 역할을 함께 정한다. 모델명은 그다음 문제다. 역할을 먼저
 정해 두면 그 자리를 맡을 제품은 나중에 갈아 끼울 수 있다.
 
 | 연구 장면 | 먼저 열 도구 | 첫 확인 |
@@ -141,7 +141,7 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 처음 시작할 연구 루프 하나를 `first_research_loop`에 고정하고, 다음 세션의
 첫 행동은 `next_smallest_actions`에 남긴다.
 
-Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 세션(session)을 사건의 append-only log, 하네스(harness)를 모델 호출과 도구 전달을 맡는 loop, 샌드박스(sandbox)를 실행 환경으로 정의한다. 여기 있는 파일은 그 세 역할을 작은 연구 작업 공간에 대응한 것이다. 세션 기록은 `project-memory.json`과 기록 장부가 받쳐 준다. 하네스 규칙은 `AGENTS.md`와 프롬프트 템플릿에 담고, 저장소·데이터셋·결과물·명령은 샌드박스에서 다룬다. 첫 AI 세션에서는 이 세 경계를 먼저 밝히고 행동 하나만 고른다.
+Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 세션(session)을 사건의 append-only log로, 하네스(harness)를 모델 호출과 도구 전달을 맡는 loop로, 샌드박스(sandbox)를 실행 환경으로 정의한다. 여기 있는 파일은 그 세 역할을 작은 연구 작업 공간에 대응시킨 것이다. 세션 기록은 `project-memory.json`과 기록 장부가 받쳐 준다. 하네스 규칙은 `AGENTS.md`와 프롬프트 템플릿에 담고, 저장소·데이터셋·결과물·명령은 샌드박스에서 다룬다. 첫 AI 세션에서는 이 세 경계를 먼저 밝히고 행동 하나만 고른다.
 
 이 세 경계를 적을 자리가 `notes/first-ai-session-prompt.md`의 `Prompt To Send`
 블록이다. 빈칸을 채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 첫 AI
@@ -165,8 +165,8 @@ Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agen
 이미 `CLAUDE.md`, `.claude/`, Cursor 규칙이 있으면
 [`templates/codex-porting-checklist.md`](templates.html#templates-codex-porting-checklist)로
 옮길 규칙과 버릴 명령을 나눈다. 파일 이름과 플러그인 명령은 도구별 형식이므로
-규칙의 의미를 먼저 본다. “가정을 드러내라”, “작게 고쳐라”, “성공 기준을 검증 가능하게
-만들어라” 같은 규칙은 Codex에서도 그대로 쓴다.
+규칙의 의미를 먼저 본다. "가정을 드러내라", "작게 고쳐라", "성공 기준을 검증 가능하게
+만들어라" 같은 규칙은 Codex에서도 그대로 쓴다.
 
 한 가지 작업에서만 쓰는 절차는 폴더 하나로 떼어 `AGENTS.md` 옆에 둔다. Anthropic의
 [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)는

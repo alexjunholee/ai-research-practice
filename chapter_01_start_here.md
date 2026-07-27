@@ -104,6 +104,6 @@ AI가 만든 설명:
 
 한참 뒤에 다시 열어 봐도 어디까지가 AI의 말이고 어디부터가 눈으로 확인한 사실인지 그대로 남아 있다.
 
-다시 열어 보려면 다섯 줄이 파일로 있어야 한다. Claude의 [memory tool](https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools)(`memory_20250818`)은 client-side에서 돈다. Claude가 memory 조작을 호출하면 그 조작을 로컬에서 실행하는 쪽은 우리가 돌리는 도구다. 명령은 `view`·`create`·`str_replace`·`insert`·`delete`·`rename` 여섯이고, 그 여섯이 닿는 자리는 우리 디스크다. 다섯 줄을 손으로 적든 AI에 적게 하든 같은 파일에 붙고, 앞에 적은 줄을 열어 볼 수 있다. 이 파일은 맥락 창 밖에 있어서 세션이 바뀌어도 남는다.
+다시 열어 보려면 다섯 줄이 파일로 있어야 한다. Claude의 [memory tool](https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools)(`memory_20250818`)은 client-side에서 돈다. Claude가 memory 조작을 호출하면 그 조작을 로컬에서 실행하는 쪽은 우리가 돌리는 도구다. 명령은 `view`·`create`·`str_replace`·`insert`·`delete`·`rename` 여섯이고, 그 여섯이 닿는 자리는 우리 디스크다. 다섯 줄은 손으로 적든 AI에 적게 하든 같은 파일에 붙고, 앞에 적은 줄을 열어 볼 수 있다. 이 파일은 맥락 창 밖에 있어서 세션이 바뀌어도 남는다.
 
 다음 장에서는 이 기록으로 상태를 복원하는 방법을 다룬다. 한 번에 하나씩 바꾸는 방법은 그 뒤에 다룬다.

@@ -38,7 +38,7 @@ metric script:
 
 여섯 질문에는 순서가 있다. 논문 주장이 어느 table에 있는지에서 시작해 모듈이 저장소 어디에 있는지, 그 모듈이 예제에서 호출되는지, config key가 runtime에 읽히는지로 갈수록 열어 볼 데가 안으로 들어간다. 앞 질문의 답이 나와야 다음 질문을 걸 자리가 생긴다. 모듈 경로가 손에 있어야 그 모듈이 예제에서 호출되는지를 물을 데가 정해진다. 뒤의 두 질문은 시간을 묻는다. 논문 표의 숫자를 만든 script가 지금 저장소에 있는지, 논문 시점과 지금 branch 사이에 convention이 바뀌었는지다.
 
-필요할 때 다음 층을 여는 짜임은 에이전트 쪽에도 있다. Anthropic의 [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)는 지시와 script와 자료를 담은 폴더를 에이전트가 찾아 필요할 때 올려 쓰게 하고, 그 열림을 세 층으로 나눴다. 폴더마다 `SKILL.md` 한 장이 들어가 이름과 언제 쓰는지를 적는다. 1층은 그 이름과 description만 system prompt에 올라가고, 2층은 관련 있다고 판단했을 때 `SKILL.md` 본문을 읽고, 3층은 같은 폴더의 다른 파일을 필요할 때 연다. 목차로 시작해 장을 지나 자세한 부록으로 가는 잘 정리된 매뉴얼에 견주며, 필요한 만큼만 올린다고 적었다. 여섯 질문도 답이 나온 줄에서 다음 줄로 내려간다.
+필요할 때 다음 층을 여는 짜임은 에이전트 쪽에도 있다. Anthropic의 [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)는 지시와 script와 자료를 담은 폴더를 에이전트가 찾아 필요할 때 올려 쓰게 하고, 그 열림을 세 층으로 나눴다. 폴더마다 `SKILL.md` 한 장이 들어가고, 그 안에 이름과 언제 쓰는지가 적혀 있다. 1층에서는 그 이름과 description만 system prompt에 올라간다. 2층에서 관련 있다고 판단하면 `SKILL.md` 본문을 읽고, 3층에서 같은 폴더의 다른 파일을 필요할 때 연다. 목차로 시작해 장을 지나 자세한 부록으로 가는 잘 정리된 매뉴얼에 견주며, 필요한 만큼만 올린다고 적었다. 여섯 질문도 답이 나온 줄에서 다음 줄로 내려간다.
 
 답이 모이면 그 모듈의 상태를 한 낱말로 적을 수 있다. `저장소에 있다`에 다음 중 하나를 붙인다.
 
@@ -54,7 +54,7 @@ metric script:
 | dead | 남아 있으나 현재 경로 밖에 있다 |
 | unknown | 확인 전 |
 
-라벨은 두 자리에서 갈린다. planned-only와 tested-failed는 문서와 issue를 읽으면 붙는다. active와 configured-unused와 dead는 실행 경로를 따라가야 붙는다. disabled는 flag를 읽어 붙이고, 켜서 돌려 본 뒤에 다른 라벨로 옮겨 간다. unknown은 물어 두고 답을 기다리는 자리다. 빈칸은 묻지 않았다는 뜻으로도 해당 없음이라는 뜻으로도 읽히므로, 물어 둔 자리에는 unknown을 적는다. 한쪽은 파일을 찾아 열면 그 자리에서 답이 나는 일이고, 다른 쪽은 이 branch와 이 config로 돌려 본 출력이 있어야 답이 나는 일이다. AI에 맡길 몫도 이 선에서 나뉜다.
+라벨은 두 자리에서 갈린다. planned-only와 tested-failed는 문서와 issue를 읽으면 붙는다. active와 configured-unused와 dead는 실행 경로를 따라가야 붙는다. disabled는 flag를 읽으면 붙는다. 켜서 돌려 본 뒤에는 다른 라벨로 옮겨 적는다. unknown은 물어 두고 답을 기다리는 자리다. 빈칸은 묻지 않았다는 뜻으로도 해당 없음이라는 뜻으로도 읽히므로, 물어 둔 자리에는 unknown을 적는다. 한쪽은 파일을 찾아 열면 그 자리에서 답이 나는 일이고, 다른 쪽은 이 branch와 이 config로 돌려 본 출력이 있어야 답이 나는 일이다. AI에 맡길 몫도 이 선에서 나뉜다.
 
 논문에서 방법의 구성요소를 뽑고, 저장소에서 관련 function, class, config를 찾고, issue thread와 README에 적힌 convention 변화를 모으는 일을 AI가 맡는다. 앞의 표가 물은 것 가운데 script 공개와 convention 변화는 코드 본문 밖에 답이 있다. YAML, launch command, issue comment, 실패한 sequence, table caption까지 내려가게 한다. 실제 호출 여부, config가 runtime에 도달하는지, dataset과 metric 조건이 같은지, 원고에서 어디까지 말할 수 있는지는 실행 결과를 보고 사람이 적는다.
 

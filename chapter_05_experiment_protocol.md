@@ -2,7 +2,7 @@
 
 실제로 도는 코드를 갈라내고 실행을 걸면 수치가 나온다. 로보틱스 metric은 이름이 같아도 dataset, split, sensor, frame, calibration, alignment, metric script, failure policy, baseline이 다르면 서로 다른 조건을 잰 값이다. 두 수치를 나란히 놓는 일은 이 항목들이 같을 때 선다.
 
-이 항목들이 같은지는 수치를 내놓은 쪽이 무엇을 함께 냈는지에서 갈린다. benchmark는 수치와 함께 evaluation script, dataset protocol, failure policy를 낸다. 그 수치를 받아 쓰는 쪽이 같은 수를 다시 얻으려면 그것들이 있어야 하기 때문이다. Pineau 등은 [NeurIPS 2019 재현성 프로그램](https://arxiv.org/abs/2003.12206)에서, 논문이나 발표에 제시된 것과 비슷한 결과를 같은 코드와, 구할 수 있으면 같은 데이터로 다시 얻는 일을 연구 결과의 신뢰성을 확인하는 데 필요한 단계로 적었다. 로보틱스에서는 코드와 데이터에 sensor 입력, frame, calibration, alignment이 더 붙는다. 낮은 error, 높은 success rate, 짧은 latency를 원고에 쓰려면 그 수치가 나온 조건도 함께 적어야 한다.
+이 항목들이 같은지는 수치를 내놓은 쪽이 무엇을 함께 냈는지에서 갈린다. benchmark는 수치와 함께 evaluation script, dataset protocol, failure policy를 낸다. 그 수치를 받아 쓰는 쪽이 같은 수를 다시 얻으려면 그것들이 있어야 하기 때문이다. Pineau 등은 [NeurIPS 2019 재현성 프로그램](https://arxiv.org/abs/2003.12206)에서, 논문이나 발표에 제시된 것과 비슷한 결과를 같은 코드와, 구할 수 있으면 같은 데이터로 다시 얻는 일을 연구 결과의 신뢰성을 확인하는 데 필요한 단계로 적었다. 로보틱스에서는 코드와 데이터에 sensor 입력, frame, calibration, alignment가 더 붙는다. 낮은 error, 높은 success rate, 짧은 latency를 원고에 쓰려면 그 수치가 나온 조건도 함께 적어야 한다.
 
 조건을 숫자로 적어 둔 실행 환경도 있다. Anthropic의 [code execution tool 문서](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)는 Claude가 Bash command를 돌리고 파일을 다루는 sandbox를 두고 Python 3.11, 리눅스 컨테이너, x86_64, 메모리 5 GiB, 디스크 5 GiB, CPU 1개를 적었다. 코드를 셀 단위로 넘겨 돌리는 쪽에서는 셀 하나가 90초 벽시계 안에서 끝나야 한다. 어떤 수치를 이 sandbox에서 뽑았다면 CPU 1개와 메모리 5 GiB가 latency를 재는 순간 그대로 그 수치의 조건이 되고, 셀 단위로 돌린 것이면 90초도 함께 붙는다. 연구실 기계에서 잰 값에는 그 기계의 경계값이 같은 자리에 들어간다.
 
@@ -63,7 +63,7 @@ dataset, split, baseline, output path 줄이 여섯 줄에 그대로 답한다. 
 
 ## 두 실행이 같은 걸 재고 있나
 
-결과물이 맞으면 그 수치를 baseline이나 지난번 수치 옆에 놓는다. 그 직전에 두 실행이 같은 것을 재고 있는지를 아래 항목으로 짚는다. 여기 오는 것은 실행 둘을 맞대야 답이 나오는 항목이다. `task input/output`은 한 실행의 파일에서 값이 나오고, 그 값이 옆에 놓을 실행의 값과 같은지는 둘을 대 봐야 갈리므로 이 표에 선다.
+결과물이 맞으면 그 수치를 baseline이나 지난번 수치 옆에 놓는다. 그 직전에 두 실행이 같은 것을 재고 있는지를 아래 항목으로 짚는다. 이 표에는 실행 둘을 맞대야 답이 나오는 항목이 온다. `task input/output`이 그렇다 — 값은 한 실행의 파일에서 나오지만, 그 값이 옆에 놓을 실행의 값과 같은지는 둘을 대 봐야 갈린다.
 
 | 항목 | 확인 내용 |
 |---|---|

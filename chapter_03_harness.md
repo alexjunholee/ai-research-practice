@@ -54,7 +54,7 @@ AI와 작업하다 보면 한 번에 바뀌는 자리가 쉽게 늘어난다. �
 
 권한을 적어 두면 요청과 행동이 같은 것을 가리킨다. 파일을 읽기만 해야 하는 자리에는 `읽기만`을, 실행 결과가 있어야 다음 말이 나오는 자리에는 `실행 요청`을 적는다.
 
-적어 둔 권한을 지키는 쪽은 사람이다. 그렇게 지키던 줄 하나는 기계에도 걸어 둘 수 있다. Claude Code의 [hook](https://code.claude.com/docs/en/hooks)은 수명주기의 정해진 지점에서 도는 셸 명령이나 HTTP 엔드포인트, LLM 프롬프트다. 지점은 세 주기로 나뉜다 — 세션당 한 번(`SessionStart`·`SessionEnd`), 턴당 한 번(`UserPromptSubmit`·`Stop`), 도구 호출마다(`PreToolUse`·`PostToolUse`). `PreToolUse`에서 종료 코드 2가 나오면 그 도구 호출이 막힌다. 무엇을 막을지 정하는 것은 우리가 거기 걸어 두는 스크립트다. 이번 작업에 `읽기만`이라고 적어 두었으면 편집 도구가 불릴 때 2를 내게 써 두고, 그러면 호출이 그 자리에서 멈춘다. JSON으로 `{"decision": "block", "reason": ...}`를 내면 막은 이유가 함께 기록에 남는다.
+적어 둔 권한을 지키는 쪽은 사람이다. 그렇게 지키던 줄 하나는 기계에도 걸어 둘 수 있다. Claude Code의 [hook](https://code.claude.com/docs/en/hooks)은 수명주기의 정해진 지점에서 도는 셸 명령이나 HTTP 엔드포인트, LLM 프롬프트다. 지점은 세 주기로 나뉜다 — 세션당 한 번(`SessionStart`·`SessionEnd`), 턴당 한 번(`UserPromptSubmit`·`Stop`), 도구 호출마다(`PreToolUse`·`PostToolUse`). `PreToolUse`에서 종료 코드 2가 나오면 그 도구 호출이 막힌다. 무엇을 막을지 정하는 것은 우리가 거기 걸어 두는 스크립트다. 이번 작업에 `읽기만`이라고 적어 두었으면 편집 도구가 불릴 때 2를 내게 써 둔다. 그러면 호출이 그 자리에서 멈춘다. JSON으로 `{"decision": "block", "reason": ...}`를 내면 막은 이유가 함께 기록에 남는다.
 
 ## 나중에 읽을 사람은 나다
 

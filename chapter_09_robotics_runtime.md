@@ -128,7 +128,7 @@ ros2 topic list | grep camera
 
 ### Launch 파일
 
-생성된 ROS2 Python launch 파일에서는 다음 네 가지가 섞였는지 본다.
+생성된 ROS2 Python launch 파일에서는 다음 네 가지를 짚는다.
 
 - ROS1 XML 문법과 ROS2 Python 문법의 혼용
 - 노드 의존성을 고려하지 않은 `LaunchDescription` action 순서
@@ -191,7 +191,7 @@ Container를 띄운 뒤에 USB 장치를 꽂으면 기존 device mapping에는 �
 
 Docker 컨테이너 간 ROS2 통신에서 `--network=host`는 설정이 단순하지만 [host의 network namespace를 공유해 network isolation을 없앤다](https://docs.docker.com/engine/network/drivers/host/). 포트 충돌과 어디까지 열리는지를 함께 본다.
 
-ROS2가 bridge network에서 서로를 못 찾으면 DDS(Data Distribution Service) discovery에 쓰이는 multicast가 container 경계를 넘는지 본다. Docker bridge 설정에 따라 discovery packet이 밖으로 안 나갈 수 있다.
+ROS2 노드들이 bridge network에서 서로를 못 찾으면 DDS(Data Distribution Service) discovery에 쓰이는 multicast가 container 경계를 넘는지 본다. Docker bridge 설정에 따라 discovery packet이 밖으로 안 나갈 수 있다.
 
 ```bash
 # 가장 간단한 방법 (개발 환경에서)
@@ -224,7 +224,7 @@ export CYCLONEDDS_URI=file:///path/to/cyclone_dds.xml
 
 ### 파일 권한 문제
 
-Docker 안에서 만든 파일은 host에서 root 소유로 남아, 고치거나 지울 때 `sudo`를 부르게 된다. 호스트 사용자의 uid·gid로 container를 띄우면 소유자가 그대로 따라온다.
+Docker 안에서 만든 파일은 host에서 root 소유로 남아, 고치거나 지울 때 `sudo`를 불러야 한다. 호스트 사용자의 uid·gid로 container를 띄우면 소유자가 그대로 따라온다.
 
 ```bash
 # 호스트 사용자 권한으로 실행
@@ -264,7 +264,7 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 sudo usermod -aG dialout "$USER"  # 다시 로그인한 뒤 group 적용
 ```
 
-이렇게 하면 그 USB 장치가 `/dev/gps`라는 고정 이름으로 붙고 권한도 따라 붙는다. 같은 모델을 여러 개 쓸 때는 시리얼 번호를 규칙에 넣어 서로 가른다.
+이렇게 하면 그 USB 장치가 `/dev/gps`라는 고정 이름으로 붙고 권한도 따라붙는다. 같은 모델을 여러 개 쓸 때는 시리얼 번호를 규칙에 넣어 서로 가른다.
 
 ### USB 대역폭
 
@@ -281,7 +281,7 @@ lsusb -t
 
 Velodyne이나 Ouster LiDAR에서 데이터가 들어오지 않을 때는 드라이버를 다시 깔기 전에 네트워크 설정부터 본다. 고정 IP와 subnet이 어긋나면 같은 증상이 난다.
 
-많은 Ethernet LiDAR는 고정 IP나 지정된 subnet 설정을 사용한다. 장치가 예를 들어 `192.168.1.201/24`라면 host interface도 충돌하지 않는 `192.168.1.x/24` 주소로 맞춘다. 실제 주소와 UDP port는 장치 설정과 제조사 문서를 우선한다.
+많은 Ethernet LiDAR는 고정 IP나 지정된 subnet 설정을 사용한다. 장치가 예를 들어 `192.168.1.201/24`라면 host interface도 충돌하지 않는 `192.168.1.x/24` 주소로 맞춘다. 실제 주소와 UDP port는 장치 설정과 제조사 문서를 따른다.
 
 ```bash
 # 1단계: LiDAR에 ping이 되는지 확인
@@ -299,7 +299,7 @@ sudo tcpdump -i eth0 udp port 2368 -c 10
 
 ### 카메라 드라이버 (v4l2)
 
-간단한 예제는 `cv2.VideoCapture(0)`만 보여준다. 그런데 USB 카메라 하나가 영상과 메타데이터용으로 `/dev/video0`, `/dev/video1`을 함께 만들기도 하므로 장치 번호를 먼저 확인해야 한다.
+간단한 예제는 `cv2.VideoCapture(0)`만 보여 준다. 그런데 USB 카메라 하나가 영상과 메타데이터용으로 `/dev/video0`, `/dev/video1`을 함께 만들기도 하므로 장치 번호를 먼저 확인해야 한다.
 
 ```bash
 # 카메라 디바이스 매핑 확인
@@ -348,7 +348,7 @@ docker pull nvcr.io/nvidia/l4t-jetpack:r36.3.0
 
 ### 실시간 제어와 타이밍
 
-`time.sleep(0.01)`은 최소 대기 시간을 줄 뿐이고, 루프가 다시 도는 시점은 계산 시간과 운영체제 스케줄링이 정한다. 100Hz는 코드에 적은 목표 숫자다.
+`time.sleep(0.01)`은 최소 대기 시간을 줄 뿐이고, 루프가 다시 도는 시점은 계산 시간과 운영체제 스케줄링이 정한다. 100 Hz는 코드에 적은 목표 숫자다.
 
 ```python
 # 주기 검증이 필요한 단순한 구현

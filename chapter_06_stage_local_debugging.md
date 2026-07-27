@@ -22,7 +22,7 @@ evaluation
 
 ## 신호가 아예 안 올 때
 
-받는 쪽 callback이 빈 채로 있으면 신호는 `input`에서 멈춘 상태다. 이어서 여섯 단계는 아직 입력을 받기 전이라 여기서 읽을 것은 `input` 하나다. 수정 전에 다음을 본다.
+받는 쪽 callback이 빈 채로 있으면 신호는 `input`에서 멈춘 상태다. 이어지는 여섯 단계는 아직 입력을 받기 전이라 여기서 읽을 것은 `input` 하나다. 수정 전에 다음을 본다.
 
 1. `ros2 topic list`로 topic 존재 확인
 2. `ros2 topic info --verbose`로 QoS 확인
