@@ -81,7 +81,7 @@ Ch.2 자료 확인일: 2026-07-26
 - [Claude Code, *Hooks*](https://code.claude.com/docs/en/hooks)
 - [Model Context Protocol, *Architecture*](https://modelcontextprotocol.io/docs/learn/architecture)
 
-이 묶음은 본문이 인용한 정의와 수치를 원문에서 확인했다. cookbook 문서의 측정값
+이 묶음에서는 본문이 인용한 정의와 수치를 원문에서 확인했다. cookbook 문서의 측정값
 (최대 맥락 335,279 토큰, 파일 읽기 결과 96.3%, 메모리 사용 세션 5K 대 미사용 332K)은
 그 문서가 돌린 실행의 값이고 이 책이 잰 것이 아니다.
 

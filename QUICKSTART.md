@@ -22,7 +22,7 @@
 
 도구를 새로 붙일 때도 같은 가름이 필요하다.
 [Model Context Protocol](https://modelcontextprotocol.io/docs/learn/architecture)에서
-host는 server마다 client를 하나씩 만들어 전용 연결을 유지하고, 서버는 세 가지를 함께
+host는 server마다 client를 하나씩 만들어 전용 연결을 잡아 두고, 서버는 세 가지를 함께
 내놓는다. 실행되는 것은 tool, 맥락으로 읽히는 자료는 resource, 다시 쓰는 틀은 prompt다.
 서버 하나를 붙이면 셋이 한꺼번에 들어오므로 무엇을 어느 역할로 쓸지 붙이는 자리에서
 갈라 둔다. 클라이언트 쪽에는 sampling과 elicitation, logging이 있고, elicitation은
@@ -141,7 +141,7 @@ New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 처음 시작할 연구 루프 하나를 `first_research_loop`에 고정하고, 다음 세션의
 첫 행동은 `next_smallest_actions`에 남긴다.
 
-Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 세션(session)을 사건의 append-only log로, 하네스(harness)를 모델 호출과 도구 전달을 맡는 loop로, 샌드박스(sandbox)를 실행 환경으로 정의한다. 여기 있는 파일은 그 세 역할을 작은 연구 작업 공간에 대응시킨 것이다. 세션 기록은 `project-memory.json`과 기록 장부가 받쳐 준다. 하네스 규칙은 `AGENTS.md`와 프롬프트 템플릿에 담고, 저장소·데이터셋·결과물·명령은 샌드박스에서 다룬다. 첫 AI 세션에서는 이 세 경계를 먼저 밝히고 행동 하나만 고른다.
+Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 세션(session)을 사건의 append-only log로, 하네스(harness)를 모델을 부르고 도구 호출을 넘기는 loop로, 샌드박스(sandbox)를 실행 환경으로 정의한다. 여기 있는 파일은 그 세 역할을 작은 연구 작업 공간에 대응시킨다. 세션 기록은 `project-memory.json`과 기록 장부가 받쳐 준다. 하네스 규칙은 `AGENTS.md`와 프롬프트 템플릿에 담고, 저장소·데이터셋·결과물·명령은 샌드박스에서 다룬다. 첫 AI 세션에서는 이 세 경계를 먼저 밝히고 행동 하나만 고른다.
 
 이 세 경계를 적을 자리가 `notes/first-ai-session-prompt.md`의 `Prompt To Send`
 블록이다. 빈칸을 채우고 `artifacts/first-ai-session-message.txt`에 저장한다. 첫 AI
@@ -170,7 +170,7 @@ Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agen
 
 한 가지 작업에서만 쓰는 절차는 폴더 하나로 떼어 `AGENTS.md` 옆에 둔다. Anthropic의
 [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)는
-skill을 특정 작업을 더 잘 해내도록 에이전트가 찾아내 필요할 때 불러 쓰는 지시·스크립트·자료의
+skill을 정해진 작업을 더 잘 해내도록 에이전트가 찾아내 필요할 때 불러 쓰는 지시·스크립트·자료가 든
 폴더로 정의한다. `SKILL.md`는 YAML frontmatter로 열고 `name`과 언제 쓰는지 적는
 `description`이 필수다. 이 부록이 파일마다 물어 온 `이 파일을 언제 여나`가 그
 `description` 칸에 들어간다. 단계적 공개는 세 층이다. 1층은 이름과 description만
@@ -214,7 +214,7 @@ available.
 
 돌아온 설명을 연구 행동으로 옮기기 전에 근거 상태부터 짚어 본다.
 첫 메시지는 `artifacts/first-ai-session-message.txt`처럼 파일로 남겨 두고
-다음 세션에서도 같은 읽기 순서로 사용한다.
+다음 세션에서도 같은 읽기 순서로 쓴다.
 
 ## 연구 루프를 하나만 고른다
 
