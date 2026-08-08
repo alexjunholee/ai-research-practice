@@ -319,7 +319,7 @@ figure와 table 이름을 적을 때 그 숫자가 주장을 어떻게 받치는
 
 `답변 범위`에 쓸 말은 `현재 근거` 칸에서 나온다. 그 칸 밖에서 나온 말은 `남는 한계`로 내려간다.
 
-표의 칸을 채우는 동안 심사 의견 원문, 겨냥된 문장, 표의 숫자, 새로 돌린 실행 결과가 한 세션에 쌓인다. 여기에 1부에서 본 compaction이 걸린다. 창에 든 것을 통째로 요약 하나로 접는 일이다. Anthropic의 [context engineering 문서](https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools)는 무엇이 납작해지는지를 이렇게 적었다.
+표의 칸을 채우는 동안 심사 의견 원문, 겨냥된 문장, 표의 숫자, 새로 돌린 실행 결과가 한 세션에 쌓인다. 여기에 1부에서 본 compaction이 걸린다. 창에 든 것을 통째로 요약 하나로 접는 일이다. Anthropic의 [context engineering 문서](https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools)는 무엇이 요약 하나로 뭉뚱그려지는지를 이렇게 적었다.
 
 > user messages, assistant messages, tool calls, tool results, even prior compaction blocks are all flattened into the summary
 
