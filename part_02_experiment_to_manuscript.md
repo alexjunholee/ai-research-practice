@@ -275,13 +275,11 @@ Claude Code는 도구 응답을 기본 25,000 토큰으로 제한하고, 이 제
 
 ## 본 것은 같은 꼴로 적는다
 
-앞의 두 목록은 항목마다 확인 하나를 만든다. 다음 세션에서 같은 자리를 다시 열려면 그 확인들이 한 파일에 같은 꼴로 쌓여 있어야 한다.
+앞의 두 목록은 항목마다 확인 하나를 만든다. 다음 세션에서 같은 자리를 다시 열려면 그 확인들이 한 파일에 같은 꼴로 쌓여 있어야 한다. 부록의 `stage-local-debugging.md`가 그 꼴이다.
 
-부록의 `stage-local-debugging.md`가 그 꼴을 갖고 있다. `Next Check` 절이 Command, Working directory, Expected artifact, Timeout, Success signal, Failure signal 여섯 줄이고, `Result` 절이 Command completed, Artifact produced, New evidence, Claim allowed, Claim forbidden 다섯 줄이다.
+양식에서 눈여겨볼 것은 성공 신호와 실패 신호를 실행 전에 적게 해 두었다는 점이다. 무엇이 나오면 됐다고 할지 정하지 않고 돌리면, 나온 출력에 맞춰 기준이 따라간다. 이건 나중에 정직해서 막을 수 있는 종류가 아니다.
 
-앞의 여섯은 실행을 걸기 전에 채운다. Success signal과 Failure signal을 미리 적어 두는 것이 이 양식의 요지다. 무엇이 나오면 됐다고 할지 정하지 않고 돌리면, 나온 출력에 맞춰 기준이 따라간다.
-
-뒤의 다섯은 실행이 끝난 뒤다. `Claim allowed`와 `Claim forbidden` 두 줄이 이 확인으로 원고에서 어디까지 말할 수 있는지를 못 박는다. `ros2 topic list`를 찍어 봤으면 그 단계는 `input`이고, 거기서 허용되는 주장도 `input`까지다.
+실행이 끝난 뒤 채우는 칸에는 이 확인으로 말해도 되는 것과 안 되는 것을 적는다. `ros2 topic list`를 찍어 본 확인이라면 허용되는 주장도 `input` 단계까지다.
 
 눈으로 본 신호를 적는 칸에는 하나만 적는다. 앞 절에 든 도구 작성 지침은 오류 메시지를 다음에 무엇을 하라는 말로 쓰라고 적었다. traceback을 통째로 옮겨 붙인 확인과, `input`에서 어느 topic이 빈 채로 있었는지를 적은 확인이 여기서 갈린다.
 
