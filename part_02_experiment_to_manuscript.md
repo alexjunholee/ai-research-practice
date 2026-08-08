@@ -42,9 +42,9 @@
 
 AI가 뽑아 오는 것은 구성요소 이름과 function과 config key와 convention 변화라 답이 들어갈 칸이 미리 정해져 있다. Claude API의 [structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)는 constrained decoding으로 스키마에 맞는 답을 보장한다고 적었다. 칸 이름을 스키마로 걸어 두면 돌아온 답이 그대로 표의 한 줄이 된다. 스키마가 받는 것은 type과 properties, items와 required다. enum과 const, additionalProperties도 받는다. 객체를 중첩하거나 배열로 묶은 꼴도 그대로 받고, 칸 하나에는 boolean, number, integer, string, null이 온다. pattern(정규식)은 그 목록 밖에 있다. minimum과 maximum, minLength와 maxLength, uniqueItems, allOf, oneOf도 밖이다. 스키마는 그 칸이 채워졌다는 데까지 센다. 칸에 적힌 경로가 실행에서 지나갔는지는 앞의 라벨이 받는다.
 
-논문이 말한 자리와 실행 경로의 라벨이 어긋나면 1부의 방식대로 한 번에 하나씩 바꾸며 좁힌다. 좁히는 동안 다시 여는 것은 라벨을 붙인 근거다. active로 적은 줄에는 그 라벨을 만든 command와 config가 함께 남는다. 다음에 그 줄을 열 때는 같은 command를 다시 걸어 라벨이 그대로인지 본다. 다음 절에서는 그 command가 내놓은 숫자에 조건을 붙여 둔다.
+논문이 말한 자리와 실행 경로의 라벨이 어긋나면 1부의 방식대로 한 번에 하나씩 바꾸며 좁힌다. 좁히는 동안 다시 여는 것은 라벨을 붙인 근거다. active로 적은 줄에는 그 라벨을 만든 command와 config가 함께 남는다. 다음에 그 줄을 열 때는 같은 command를 다시 걸어 라벨이 그대로인지 본다. command가 내놓는 숫자에는 조건이 붙어야 한다.
 
-실제로 도는 코드를 갈라내고 실행을 걸면 수치가 나온다. 로보틱스 metric은 이름 하나에 조건이 여럿 붙는다. dataset과 split, sensor와 frame, calibration과 alignment, metric script, failure policy, baseline 가운데 하나만 달라도 두 값은 서로 다른 조건을 잰 값이 된다. 두 수치를 나란히 놓는 일은 이 항목들이 같을 때 선다.
+조건이 왜 붙어야 하는지는 로보틱스 metric의 생김에서 나온다. 로보틱스 metric은 이름 하나에 조건이 여럿 붙는다. dataset과 split, sensor와 frame, calibration과 alignment, metric script, failure policy, baseline 가운데 하나만 달라도 두 값은 서로 다른 조건을 잰 값이 된다. 두 수치를 나란히 놓는 일은 이 항목들이 같을 때 선다.
 
 이 항목들이 같은지는 수치를 내놓은 쪽이 무엇을 함께 냈는지에서 갈린다. benchmark는 수치를 내면서 evaluation script와 dataset protocol, failure policy를 같이 낸다. 그 수치를 받아 쓰는 쪽이 같은 수를 다시 얻으려면 그것들이 있어야 하기 때문이다. Pineau 등은 [NeurIPS 2019 재현성 프로그램](https://arxiv.org/abs/2003.12206)에서, 같은 코드와, 구할 수 있으면 같은 데이터로 논문이나 발표에 제시된 것과 비슷한 결과를 다시 얻는 일을 연구 결과의 신뢰성을 확인하는 데 필요한 단계로 적었다. 로보틱스에서는 코드와 데이터에 sensor 입력, frame, calibration, alignment가 더 붙는다. error가 낮다거나 success rate가 높다거나 latency가 짧다고 원고에 쓰려면 그 수치가 나온 조건도 같이 적어야 한다.
 
@@ -107,7 +107,7 @@ metric script와 baseline과 output path는 앞의 물음이 묻던 것이다. �
 
 최소 기록은 결과 파일이 나온 실행을 받는다. output path와 metric이 결과 파일에서 채워지기 때문이다. 멈춘 실행에도 남길 것이 있다. timeout과 OOM, sensor dropout과 tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험의 조건을 정하는 자료다. 최소 기록의 실패 처리 항목은 집계에서 실패 구간을 어떻게 다뤘는지를 받고, 멈춘 실행에는 그 한 벌을 따로 적어 어디까지 갔는지를 남긴다. 실패 하나가 실행의 어느 지점에서 나왔는지에 따라 다음에 고칠 자리가 갈린다. 어느 단계에서 끊겼는지는 이어서 가른다.
 
-AI에 오류를 물으면 QoS, calibration, cache, normalization 같은 원인 후보가 빠르게 나온다. 이 답을 받아 바로 고치기 시작하면 지금 무엇이 돌고 있는지 보기 전에 원인이 정해진다. 답은 1부의 방식대로 모델의 말로 적어 두고, 어느 단계에서 신호가 끊겼는지 눈으로 본 뒤에 꺼낸다.
+끊긴 단계를 AI에 물으면 QoS, calibration, cache, normalization 같은 원인 후보가 빠르게 나온다. 이 답을 받아 바로 고치기 시작하면 지금 무엇이 돌고 있는지 보기 전에 원인이 정해진다. 답은 1부의 방식대로 모델의 말로 적어 두고, 어느 단계에서 신호가 끊겼는지 눈으로 본 뒤에 꺼낸다.
 
 [Endsley](https://doi.org/10.1518/001872095779049543)는 situation awareness를 시간과 공간의 한 범위 안에서 환경의 요소를 지각하는 것, 그 의미를 이해하는 것, 가까운 미래의 상태를 예측하는 것으로 정의했다. 눈으로 본 것은 이 정의 한 문장까지다. 세 항목 각각을 원문이 어떻게 풀었는지는 못 봤다. 여기서 가져다 쓰는 것은 셋을 갈라 세웠다는 짜임 하나다. 정의가 셋을 따로 세운 것처럼 이 책의 기록도 셋을 각각 다른 칸에 적는다. 눈으로 본 신호가 한 칸, 그 신호가 나온 단계가 한 칸, 아직 남은 원인 후보가 또 한 칸이다.
 
@@ -183,9 +183,9 @@ evaluation
 
 첫 줄의 자리들을 지우고 나면 둘째 줄이 선다. callback 없음과 tf lookup 실패는 둘째 줄에서 따로 본다. wrong metric script가 걸리는 자리는 셋째 줄이다. output이 쓸 데에 맞는지는 결과가 간 자리에 적은 파일을 열어 본다. 넷째 줄은 앞의 세 줄을 지운 뒤에 남는 자리다. 도구 실패를 넷째 줄에 적으면 아직 남아 있는 자리가 지워진 것으로 기록되고, 다음 확인이 같은 단계로 돌아온다. 도구 실패와 방법 실패가 한 기록에 섞이면 부록 D가 적은 대로 멈춘다.
 
-`evaluation`까지 지나온 줄은 성능 숫자를 두고 쓴 문장을 받쳐 준다. `input`에서 멈춘 줄이 받쳐 주는 것은 그 단계에서 눈으로 본 것까지다. 기록에 적힌 단계와 실패 종류가 원고에 쓸 수 있는 문장의 어디까지를 정한다. 다음 절에서는 그 문장을 주장과 근거로 갈라 `claim-evidence-map.md`에 적는다.
+`evaluation`까지 지나온 줄은 성능 숫자를 두고 쓴 문장을 받쳐 준다. `input`에서 멈춘 줄이 받쳐 주는 것은 그 단계에서 눈으로 본 것까지다. 기록에 적힌 단계와 실패 종류가 원고에 쓸 수 있는 문장의 어디까지를 정한다. 그 문장은 주장과 근거로 갈라 `claim-evidence-map.md`에 적는다.
 
-AI는 원고의 문장을 빠르게 다듬는다. 다듬고 나면 표현이 바뀐 원고가 남는다. 심사 의견은 손대기 전 원고를 읽고 돌아온다. 그 의견이 짚은 근거는 다듬기 전 자리에 그대로 있다. 답변서는 원고의 어느 줄을 어떻게 바꿨는지 적어 함께 보내는 문서다. 손댄 것이 표현뿐이면 거기 적을 것도 표현뿐이다. 의견 하나를 받으면 그것이 원고의 무엇을 짚었는지부터 가른다. 어조를 짚은 의견은 문장을 고치면 답이 된다. 실험 조건을 물었으면 실행이 한 번 더 든다. 주장이 어디까지 간다고 썼는지가 걸린 자리에서는 쓴 만큼을 줄여 답한다.
+원고로 간 문장은 심사를 받는다. 심사를 기다리는 동안 AI는 원고의 문장을 빠르게 다듬고, 다듬고 나면 표현이 바뀐 원고가 남는다. 심사 의견은 손대기 전 원고를 읽고 돌아온다. 그 의견이 짚은 근거는 다듬기 전 자리에 그대로 있다. 답변서는 원고의 어느 줄을 어떻게 바꿨는지 적어 함께 보내는 문서다. 손댄 것이 표현뿐이면 거기 적을 것도 표현뿐이다. 의견 하나를 받으면 그것이 원고의 무엇을 짚었는지부터 가른다. 어조를 짚은 의견은 문장을 고치면 답이 된다. 실험 조건을 물었으면 실행이 한 번 더 든다. 주장이 어디까지 간다고 썼는지가 걸린 자리에서는 쓴 만큼을 줄여 답한다.
 
 의견이 무엇을 짚었는지 가르려면 주장과 근거가 어디서 붙는지 그 자리에 이름이 있어야 한다. [Toulmin은 *The Uses of Argument*](https://www.cambridge.org/core/books/uses-of-argument/26CF801BC12004587B66778297D5567C)에서 실제 논쟁의 주장이 어떻게 서는지 뜯어 놓았다. claim은 주장된 명제다(p.12). "무엇을 근거로 하는가"에 답하는 것이 data다(p.97). 둘을 잇는 자리에 필요한 것을 Toulmin은 "general, hypothetical statements, which can act as bridges, and authorise the sort of step to which our argument commits us"(p.98)라고 적었다. 이 다리가 warrant다. 같은 책은 "data are appealed to explicitly, warrants implicitly"(p.100)라고도 적었다. 원고에서 data는 표와 그림으로 이름을 갖고 본문에 나온다. 그 숫자가 왜 그 주장을 받치는지는 읽는 쪽이 채워 넣는 자리로 남는다. 다리를 문장으로 꺼내 적으면 의견이 어느 다리를 물었는지 짚을 자리가 생긴다. 주장이 어디까지 가는지는 다리와 다른 자리에 적힌다. Toulmin이 qualifier로 따로 둔 probably, generally, presumably 같은 양태 한정을 지우면 근거는 그대로인 채 주장만 멀리 간다.
 
@@ -211,11 +211,8 @@ warrant는 표에 따로 칸을 두지 않고 `현재 근거` 칸 안에 함께 
 
 파일에 옮겨 적는 일은 압축이 걸리기 전에 끝나 있어야 한다. 압축이 걸리는 시점은 context engineering 문서가 적어 둔 설정값이 잡는다. 기본 트리거는 150K 토큰이고 최소는 50K다. Claude Code의 [hooks 문서](https://code.claude.com/docs/en/hooks)에는 `PreCompact`와 `PostCompact`가 있어 압축 앞뒤에 무엇을 할지 정해 둘 수 있다. 표의 한 줄을 파일로 빼 두는 일을 `PreCompact`에 걸어 두면 세션이 압축을 지나도 같은 칸에서 다음 행동이 나온다.
 
-표가 채워지면 의견마다 다음 행동이 어느 칸에서 나오는지가 서 있다. 그 행동을
-답변서 문장으로 언제 옮겨도 되는지는 이어서 다룬다.
-
-앞 절에서 의견 하나가 표의 한 줄이 됐다. 그 줄에는 겨냥된 주장과 현재 근거와
-부족한 근거가 갈라져 있다. 여기서는 그 줄을 답변서 문장으로 옮기는 순서를 다룬다.
+표가 채워지면 의견 하나가 표의 한 줄이 되어, 겨냥된 주장과 현재 근거와 부족한
+근거가 갈라져 있다. 그 줄을 답변서 문장으로 언제 옮겨도 되는지가 다음이다.
 
 ## 답변 문장은 언제 써도 되나
 
