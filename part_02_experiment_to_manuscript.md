@@ -44,7 +44,7 @@ AI가 뽑아 오는 것은 구성요소 이름과 function과 config key와 conv
 
 논문이 말한 자리와 실행 경로의 라벨이 어긋나면 1부의 방식대로 한 번에 하나씩 바꾸며 좁힌다. 좁히는 동안 다시 여는 것은 라벨을 붙인 근거다. active로 적은 줄에는 그 라벨을 만든 command와 config가 함께 남는다. 다음에 그 줄을 열 때는 같은 command를 다시 걸어 라벨이 그대로인지 본다. command가 내놓는 숫자에는 조건이 붙어야 한다.
 
-조건이 왜 붙어야 하는지는 로보틱스 metric의 생김에서 나온다. 로보틱스 metric은 이름 하나에 조건이 여럿 붙는다. dataset과 split, sensor와 frame, calibration과 alignment, metric script, failure policy, baseline 가운데 하나만 달라도 두 값은 서로 다른 조건을 잰 값이 된다. 두 수치를 나란히 놓는 일은 이 항목들이 같을 때 선다.
+조건이 붙어야 하는 까닭은 로보틱스 metric의 생김새에 있다. metric은 이름 하나에 조건이 여럿 붙는다. dataset과 split, sensor와 frame, calibration과 alignment, metric script, failure policy, baseline 가운데 하나만 달라도 두 값은 서로 다른 조건을 잰 값이 된다. 두 수치를 나란히 놓는 일은 이 항목들이 같을 때 선다.
 
 이 항목들이 같은지는 수치를 내놓은 쪽이 무엇을 함께 냈는지에서 갈린다. benchmark는 수치를 내면서 evaluation script와 dataset protocol, failure policy를 같이 낸다. 그 수치를 받아 쓰는 쪽이 같은 수를 다시 얻으려면 그것들이 있어야 하기 때문이다. Pineau 등은 [NeurIPS 2019 재현성 프로그램](https://arxiv.org/abs/2003.12206)에서, 같은 코드와, 구할 수 있으면 같은 데이터로 논문이나 발표에 제시된 것과 비슷한 결과를 다시 얻는 일을 연구 결과의 신뢰성을 확인하는 데 필요한 단계로 적었다. 로보틱스에서는 코드와 데이터에 sensor 입력, frame, calibration, alignment가 더 붙는다. error가 낮다거나 success rate가 높다거나 latency가 짧다고 원고에 쓰려면 그 수치가 나온 조건도 같이 적어야 한다.
 
@@ -54,7 +54,7 @@ AI가 뽑아 오는 것은 구성요소 이름과 function과 config key와 conv
 
 ## 돌릴 때 그 자리에서 채운다
 
-이 답은 실행을 걸 때 한 벌 적어 두면 그 자리에 남는다. 실행을 건 뒤에 같은 답을 맞추려면 command 이력과 config 파일과 결과 디렉터리를 각각 열어 봐야 한다. 그래서 command를 던지는 사람이 그 자리에서 적는다. 적을 것의 앞쪽은 수치의 조건이다. 어느 dataset의 어느 split과 sequence인지, 어느 sensor로 무엇을 받아 무엇을 내는지, ground-truth frame과 alignment는 무엇인지, metric과 threshold와 baseline은 무엇인지가 그 조건이다. 조건 뒤에는 같은 command를 다시 던지는 데 드는 것들이 이어진다. command와 config, output path, timeout, 그리고 실패 구간을 어떻게 처리했는지다. 결과 파일이 나오면 output path를 마저 채운다. 이 한 벌이 실행 하나의 최소 기록이다.
+이 답은 실행을 걸 때 한 벌 적어 두면 그 자리에 남는다. 실행을 건 뒤에 같은 답을 맞추려면 command 이력과 config 파일과 결과 디렉터리를 각각 열어 봐야 한다. 그래서 command를 던지는 사람이 그 자리에서 적는다. 적는 것의 앞쪽은 수치의 조건이다. 어느 dataset의 어느 split과 sequence인지, 어느 sensor로 무엇을 받아 무엇을 내는지, ground-truth frame과 alignment는 무엇인지, metric과 threshold와 baseline은 무엇인지가 그 조건이다. 조건 뒤에는 같은 command를 다시 던지는 데 드는 것들이 이어진다. command와 config, output path, timeout, 그리고 실패 구간을 어떻게 처리했는지다. 결과 파일이 나오면 output path를 마저 채운다. 이 한 벌이 실행 하나의 최소 기록이다.
 
 ## 숫자 읽기 전에 결과물부터
 
