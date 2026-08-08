@@ -59,6 +59,52 @@ Ch.2 자료 확인일: 2026-07-26
 ## 평가와 재현성
 
 - [Pineau et al., *Improving Reproducibility in Machine Learning Research*](https://arxiv.org/abs/2003.12206)
+- [Thinking Machines Lab, *Defeating Nondeterminism in LLM Inference*](https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/)
+- [*Benchmarking the Benchmarks: A Validity Audit of Tool-Calling Evaluation*](https://arxiv.org/abs/2607.02577)
+- [*Beyond pass@1: A Reliability Science Framework for Long-Horizon LLM Agents*](https://arxiv.org/abs/2603.29231)
+
+## 하네스와 자동 연구
+
+확인일: 2026-08-09
+
+- [*From Question Answering to Task Completion: A Survey on Agent System and Harness Design*](https://arxiv.org/abs/2606.20683) — 실행 하네스의 여섯 자리
+- [Si et al., *Can LLMs Generate Novel Research Ideas?*](https://arxiv.org/abs/2409.04109)
+- [Si et al., *The Ideation-Execution Gap* (ICLR 2026)](https://arxiv.org/abs/2506.20803)
+- [*PaperBench*](https://arxiv.org/abs/2504.01848)
+- [*CORE-Bench*](https://arxiv.org/abs/2409.11363)
+- [*ResearchCodeBench*](https://arxiv.org/abs/2506.02314)
+- [*ResearchGym*](https://arxiv.org/abs/2602.15112)
+- [*Kosmos: An AI Scientist for Autonomous Discovery*](https://arxiv.org/abs/2511.02824)
+- [*AI for Auto-Research: Roadmap & User Guide*](https://arxiv.org/abs/2605.18661)
+- [METR, *Time Horizon 1.1*](https://metr.org/blog/2026-1-29-time-horizon-1-1/)
+- [Ord, *Is there a half-life for the success rates of AI agents?*](https://arxiv.org/abs/2505.05115)
+
+## 심사와 출판
+
+확인일: 2026-08-09
+
+- [Pangram Labs, *21% of ICLR 2026 reviews are AI-generated*](https://www.pangram.com/blog/pangram-predicts-21-of-iclr-reviews-are-ai-generated)
+- [NeurIPS, *AI-Generated Papers in the NeurIPS 2026 Position Paper Track*](https://blog.neurips.cc/2026/06/02/ai-generated-papers-in-the-neurips-2026-position-paper-track/)
+- [*Fabricated citations: an audit across 2·5 million biomedical papers*, The Lancet, 2026-05-07](https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00603-3/fulltext)
+- [*Review the Code, Not the Story: A Vision and Protocol for Code-First Peer Review*](https://arxiv.org/abs/2606.07683)
+
+## 로봇 정책 평가
+
+확인일: 2026-08-09
+
+- [*RoboArena: Distributed Real-World Evaluation of Generalist Robot Policies*](https://arxiv.org/abs/2506.18123)
+- [*Reliable and Scalable Robot Policy Evaluation with Imperfect Simulators*](https://arxiv.org/abs/2510.04354)
+- [Toyota Research Institute, *Statistical Thinking for Robot Policy Evaluation*](https://medium.com/toyotaresearch/statistical-thinking-for-robot-policy-evaluation-from-rigorous-a-b-testing-to-effective-0ae886fbd68d)
+
+## 자율 실험실
+
+확인일: 2026-08-09
+
+- [Szymanski et al., *An autonomous laboratory for the accelerated synthesis of novel materials*, Nature 2023](https://www.nature.com/articles/s41586-023-06734-w)
+- [Chemistry World, *New analysis raises doubts over autonomous lab's materials discoveries*](https://www.chemistryworld.com/news/new-analysis-raises-doubts-over-autonomous-labs-materials-discoveries/4018791.article)
+
+위 네 묶음은 2026-08-09에 원문에서 수치를 확인했다. 본문에 적은 수는 각 원문이
+보고한 값이고 이 책이 잰 것이 아니다. 확인하지 못한 수치는 본문에서 뺐다.
 
 ## 로보틱스 실행 환경
 
