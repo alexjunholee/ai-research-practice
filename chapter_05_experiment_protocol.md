@@ -1,4 +1,4 @@
-# Ch.5 — 실험 조건과 결과
+# Ch.5 — 실험 조건 남기기
 
 실제로 도는 코드를 갈라내고 실행을 걸면 수치가 나온다. 로보틱스 metric은 이름 하나에 조건이 여럿 붙는다. dataset과 split, sensor와 frame, calibration과 alignment, metric script, failure policy, baseline 가운데 하나만 달라도 두 값은 서로 다른 조건을 잰 값이 된다. 두 수치를 나란히 놓는 일은 이 항목들이 같을 때 선다.
 
@@ -10,7 +10,7 @@
 
 ## 돌릴 때 그 자리에서 채운다
 
-이 답은 실행을 걸 때 한 벌 적어 두면 그 자리에 남는다. 실행을 건 뒤에 같은 답을 맞추려면 command 이력과 config 파일과 결과 디렉터리를 각각 열어 봐야 한다. 그래서 command를 던지는 사람이 그 자리에서 적는다. 어느 dataset의 어느 split과 sequence인지, 어느 sensor로 무엇을 받아 무엇을 내는지, ground-truth frame과 alignment는 무엇인지, metric과 threshold와 baseline은 무엇인지. 여기까지가 수치의 조건이고, 같은 command를 다시 던지는 데 드는 것들이 이어진다. command와 config, output path, timeout, 실패 구간을 어떻게 처리했는지다. 결과 파일이 나오면 output path를 마저 채운다. 이 한 벌이 실행 하나의 최소 기록이다.
+이 답은 실행을 걸 때 한 벌 적어 두면 그 자리에 남는다. 실행을 건 뒤에 같은 답을 맞추려면 command 이력과 config 파일과 결과 디렉터리를 각각 열어 봐야 한다. 그래서 command를 던지는 사람이 그 자리에서 적는다. 적을 것의 앞쪽은 수치의 조건이다. 어느 dataset의 어느 split과 sequence인지, 어느 sensor로 무엇을 받아 무엇을 내는지, ground-truth frame과 alignment는 무엇인지, metric과 threshold와 baseline은 무엇인지가 그 조건이다. 조건 뒤에는 같은 command를 다시 던지는 데 드는 것들이 이어진다. command와 config, output path, timeout, 그리고 실패 구간을 어떻게 처리했는지다. 결과 파일이 나오면 output path를 마저 채운다. 이 한 벌이 실행 하나의 최소 기록이다.
 
 ## 숫자 읽기 전에 결과물부터
 

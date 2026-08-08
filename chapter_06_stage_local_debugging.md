@@ -31,7 +31,7 @@ evaluation
 5. container device, network, volume 확인
 6. 이어서 코드 또는 launch 수정
 
-1부터 5까지는 단계 이름에 모두 `input`을 적는다. 1에서 topic 이름이 목록에 보이는데도 callback이 빈 채로 있으면 다음에 볼 것은 profile이다. ROS2 기본 profile은 RELIABLE이고 sensor data profile은 BEST_EFFORT라 driver와 받는 쪽이 어긋나면 메시지가 안 온다. 2가 보는 것이 이 어긋남이다. topic이 오는 것을 눈으로 본 뒤에야 `next stage:`에 `preprocessing`을 적는다. 5가 보는 container device와 network와 volume은 실행 환경 쪽이다. 실행 환경 쪽 증상 하나하나를 어디서 볼지는 Ch.9에서 참조표로 세운다.
+1부터 5까지는 단계 이름에 모두 `input`을 적는다. 1에서 topic 이름이 목록에 보이는데도 callback이 빈 채로 있으면 다음에 볼 것은 profile이다. ROS2 기본 profile은 RELIABLE이고 sensor data profile은 BEST_EFFORT라 driver와 받는 쪽이 어긋나면 메시지가 안 온다. 2가 보는 것이 이 어긋남이다. topic이 오는 것을 눈으로 본 뒤에야 `next stage:`에 `preprocessing`을 적는다. 5가 보는 container device와 network와 volume은 실행 환경 쪽이다. 실행 환경 쪽 증상 하나하나를 어디서 볼지는 Ch.10에서 참조표로 세운다.
 
 1의 `ros2 topic list`를 AI가 대신 찍고 결과를 옮겨 줄 때는 자리가 하나 더 생긴다. 도구 응답에는 길이 제한이 걸린다. Anthropic의 [도구 작성 지침](https://www.anthropic.com/engineering/writing-tools-for-agents)은 도구가 high signal information만 에이전트에 돌려주게 하라고 적었다. 같은 글은 응답에 pagination과 범위 선택과 필터와 잘라내기를 두라고도 적었다. Claude Code는 도구 응답을 기본 25,000 토큰으로 제한한다. 이 제한이 걸린 응답은 뒤가 잘린 채로 온다. 짧게 온 목록을 그대로 적어 두기 전에 그것이 빈 목록인지 잘린 목록인지를 먼저 가른다. 잘린 것이면 topic 이름을 좁혀 다시 찍은 결과를 받는다.
 

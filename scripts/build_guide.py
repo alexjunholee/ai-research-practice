@@ -33,16 +33,22 @@ CHAPTERS = [ROOT / f"chapter_{number:02d}_{name}.md" for number, name in [
     (4, "research_workflows"),
     (5, "experiment_protocol"),
     (6, "stage_local_debugging"),
-    (7, "manuscript_rebuttal"),
-    (8, "external_templates"),
-    (9, "robotics_runtime"),
+    (7, "claim_evidence"),
+    (8, "review_response"),
+    (9, "external_templates"),
+    (10, "robotics_runtime"),
 ]]
+
+# 부 구획. 장 번호가 열쇠이고, 그 장 앞에 부 제목이 선다.
+PARTS = {1: "1부 — 기록 남기기", 4: "2부 — 실험에서 원고까지", 9: "3부 — 규칙으로 만들기"}
 APPENDICES = [
     ROOT / "TERMS.md",
     ROOT / "QUICKSTART.md",
     ROOT / "EXAMPLE_WORKSPACE.md",
     ROOT / "PATH.md",
     ROOT / "SOURCES.md",
+    ROOT / "ROBOTICS_REFERENCE.md",
+    ROOT / "TOOLS.md",
 ]
 
 
@@ -139,10 +145,14 @@ def build_content() -> str:
         rendered.append(fragment)
         metadata.append((path, headings))
 
-    guide_entries = "".join(
-        overview_entry(path, headings, f"{index:02d}")
-        for index, (path, headings) in enumerate(metadata[: len(CHAPTERS)])
-    )
+    guide_parts = []
+    for index, (path, headings) in enumerate(metadata[: len(CHAPTERS)]):
+        part = PARTS.get(index)
+        if part:
+            guide_parts.append(
+                f'<div class="overview-part-label">{html.escape(part)}</div>')
+        guide_parts.append(overview_entry(path, headings, f"{index:02d}"))
+    guide_entries = "".join(guide_parts)
     appendix_entries = "".join(
         overview_entry(path, headings, "부록")
         for path, headings in metadata[len(CHAPTERS) :]

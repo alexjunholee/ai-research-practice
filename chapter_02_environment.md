@@ -12,11 +12,11 @@ ROS2를 예로 들면 이렇다. 토픽마다 QoS profile이 붙는데, 보내�
 
 이 메모가 어디에 놓이느냐도 함께 정해진다. 채우다 보면 심사 의견 원문과 미공개 숫자가 같이 들어오는데, 이런 줄이 갈 자리는 공개 저장소와 다르다. 반복되는 실패 유형과 운영 규칙과 공개용 template은 공개 저장소에 둔다. 개인 대화 원문과 개인 경로와 reviewer 원문과 미공개 숫자와 인증 정보는 로컬 기록에 남긴다. 부록 D도 다시 시작할 때 확인할 것으로 이 경계를 꼽아 두었다.
 
-읽어서 돌아오는 데까지가 여기다. 메모는 지난번에 눈으로 보고 적은 값이라 지금도 그런지는 돌려 봐야 안다. 그리고 돌려 봐야 아는 자리는 여섯 군데로 흩어져 있다. repo의 branch와 commit과 고쳐 둔 파일, 지금 도는 process와 container와 device, dataset의 version과 split과 calibration, metric 출력과 plot과 실패한 실행, 원고의 TeX diff와 figure 원본과 table, 그리고 지난번의 내가 남긴 project memory와 handoff다.
+읽어서 돌아오는 데까지가 여기다. 메모는 지난번에 눈으로 보고 적은 값이라 지금도 그런지는 돌려 봐야 안다. 그리고 돌려 봐야 아는 자리는 여섯 군데로 흩어져 있다. 여섯이란 repo의 branch와 commit과 고쳐 둔 파일, 지금 도는 process와 container와 device, dataset의 version과 split과 calibration, metric 출력과 plot과 실패한 실행, 원고의 TeX diff와 figure 원본과 table, 그리고 지난번의 내가 남긴 project memory와 handoff다.
 
 이 가운데 기억만 사람이 남긴 것이고 나머지 다섯은 기계가 지금 들고 있는 상태다. 다섯은 각자 따로 봐야 한다. repo가 깨끗해도 container는 그때 그대로일 수 있고 아닐 수 있다. metric output이 남아 있어도 지금 코드에서 나온 값인지는 데이터 쪽을 따로 봐야 안다.
 
-실행 쪽을 여는 방법은 Ch.9에 모아 두었다. 환경을 갈아엎기 전에 `pip show`와 `dpkg -l | grep`과 `apt policy`로 지금 무엇이 깔려 있는지 적고, 새 terminal에서 package를 못 찾으면 `echo $AMENT_PREFIX_PATH`로 지금 걸린 workspace를 읽는다. 토픽이 안 들어올 때 `ros2 topic list`와 `ros2 node list`를 함께 찍으면 노드가 안 뜬 것인지 이름이 다른 데 붙은 것인지가 갈린다. 적어 둔 줄에는 그 갈래가 안 남는다.
+실행 쪽을 여는 방법은 Ch.10에 모아 두었다. 환경을 갈아엎기 전에 `pip show`와 `dpkg -l | grep`과 `apt policy`로 지금 무엇이 깔려 있는지 적고, 새 terminal에서 package를 못 찾으면 `echo $AMENT_PREFIX_PATH`로 지금 걸린 workspace를 읽는다. 토픽이 안 들어올 때 `ros2 topic list`와 `ros2 node list`를 함께 찍으면 노드가 안 뜬 것인지 이름이 다른 데 붙은 것인지가 갈린다. 적어 둔 줄에는 그 갈래가 안 남는다.
 
 우리가 파일을 열고 명령을 돌리는 동안 그 결과는 모델이 든 창에도 그대로 쌓인다. Anthropic의 [context engineering cookbook](https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools)은 아무것도 걸지 않고 돌린 실행의 최대 맥락을 335,279 토큰으로 쟀고, 그중 96.3%가 파일 읽기 결과였다. 도구 호출 기록이 1.9%, 추론이 1.7%다. 창에 든 것의 거의 전부가 어느 시점에 읽힌 파일의 내용이고, 그 파일이 그 뒤에 바뀌었으면 창은 옛것을 들고 있다.
 
