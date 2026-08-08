@@ -70,7 +70,7 @@ AI가 뽑아 오는 것은 구성요소 이름과 function과 config key와 conv
 | cache/checkpoint | 현재 model과 config에서 나온 결과물인가 |
 | failure policy | 실패 구간을 평균이나 집계에서 어떻게 처리했는가 |
 
-`cache/checkpoint` 줄은 실행 환경이 요청 사이에 상태를 이어 줄 때 걸린다. 앞의 code execution tool 문서는 컨테이너가 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다고 적었다. 도구 판을 `code_execution_20260120` 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 요청에서 정한 값이 이번 요청에도 그대로 살아 있을 수 있으니, 결과물을 열어 그것이 지금의 model과 config에서 나온 것인지를 짚는다. 같은 문서는 컨테이너가 30일 뒤 만료된다고도 적었다.
+`cache/checkpoint` 줄은 실행 환경이 요청 사이에 상태를 이어 줄 때 걸린다. 앞의 code execution tool 문서는 컨테이너가 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다고 적었다. 도구 버전을 `code_execution_20260120` 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 요청에서 정한 값이 이번 요청에도 그대로 살아 있을 수 있으니, 결과물을 열어 그것이 지금의 model과 config에서 나온 것인지를 짚는다. 같은 문서는 컨테이너가 30일 뒤 만료된다고도 적었다.
 
 한 항목이 어긋나면 그 수치는 보류하고, 어긋난 자리를 최소 기록에 적는다.
 
@@ -179,7 +179,7 @@ evaluation
 
 첫 줄은 여러 자리를 한꺼번에 받는다. 빌드 성공은 첫 줄에서 한 자리를 지운다. 소스가 컴파일됐다는 것까지가 그 한 자리다. `pip install`과 CUDA driver와 Docker volume과 dataset path는 그대로 남는다.
 
-같은 확인을 AI가 code execution tool 안에서 돌렸다면 첫 줄이 받는 자리가 달라진다. Anthropic의 [code execution tool 문서](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)는 그 컨테이너의 인터넷이 완전히 막혀 있어 런타임에 패키지를 받지 못한다고 적었다. 미리 깔린 것만 도는 자리라 `pip install`은 후보에서 빠지고, 대신 필요한 패키지가 그 목록에 있는지가 첫 줄의 자리로 들어온다. 같은 문서가 적은 두 가지는 첫 줄에 자리를 하나 더 붙인다. 컨테이너는 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다. 도구 판을 `code_execution_20260120` 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 실행의 상태가 남아 있는 것이 그 자리다.
+같은 확인을 AI가 code execution tool 안에서 돌렸다면 첫 줄이 받는 자리가 달라진다. Anthropic의 [code execution tool 문서](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)는 그 컨테이너의 인터넷이 완전히 막혀 있어 런타임에 패키지를 받지 못한다고 적었다. 미리 깔린 것만 도는 자리라 `pip install`은 후보에서 빠지고, 대신 필요한 패키지가 그 목록에 있는지가 첫 줄의 자리로 들어온다. 같은 문서가 적은 두 가지는 첫 줄에 자리를 하나 더 붙인다. 컨테이너는 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다. 도구 버전을 `code_execution_20260120` 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 실행의 상태가 남아 있는 것이 그 자리다.
 
 첫 줄의 자리들을 지우고 나면 둘째 줄이 선다. callback 없음과 tf lookup 실패는 둘째 줄에서 따로 본다. wrong metric script가 걸리는 자리는 셋째 줄이다. output이 쓸 데에 맞는지는 결과가 간 자리에 적은 파일을 열어 본다. 넷째 줄은 앞의 세 줄을 지운 뒤에 남는 자리다. 도구 실패를 넷째 줄에 적으면 아직 남아 있는 자리가 지워진 것으로 기록되고, 다음 확인이 같은 단계로 돌아온다. 도구 실패와 방법 실패가 한 기록에 섞이면 부록 D가 적은 대로 멈춘다.
 

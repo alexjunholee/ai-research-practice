@@ -64,7 +64,7 @@ body { font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Apple SD 
 <p>AI는 큰 저장소에서 관련 파일을 찾고, 긴 로그에서 원인 후보를 좁히며, 논문의 방법을 prototype code로 옮기는 일을 빠르게 처리한다. 그러나 작업 맥락을 놓치거나 확인하지 않은 내용을 단정하기도 한다. 모델을 다그치거나 달래듯 요청을 거듭 고쳐 결과를 끌어낸 경험이 있더라도, 긴 연구 과정을 매번 이런 대화에만 의존할 수는 없다. 이 글은 작업 맥락과 검증 절차를 파일로 남기는 방법을 다룬다.</p>
 <h2 data-source="part_00_intro.md" id="part-00-intro-비싼-구독-모델을-쓰면-해결되지-않나">비싼 구독 모델을 쓰면 해결되지 않나?</h2>
 <p>이 글의 초고를 쓸 때 우리 연구실은 월 200 USD 구독을 6개월째 사용하고 있었다. 성능이 좋은 모델은 분명 도움이 되지만 작업 품질이 늘 일정한 것은 아니다. 상용 구독은 사용자가 모델의 동작 조건을 직접 통제할 수 없는 폐쇄형 서비스다. 공급자는 실제 parameter 수, token limit, backend routing, system prompt, cache, thinking 처리의 변화를 제한적으로만 공개한다. Anthropic의 <a href="https://www.anthropic.com/engineering/april-23-postmortem">2026년 4월 Claude Code postmortem</a>은 reasoning effort 변경, thinking cache bug, 짧은 답변을 유도한 system prompt가 품질 저하 보고로 이어졌다고 적었다. 이런 변경은 사용자가 바로 알아차리기 어렵다. 장기 연구에는 모델 바깥에 안정적인 작업 조건을 마련해야 한다.</p>
-<p>변화 가운데 문서에 적힌 것들은 판번호가 붙은 수치다. 판이 바뀌면 수치도 함께 바뀌므로, 이런 값은 본문에 두지 않고 확인한 날짜를 적어 부록의 도구 문서 요약에 모았다.</p>
+<p>그런 변경 가운데 문서에 공개된 것들은 버전과 수치로 남는다. 버전이 올라가면 수치도 함께 바뀌므로, 이런 값은 본문에 두지 않고 확인한 날짜와 함께 부록의 도구 문서 요약에 모아 두었다.</p>
 <h2 data-source="part_00_intro.md" id="part-00-intro-최신-모델을-자체-서버에서-돌리면-어떤가">최신 모델을 자체 서버에서 돌리면 어떤가?</h2>
 <p>성능이 좋은 모델을 자체 서버에 올리면 공급자의 routing이나 quota 변화의 영향은 덜 받는다. 다만 상용 서비스의 품질에는 LLM 가중치뿐 아니라 모델 선택, system prompt, context 압축, cache, tool 호출, retrieval, 권한, 실행 환경이 모두 관여한다. 연구실에서도 자료를 검색 가능한 단위로 정리하고 질문마다 사용할 근거를 정해야 일관된 작업 조건을 마련할 수 있다.</p>
 <p>Retrieval을 모델 구조에 결합하는 연구는 이 문제의 일부를 다뤘다. <a href="https://arxiv.org/abs/2002.08909">REALM</a>은 pre-training 단계부터 retriever를 붙였다. <a href="https://arxiv.org/abs/2004.04906">DPR</a>은 질문과 passage를 같은 dense representation 공간에 맞추도록 dual encoder를 학습했다. <a href="https://arxiv.org/abs/2005.11401">RAG</a>는 seq2seq model의 parametric memory와 Wikipedia dense index를 결합했다. 그렇게 factuality, provenance, knowledge update 문제를 줄이려 했다. <a href="https://arxiv.org/abs/2007.01282">FiD</a>는 retrieved passage를 generator가 읽게 했다. <a href="https://arxiv.org/abs/2112.04426">RETRO</a>는 큰 text database에서 chunk를 가져왔다. <a href="https://arxiv.org/abs/2208.03299">Atlas</a>는 few-shot setting에서 retrieval을 썼다.</p>
@@ -378,7 +378,7 @@ available.
 </tr>
 </tbody>
 </table>
-<p><code>cache/checkpoint</code> 줄은 실행 환경이 요청 사이에 상태를 이어 줄 때 걸린다. 앞의 code execution tool 문서는 컨테이너가 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다고 적었다. 도구 판을 <code>code_execution_20260120</code> 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 요청에서 정한 값이 이번 요청에도 그대로 살아 있을 수 있으니, 결과물을 열어 그것이 지금의 model과 config에서 나온 것인지를 짚는다. 같은 문서는 컨테이너가 30일 뒤 만료된다고도 적었다.</p>
+<p><code>cache/checkpoint</code> 줄은 실행 환경이 요청 사이에 상태를 이어 줄 때 걸린다. 앞의 code execution tool 문서는 컨테이너가 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다고 적었다. 도구 버전을 <code>code_execution_20260120</code> 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 요청에서 정한 값이 이번 요청에도 그대로 살아 있을 수 있으니, 결과물을 열어 그것이 지금의 model과 config에서 나온 것인지를 짚는다. 같은 문서는 컨테이너가 30일 뒤 만료된다고도 적었다.</p>
 <p>한 항목이 어긋나면 그 수치는 보류하고, 어긋난 자리를 최소 기록에 적는다.</p>
 <h2 data-source="part_02_experiment_to_manuscript.md" id="part-02-experiment-to-manuscript-두-실행이-같은-걸-재고-있나">두 실행이 같은 걸 재고 있나</h2>
 <p>결과물이 맞으면 그 수치를 baseline이나 지난번 수치 옆에 놓는다. 그 직전에 두 실행이 같은 것을 재고 있는지를 아래 항목으로 짚는다. 아래에는 실행 둘을 맞대야 답이 나오는 항목만 세운다. <code>task input/output</code>이 그렇다 — 값은 한 실행의 파일에서 나오지만, 그 값이 옆에 놓을 실행의 값과 같은지는 둘을 대 봐야 갈린다.</p>
@@ -501,7 +501,7 @@ evaluation
 </tbody>
 </table>
 <p>첫 줄은 여러 자리를 한꺼번에 받는다. 빌드 성공은 첫 줄에서 한 자리를 지운다. 소스가 컴파일됐다는 것까지가 그 한 자리다. <code>pip install</code>과 CUDA driver와 Docker volume과 dataset path는 그대로 남는다.</p>
-<p>같은 확인을 AI가 code execution tool 안에서 돌렸다면 첫 줄이 받는 자리가 달라진다. Anthropic의 <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool">code execution tool 문서</a>는 그 컨테이너의 인터넷이 완전히 막혀 있어 런타임에 패키지를 받지 못한다고 적었다. 미리 깔린 것만 도는 자리라 <code>pip install</code>은 후보에서 빠지고, 대신 필요한 패키지가 그 목록에 있는지가 첫 줄의 자리로 들어온다. 같은 문서가 적은 두 가지는 첫 줄에 자리를 하나 더 붙인다. 컨테이너는 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다. 도구 판을 <code>code_execution_20260120</code> 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 실행의 상태가 남아 있는 것이 그 자리다.</p>
+<p>같은 확인을 AI가 code execution tool 안에서 돌렸다면 첫 줄이 받는 자리가 달라진다. Anthropic의 <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool">code execution tool 문서</a>는 그 컨테이너의 인터넷이 완전히 막혀 있어 런타임에 패키지를 받지 못한다고 적었다. 미리 깔린 것만 도는 자리라 <code>pip install</code>은 후보에서 빠지고, 대신 필요한 패키지가 그 목록에 있는지가 첫 줄의 자리로 들어온다. 같은 문서가 적은 두 가지는 첫 줄에 자리를 하나 더 붙인다. 컨테이너는 약 5분 놀면 체크포인트로 저장됐다가 같은 컨테이너 ID로 되살아난다. 도구 버전을 <code>code_execution_20260120</code> 이후로 올리면 변수 바인딩까지 요청 사이에 남는다. 앞 실행의 상태가 남아 있는 것이 그 자리다.</p>
 <p>첫 줄의 자리들을 지우고 나면 둘째 줄이 선다. callback 없음과 tf lookup 실패는 둘째 줄에서 따로 본다. wrong metric script가 걸리는 자리는 셋째 줄이다. output이 쓸 데에 맞는지는 결과가 간 자리에 적은 파일을 열어 본다. 넷째 줄은 앞의 세 줄을 지운 뒤에 남는 자리다. 도구 실패를 넷째 줄에 적으면 아직 남아 있는 자리가 지워진 것으로 기록되고, 다음 확인이 같은 단계로 돌아온다. 도구 실패와 방법 실패가 한 기록에 섞이면 부록 D가 적은 대로 멈춘다.</p>
 <p><code>evaluation</code>까지 지나온 줄은 성능 숫자를 두고 쓴 문장을 받쳐 준다. <code>input</code>에서 멈춘 줄이 받쳐 주는 것은 그 단계에서 눈으로 본 것까지다. 기록에 적힌 단계와 실패 종류가 원고에 쓸 수 있는 문장의 어디까지를 정한다. 그 문장은 주장과 근거로 갈라 <code>claim-evidence-map.md</code>에 적는다.</p>
 <p>원고로 간 문장은 심사를 받는다. 심사를 기다리는 동안 AI는 원고의 문장을 빠르게 다듬고, 다듬고 나면 표현이 바뀐 원고가 남는다. 심사 의견은 손대기 전 원고를 읽고 돌아온다. 그 의견이 짚은 근거는 다듬기 전 자리에 그대로 있다. 답변서는 원고의 어느 줄을 어떻게 바꿨는지 적어 함께 보내는 문서다. 손댄 것이 표현뿐이면 거기 적을 것도 표현뿐이다. 의견 하나를 받으면 그것이 원고의 무엇을 짚었는지부터 가른다. 어조를 짚은 의견은 문장을 고치면 답이 된다. 실험 조건을 물었으면 실행이 한 번 더 든다. 주장이 어디까지 간다고 썼는지가 걸린 자리에서는 쓴 만큼을 줄여 답한다.</p>
@@ -1747,7 +1747,7 @@ sudo tcpdump -i eth0 -w capture.pcap
 </code></pre>
 <p>이 정보를 함께 주면 에이전트의 답이 어디에나 붙는 재설치 처방 대신 지금 이 시스템의 증거를 가리킨다.</p>
 <h1 data-source="TOOLS.md" id="부록-도구-문서-요약-2026-08-기준">부록 — 도구 문서 요약 (2026-08 기준)</h1>
-<p>공급자 문서에서 옮겨 적은 판번호와 수치를 여기 모은다. 판이 바뀌면 함께 바뀌는 값들이라, 항목마다 확인한 날짜를 적는다.</p>
+<p>공급자 문서에서 옮겨 적은 버전과 수치를 여기 모은다. 버전이 올라가면 함께 바뀌는 값들이라, 항목마다 확인한 날짜를 적는다.</p>
 <h2 data-source="TOOLS.md" id="tools-thinking과-cache">thinking과 cache</h2>
 <p>그 가운데 thinking 처리의 변화는 문서에 적혀 있다. <code>budget_tokens</code>로 생각할 양을 직접 정하던 방식은 4.7 이상에서 400 오류로 거부된다. 그 자리는 <code>thinking: {"type": "adaptive"}</code>가 대신하고, 이번 요청에 생각할지 말지는 모델이 스스로 정한다. 앞 턴의 thinking block을 어떻게 하는지도 모델마다 갈린다. <a href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking">extended thinking 문서</a>는 Opus 4.5와 4.6 이상이 이것을 남기고 입력으로 과금한다고 적었다. Sonnet 4.5·Haiku 4.5와 그 이전은 지운다. 이번 요청에 얼마나 생각했는지는 <code>response.usage.output_tokens_details.thinking_tokens</code>에 나온다. 우리 쪽 코드가 같아도 어느 모델을 부르느냐에 따라 모델이 이어받는 앞 맥락과 입력으로 청구되는 양이 달라진다.</p>
 <p>부르는 모델을 고정해 두어도 우리 쪽에서 어디를 손대느냐에 따라 같은 앞 맥락을 보내는 값이 달라진다. <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching">prompt caching 문서</a>는 앞부분이 같은 요청을 그 지점부터 이어 쓴다고 적었다. 캐시는 tools, system, messages 순서로 쌓이고, 앞 층이 바뀌면 그 아래가 전부 다시 쌓인다. 도구 정의를 하나 고치면 캐시 전체가 처음부터 새로 쓰인다. 캐시에 쓰는 값은 5분짜리가 기본 입력가의 1.25배다. <code>"ttl": "1h"</code>로 한 시간까지 늘리면 2배, 읽어 오는 값은 0.1배다. 무효가 된 자리는 읽기 값 대신 다시 쓰는 값을 낸다. 캐시로 잡히는 최소 토큰도 모델마다 갈려서 Opus 5는 512, Sonnet 5는 1,024, Haiku 4.5는 4,096이다.</p></div></main>
