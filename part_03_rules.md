@@ -60,7 +60,7 @@ Schick 등의 [Toolformer](https://arxiv.org/abs/2302.04761)는 한 걸음 더 �
 
 ## 규칙을 쪼개서 옮겨 온다
 
-옮기는 일은 외부 규칙을 쪼개는 데서 시작한다. 저장소 하나가 내놓는 prompt 문구에는 도구를 부르는 법과 다음 세션이 읽을 상태와 계속 걸어 둘 행동 규칙이 한 덩이로 적혀 있어, 통째로 옮기면 셋이 함께 따라온다. 조각마다 무엇인지를 먼저 묻는다. [Model Context Protocol](https://modelcontextprotocol.io/docs/learn/architecture)이 그 물음의 본보기를 준다. AI 애플리케이션에 기능을 붙여 주는 프로그램을 server라 부르는데, server가 내놓는 것을 이 규약이 셋으로 갈라 두었다. tool은 불러서 동작을 시키는 실행 가능한 함수다. resource는 읽어서 맥락으로 쓰는 자료다. prompt는 주고받을 말을 짜는 데 다시 쓰는 틀이다.
+옮기는 일은 외부 규칙을 쪼개는 데서 시작한다. 저장소 하나가 내놓는 prompt 문구에는 도구를 부르는 법과 다음 세션이 읽을 상태와 계속 걸어 둘 행동 규칙이 한 덩이로 적혀 있어, 통째로 옮기면 셋이 함께 따라온다. 조각마다 무엇인지를 먼저 묻는다. [Model Context Protocol](https://modelcontextprotocol.io/docs/learn/architecture)이 그 물음의 본보기가 된다. AI 애플리케이션에 기능을 붙여 주는 프로그램을 server라 부르는데, server가 내놓는 것을 이 규약이 셋으로 갈라 두었다. tool은 불러서 동작을 시키는 실행 가능한 함수다. resource는 읽어서 맥락으로 쓰는 자료다. prompt는 주고받을 말을 짜는 데 다시 쓰는 틀이다.
 
 옮겨 올 줄에도 같은 것을 묻는다. 이 줄은 실행되는 것인가, 읽히는 자료인가, 다시 채워 쓰는 틀인가.
 
