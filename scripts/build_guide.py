@@ -25,22 +25,12 @@ TEMPLATE = ROOT / "guide.template.html"
 OUTPUT = ROOT / "guide.html"
 PLACEHOLDER = "{{CONTENT}}"
 
-CHAPTERS = [ROOT / f"chapter_{number:02d}_{name}.md" for number, name in [
-    (0, "intro"),
-    (1, "start_here"),
-    (2, "environment"),
-    (3, "harness"),
-    (4, "research_workflows"),
-    (5, "experiment_protocol"),
-    (6, "stage_local_debugging"),
-    (7, "claim_evidence"),
-    (8, "review_response"),
-    (9, "external_templates"),
-    (10, "robotics_runtime"),
-]]
-
-# 부 구획. 장 번호가 열쇠이고, 그 장 앞에 부 제목이 선다.
-PARTS = {1: "1부 — 기록 남기기", 4: "2부 — 실험에서 원고까지", 9: "3부 — 규칙으로 만들기"}
+CHAPTERS = [
+    (ROOT / "part_00_intro.md", "서문"),
+    (ROOT / "part_01_records.md", "1부"),
+    (ROOT / "part_02_experiment_to_manuscript.md", "2부"),
+    (ROOT / "part_03_rules.md", "3부"),
+]
 APPENDICES = [
     ROOT / "TERMS.md",
     ROOT / "QUICKSTART.md",
@@ -133,7 +123,7 @@ def overview_entry(path: Path, headings: list[tuple[int, str, str]], label: str)
 
 
 def build_content() -> str:
-    sources = CHAPTERS + APPENDICES
+    sources = [path for path, _ in CHAPTERS] + APPENDICES
     missing = [str(path) for path in sources if not path.is_file()]
     if missing:
         raise RuntimeError("missing canonical sources: " + ", ".join(missing))
@@ -145,14 +135,10 @@ def build_content() -> str:
         rendered.append(fragment)
         metadata.append((path, headings))
 
-    guide_parts = []
-    for index, (path, headings) in enumerate(metadata[: len(CHAPTERS)]):
-        part = PARTS.get(index)
-        if part:
-            guide_parts.append(
-                f'<div class="overview-part-label">{html.escape(part)}</div>')
-        guide_parts.append(overview_entry(path, headings, f"{index:02d}"))
-    guide_entries = "".join(guide_parts)
+    guide_entries = "".join(
+        overview_entry(path, headings, label)
+        for (path, label), (_, headings) in zip(CHAPTERS, metadata[: len(CHAPTERS)])
+    )
     appendix_entries = "".join(
         overview_entry(path, headings, "부록")
         for path, headings in metadata[len(CHAPTERS) :]
