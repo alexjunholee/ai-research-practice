@@ -2,9 +2,9 @@
 
 공개된 agent 저장소에는 다시 쓸 만한 작업 습관이 있다. 작은 단위의 수정, 가정 명시, 실패 보고, 역할 분리, tool 호출 기록은 연구에도 쓸 데가 있다. 다만 그 규칙은 코드를 고치고 tool을 부르는 일을 중심으로 짜여 있다. 로봇 실험의 수치가 무엇을 가리키는지 말하려면 dataset, calibration, frame, metric, 실패 처리, reviewer risk까지 같은 자리에 적혀 있어야 한다.
 
-tool 호출 쪽으로는 논문이 정해 둔 것이 있다. Yao 등은 reasoning trace와 action을 번갈아 내놓게 한 [ReAct](https://arxiv.org/abs/2210.03629)를 ALFWorld와 WebShop에서 쟀고, in-context example 한둘로 절대 성공률을 34%와 10% 올렸다. reasoning trace는 모델이 action plan을 세우고 따라가고 고치게 했고 예외도 그 자리에서 다루게 했다. action은 knowledge base나 environment 같은 외부 출처에서 정보를 더 모으는 통로였다. Schick 등의 [Toolformer](https://arxiv.org/abs/2302.04761)는 어느 API를 언제 부르고 무슨 argument를 넘기고 그 결과를 다음 token 예측에 어떻게 넣을지를 모델이 정하도록 훈련했다. 두 연구는 언제 부를지, 어떤 argument를 넘길지, 결과를 어떻게 다룰지를 정해 두었다. 그 호출이 어느 dataset의 어느 split으로 가고 어느 metric script로 재는지는 연구자 쪽에 남는다.
+tool 호출 쪽으로는 논문이 정해 둔 것이 있다. Yao 등은 reasoning trace와 action을 번갈아 내놓게 한 [ReAct](https://arxiv.org/abs/2210.03629)를 ALFWorld와 WebShop에서 쟀고, in-context example 한둘로 절대 성공률을 34%와 10% 올렸다. reasoning trace는 모델이 action plan을 세우고 따라가고 고치게 했고 예외도 거기서 다루게 했다. action은 knowledge base나 environment 같은 외부 출처에서 정보를 더 모으는 통로였다. Schick 등의 [Toolformer](https://arxiv.org/abs/2302.04761)는 어느 API를 언제 부르고 무슨 argument를 넘기고 그 결과를 다음 token 예측에 어떻게 넣을지를 모델이 정하도록 훈련했다. 두 연구는 언제 부를지, 어떤 argument를 넘길지, 결과를 어떻게 다룰지를 정해 두었다. 그 호출이 어느 dataset의 어느 split으로 가고 어느 metric script로 재는지는 연구자 쪽에 남는다.
 
-연구자 쪽에 남은 것을 어디에 적어 둘지는 그 작업이 돌아가는 구조에서 정해진다. Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 자리를 셋으로 갈랐다. session은 일어난 일을 그대로 쌓는 append-only log, harness는 모델을 부르고 그 tool 호출을 그 infrastructure로 넘기는 loop, sandbox는 코드를 실행하고 파일을 고치는 실행 환경이다. harness는 loop를 한 바퀴 돌 때마다 지금 어느 도구를 부를지, 그 결과를 어디로 보낼지를 정한다. 연구 workspace에서는 사람이 그 판단을 미리 글로 적어 둔다. 어느 파일을 먼저 읽고 어떤 결과가 나오면 멈출지를 문장으로 남기면 agent가 걸음마다 그 문장을 본다. 그 문장 묶음이 harness에 해당한다. 다음 작업에서 다시 읽을 기록은 session에, 실제 파일과 command와 dataset이 놓인 경계는 sandbox에 대응한다.
+연구자 쪽에 남은 것을 어디에 적어 둘지는 그 작업이 돌아가는 구조에서 정해진다. Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agents)는 셋으로 갈랐다. session은 일어난 일을 그대로 쌓는 append-only log, harness는 모델을 부르고 그 tool 호출을 그 infrastructure로 넘기는 loop, sandbox는 코드를 실행하고 파일을 고치는 실행 환경이다. harness는 loop를 한 바퀴 돌 때마다 지금 어느 도구를 부를지, 그 결과를 어디로 보낼지를 정한다. 연구 workspace에서는 사람이 그 판단을 미리 글로 적어 둔다. 어느 파일을 먼저 읽고 어떤 결과가 나오면 멈출지를 문장으로 남기면 agent가 걸음마다 그 문장을 본다. 그 문장 묶음이 harness에 해당한다. 다음 작업에서 다시 읽을 기록은 session에, 실제 파일과 command와 dataset이 놓인 경계는 sandbox에 대응한다.
 
 연구 workspace로 옮겨 오는 것은 이 셋의 구분이다. 옮겨 올 규칙은 저장소마다 prompt 문구로 적혀 있다. 그 문구를 손보기 전에 이 셋부터 대응시킨다.
 
@@ -36,9 +36,9 @@ tool 호출 쪽으로는 논문이 정해 둔 것이 있다. Yao 등은 reasonin
 - result provenance
 - 원고에서 말할 수 있는 범위
 
-여덟 항목은 1부와 2부가 이미 채워 본 이름이다. 위의 다섯은 실행을 걸 때 그 자리에서 채우는 최소 기록이다. 그것이 가리키는 것은 sandbox 자리에 놓인 파일과 script다. implementation status는 `저장소에 있다`에 붙이는 라벨이라 논문 주장과 실행 경로를 맞춰 봐야 정해진다. result provenance는 그 숫자가 어느 실행에서 나왔는지 적어 둔 기록에 남는다. 외부 저장소에서 가져온 문구 옆에 이 여덟 항목을 따로 단다.
+여덟 항목은 1부와 2부가 이미 채워 본 이름이다. 위의 다섯은 실행을 걸 때 거기서 채우는 최소 기록이다. 그것이 가리키는 것은 sandbox 쪽에 놓인 파일과 script다. implementation status는 `저장소에 있다`에 붙이는 라벨이라 논문 주장과 실행 경로를 맞춰 봐야 정해진다. result provenance는 그 숫자가 어느 실행에서 나왔는지 적어 둔 기록에 남는다. 외부 저장소에서 가져온 문구 옆에 이 여덟 항목을 따로 단다.
 
-부록 D(`PATH.md`)는 멈춰야 하는 조건 하나로 `실험 조건이 바뀌었는데 숫자를 비교하려 한다`를 적어 두었다. 조건이 바뀐 뒤에도 앞 조건에서 만들어 둔 cache를 그대로 읽거나 이름만 같은 metric script 둘을 한 표에 올려도 숫자는 그대로 나온다. 위 여덟 항목이 채워져 있으면 어긋난 것이 그 자리에서 눈에 보인다. 맨 아래 줄은 원고 문장 쪽으로 이어져 `claim-evidence-map.md`에서 주장과 근거로 나뉜다.
+부록 D(`PATH.md`)는 멈춰야 하는 조건 하나로 `실험 조건이 바뀌었는데 숫자를 비교하려 한다`를 적어 두었다. 조건이 바뀐 뒤에도 앞 조건에서 만들어 둔 cache를 그대로 읽거나 이름만 같은 metric script 둘을 한 표에 올려도 숫자는 그대로 나온다. 위 여덟 항목이 채워져 있으면 어긋난 것이 거기서 눈에 보인다. 맨 아래 줄은 원고 문장 쪽으로 이어져 `claim-evidence-map.md`에서 주장과 근거로 나뉜다.
 
 ## 규칙을 쪼개서 옮겨 온다
 
