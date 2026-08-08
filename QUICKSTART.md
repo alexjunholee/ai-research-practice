@@ -152,7 +152,7 @@ Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agen
 - durable corrections
 
 이미 `CLAUDE.md`, `.claude/`, Cursor 규칙이 있으면 옮길 규칙과 버릴 명령을
-나눈다(따라 할 절차는 `templates/archive/codex-porting-checklist.md`에 있다). 파일 이름과 플러그인 명령은 도구별 형식이므로
+나눈다(따라 할 절차는 `templates/codex-porting-checklist.md`에 있다). 파일 이름과 플러그인 명령은 도구별 형식이므로
 규칙의 의미를 먼저 본다. "가정을 드러내라", "작게 고쳐라", "성공 기준을 검증 가능하게
 만들어라" 같은 규칙은 Codex에서도 그대로 쓴다.
 
