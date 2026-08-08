@@ -49,7 +49,7 @@ evaluation
 
 일곱 이름은 데이터가 지나가는 차례다. `input`으로 들어온 것을 `preprocessing`이 손질하고, `representation`이 그것을 다루기 좋은 꼴로 바꿔 두면 `matching`이 짝을 찾고 `geometry`가 위치를 세우고 `optimization`이 전체를 맞춘다. 마지막 `evaluation`이 그 결과를 숫자로 잰다. 1과 2는 `input`에 들어온 것과 거기 붙은 조건을 본다. 3에서 여는 normalization은 `preprocessing` 안에서 도는 손질이다. 4가 여는 cache와 checkpoint와 중간 출력은 `representation`이 남겨 둔 것이다. 5는 `matching`과 `geometry`와 `optimization`의 입력과 출력을 한 줄에서 받고, 6이 metric script와 failure policy를 여는 자리가 `evaluation`이다. 앞 장에서 숫자마다 dataset과 split과 metric script를 적어 두었다면 1과 6은 그 기록을 다시 읽는 일이 된다. 7은 일곱 이름을 다 지나온 뒤에 남는다.
 
-## 본 것을 적어 두는 형식
+## 본 것은 같은 꼴로 적는다
 
 앞의 두 목록은 항목마다 확인 하나를 만든다. 다음 세션에서 같은 자리를 다시 열려면 그 확인들이 한 파일에 같은 모양으로 쌓여 있어야 한다. 확인은 하나하나 같은 형식으로 남긴다.
 
