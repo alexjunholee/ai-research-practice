@@ -6,39 +6,21 @@
 
 다시 돌려 보려면 어느 code와 어느 data인지부터 정한다. 그 둘은 셋을 갈라 둔 자리에서 나온다. 저장소에서 이름으로 찾아 나온 파일과 그 실행이 지나간 파일이 같은 것인지까지 정해야 어느 code인지가 하나로 선다. 논문에 적힌 component가 저장소에 있으면 config를 거쳐 실제로 호출되는지, 결과에 영향을 주는지를 이어서 짚어 본다.
 
-논문 초록과 저장소 README에도 그 component의 이름과 하는 일이 적혀 있다. 초록과 README는 저자가 쓴 요약이다. 앞 장이 옮겨 둔 대로, 원문 파일이 손에 있으면 프로젝트의 참은 그 파일에서 정한다. 그 파일을 열고 눈으로 본 것을 여섯 줄에 남긴다.
+논문 초록과 저장소 README에도 그 component의 이름과 하는 일이 적혀 있다. 초록과 README는 저자가 쓴 요약이다. 앞 장이 옮겨 둔 대로, 원문 파일이 손에 있으면 프로젝트의 참은 그 파일에서 정한다. 그 파일을 열고 눈으로 본 것을 남긴다.
 
-## 줄마다 열어 볼 데가 다르다
+## 위에서 아래로 채운다
 
-```text
-논문 주장:
-관련 code path:
-실제로 호출되는 경로:
-실험 command:
-metric script:
-비교할 수 있는 범위:
-```
+적을 것은 위에서 아래로 순서가 있다. 논문 주장을 먼저 옮겨 오는데, 어느 table과 figure의 문장인지까지 적어 두면 다음에 그 자리를 바로 편다. 그다음 저장소에서 이름으로 찾은 code path를 적는다. 실제로 호출되는 경로는 돌려 봐야 아는 것이라 그다음이다. 둘이 같으면 같다고 적고 다르면 다르게 적는다. 이어서 다시 돌려 보는 데 쓴 command와 metric script를 적는다. 비교할 수 있는 범위는 앞이 다 채워진 뒤에 문장으로 적고, 원고에는 거기 적힌 데까지만 쓴다.
 
-이 여섯 줄은 위에서 아래로 채운다. 첫 줄은 논문에서 옮겨 온다. 어느 table, 어느 figure의 문장인지까지 적어 두면 다음에 그 자리를 바로 편다. 둘째 줄은 저장소에서 이름으로 찾아 채운다. 셋째 줄을 채우려면 그 이름이 실행에서 지나갔는지 돌려 봐야 한다. 두 줄이 같으면 같다고 적고 다르면 다르게 적는다. 넷째 줄과 다섯째 줄에는 그것을 다시 돌려 보는 데 쓴 command와 script가 들어간다. 마지막 줄은 앞의 다섯 줄이 채워진 뒤에 문장으로 적고, 원고에는 그 줄에 적힌 어디까지만 쓴다.
-
-이 여섯 줄 가운데 앞의 다섯에 남는 것은 이름과 경로다. Anthropic은 파일 경로나 질의나 링크처럼 가벼운 식별자만 들고 있다가 실행할 때 그 자리에서 불러오는 방식을 [`just in time`](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)이라고 적었다. 같은 문서는 맥락 창에 든 토큰이 늘수록 모델이 그 안의 내용을 정확히 되짚는 능력이 떨어진다고 적었다. 논문 전문과 저장소를 통째로 읽혀 넣으면 그 토큰이 모두 창에 남는다. 여섯 줄에 적힌 경로는 열기 전까지 한 줄이고, 그 줄을 열어 돌려 본 결과가 셋째 줄에 들어간다.
+이 가운데 앞쪽에 남는 것은 이름과 경로다. Anthropic은 파일 경로나 질의나 링크처럼 가벼운 식별자만 들고 있다가 실행할 때 그 자리에서 불러오는 방식을 [`just in time`](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)이라고 적었다. 같은 문서는 맥락 창에 든 토큰이 늘수록 모델이 그 안의 내용을 정확히 되짚는 능력이 떨어진다고 적었다. 논문 전문과 저장소를 통째로 읽혀 넣으면 그 토큰이 모두 창에 남는다. 여섯 줄에 적힌 경로는 열기 전까지 한 줄이고, 그 줄을 열어 돌려 본 결과가 셋째 줄에 들어간다.
 
 논문 쪽과 저장소 쪽에 각각 물어 둘 것이 있다.
 
 ## 논문에 묻고 코드에 묻고
 
-| 질문 | 이유 |
-|---|---|
-| 논문 주장이 어느 table, figure, section에 있는가 | 원고 주장 범위를 확인한다 |
-| 공개 코드에서 해당 모듈이 어디 있는가 | 코드 존재 여부를 확인한다 |
-| 그 모듈이 실제 예제에서 호출되는가 | 실행 경로를 확인한다 |
-| config key가 runtime에 읽히는가 | config만 있고 쓰이지 않는 상태를 막는다 |
-| 논문 표의 숫자를 만든 script가 공개되어 있는가 | 재현 가능성을 확인한다 |
-| issue나 commit에서 convention이 바뀌었는가 | 현재 branch의 의미를 확인한다 |
+물을 것에는 순서가 있고, 갈수록 열어 볼 데가 안으로 들어간다. 논문 주장이 어느 table과 figure와 section에 있는지 먼저 본다. 원고 주장의 범위가 여기서 선다. 공개 코드에서 해당 모듈이 어디 있는지 찾고, 그 모듈이 실제 예제에서 호출되는지 본다. config key가 runtime에 읽히는지도 본다. config에만 있고 쓰이지 않는 상태를 여기서 거른다. 앞 질문의 답이 나와야 다음 질문을 걸 자리가 생긴다. 모듈 경로가 손에 있어야 그 모듈이 예제에서 호출되는지를 물을 데가 정해진다. 뒤의 둘은 시간을 묻는다. 논문 표의 숫자를 만든 script가 지금 저장소에 공개되어 있는지, 논문 시점과 지금 branch 사이에 convention이 바뀌었는지다.
 
-여섯 질문에는 순서가 있다. 논문 주장이 어느 table에 있는지에서 시작해 config key가 runtime에 읽히는지까지, 갈수록 열어 볼 데가 안으로 들어간다. 앞 질문의 답이 나와야 다음 질문을 걸 자리가 생긴다. 모듈 경로가 손에 있어야 그 모듈이 예제에서 호출되는지를 물을 데가 정해진다. 뒤의 두 질문은 시간을 묻는다. 논문 표의 숫자를 만든 script가 지금 저장소에 있는지, 논문 시점과 지금 branch 사이에 convention이 바뀌었는지다.
-
-필요할 때 다음 층을 여는 짜임은 에이전트 쪽에도 있다. Anthropic의 [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)는 지시와 script와 자료를 담은 폴더를 에이전트가 찾아 필요할 때 올려 쓰게 하고, 그 열림을 세 층으로 나눴다. 폴더마다 `SKILL.md` 한 장이 들어가고, 그 안에 이름과 언제 쓰는지가 적혀 있다. 1층에서는 그 이름과 description만 system prompt에 올라간다. 2층에서 관련 있다고 판단하면 `SKILL.md` 본문을 읽고, 3층에서 같은 폴더의 다른 파일을 필요할 때 연다. 목차로 시작해 장을 지나 자세한 부록으로 가는 잘 정리된 매뉴얼에 견주며, 필요한 만큼만 올린다고 적었다. 여섯 질문도 답이 나온 줄에서 다음 줄로 내려간다.
+필요할 때 다음 층을 여는 짜임은 에이전트 쪽에도 있다. Anthropic의 [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)는 지시와 script와 자료를 담은 폴더를 에이전트가 찾아 필요할 때 올려 쓰게 하고, 그 열림을 세 층으로 나눴다. 폴더마다 `SKILL.md` 한 장이 들어가고, 그 안에 이름과 언제 쓰는지가 적혀 있다. 1층에서는 그 이름과 description만 system prompt에 올라간다. 2층에서 관련 있다고 판단하면 `SKILL.md` 본문을 읽고, 3층에서 같은 폴더의 다른 파일을 필요할 때 연다. 목차로 시작해 장을 지나 자세한 부록으로 가는 잘 정리된 매뉴얼에 견주며, 필요한 만큼만 올린다고 적었다. 이쪽 질문들도 답이 나온 자리에서 다음으로 내려간다.
 
 답이 모이면 그 모듈의 상태가 한 낱말로 선다. `저장소에 있다`에 다음 중 하나를 붙인다.
 
@@ -56,7 +38,7 @@ metric script:
 
 라벨은 두 자리에서 갈린다. planned-only와 tested-failed는 문서와 issue를 읽으면 붙는다. active와 configured-unused와 dead를 가르려면 실행 경로를 따라가야 한다. disabled는 flag를 읽으면 나온다. 켜서 돌려 본 뒤에는 다른 라벨로 옮겨 적는다. unknown은 물어 두고 답을 기다리는 자리다. 빈칸은 묻지 않았다는 뜻으로도 해당 없음이라는 뜻으로도 읽히므로, 물어 둔 자리에는 unknown을 적는다. 여기서 갈리는 것은 파일을 찾아 열면 그 자리에서 답이 나는 일과, 이 branch와 이 config로 돌려 본 출력이 있어야 답이 나는 일이다. AI에 맡길 몫도 이 선에서 나뉜다.
 
-논문에서 방법의 구성요소를 뽑고, 저장소에서 관련 function, class, config를 찾고, issue thread와 README에 적힌 convention 변화를 모으는 일을 AI가 맡는다. 앞의 표가 물은 것 가운데 script 공개와 convention 변화는 코드 본문 밖에 답이 있다. YAML, launch command, issue comment, 실패한 sequence, table caption까지 내려가게 한다. 실제로 호출됐는지, config가 runtime에 도달하는지, dataset과 metric 조건이 같은지, 원고에서 어디까지 말할 수 있는지는 실행 결과를 보고 사람이 적는다.
+논문에서 방법의 구성요소를 뽑고, 저장소에서 관련 function, class, config를 찾고, issue thread와 README에 적힌 convention 변화를 모으는 일을 AI가 맡는다. 위 질문 가운데 script 공개와 convention 변화는 코드 본문 밖에 답이 있다. YAML, launch command, issue comment, 실패한 sequence, table caption까지 내려가게 한다. 실제로 호출됐는지, config가 runtime에 도달하는지, dataset과 metric 조건이 같은지, 원고에서 어디까지 말할 수 있는지는 실행 결과를 보고 사람이 적는다.
 
 AI가 뽑아 오는 것은 구성요소 이름과 function과 config key와 convention 변화라 답이 들어갈 칸이 미리 정해져 있다. Claude API의 [structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)는 constrained decoding으로 스키마에 맞는 답을 보장한다고 적었다. 칸 이름을 스키마로 걸어 두면 돌아온 답이 그대로 표의 한 줄이 된다. 스키마가 받는 것은 type과 properties, items와 required다. enum과 const, additionalProperties도 받는다. 객체를 중첩하거나 배열로 묶은 꼴도 그대로 받고, 칸 하나에는 boolean, number, integer, string, null이 온다. pattern(정규식)은 그 목록 밖에 있다. minimum과 maximum, minLength와 maxLength, uniqueItems, allOf, oneOf도 밖이다. 스키마는 그 칸이 채워졌다는 데까지 센다. 칸에 적힌 경로가 실행에서 지나갔는지는 앞의 라벨이 받는다.
 

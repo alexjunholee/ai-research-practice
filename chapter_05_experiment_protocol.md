@@ -6,46 +6,15 @@
 
 조건을 숫자로 적어 둔 실행 환경도 있다. Anthropic의 [code execution tool 문서](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)는 Claude가 Bash command를 돌리고 파일을 다루는 sandbox를 두고 그 경계를 숫자로 적었다. Python 3.11, 리눅스 컨테이너, x86_64, 메모리 5 GiB, 디스크 5 GiB, CPU 1개다. 코드를 셀 단위로 넘겨 돌리는 쪽에서는 셀 하나가 90초 벽시계 안에서 끝나야 한다. 어떤 수치를 이 sandbox에서 뽑았다면 latency를 재는 순간 이 값들이 그대로 그 수치의 조건이 되고, 셀 단위로 돌렸다면 90초도 함께 붙는다. 연구실 기계에서 잰 값에는 그 기계의 경계값이 같은 자리에 들어간다.
 
-어느 기계에서 어느 dataset으로 잰 값인지를 수치마다 되짚으려면 물음이 한 벌 서 있어야 한다. 숫자를 다시 마주쳤을 때 던질 여섯 줄이 부록 D에 있다.
-
-```text
-Which dataset?
-Which split?
-Which direction?
-Which metric script?
-Which baseline?
-Which output?
-```
-
-이 여섯 줄에 답이 붙은 수치가 원고에서 근거가 된다.
+어느 기계에서 어느 dataset으로 잰 값인지를 수치마다 되짚으려면 물음이 한 벌 서 있어야 한다. 어느 dataset의 어느 split인지, 방향은 무엇인지, 어느 metric script와 어느 baseline인지, 실제로 읽은 output이 무엇인지다. 이 물음에 답이 붙은 수치가 원고에서 근거가 된다.
 
 ## 돌릴 때 그 자리에서 채운다
 
-여섯 줄의 답은 실행을 걸 때 한 벌 적어 두면 그 자리에 남는다. 실행을 건 뒤에 같은 답을 맞추려면 command 이력과 config 파일과 결과 디렉터리를 각각 열어 봐야 한다. 아래 칸은 command를 던지는 사람이 그 자리에서 채우고, 결과 파일이 나오면 output path를 마저 채운다.
-
-```text
-dataset:
-split:
-sequence:
-sensor/modality:
-task input/output:
-ground-truth frame:
-alignment:
-metric:
-threshold:
-baseline:
-command:
-config:
-output path:
-timeout:
-failure policy:
-```
-
-dataset과 split, baseline, output path 줄은 여섯 줄에 그대로 답한다. direction은 이름이 바뀌어 task input/output 칸으로 간다. metric script를 받는 칸은 metric이다. 나머지 칸이 남기는 것은 같은 command를 다시 던지는 데 드는 것들이다. 이 한 벌이 실행 하나의 최소 기록이다.
+이 답은 실행을 걸 때 한 벌 적어 두면 그 자리에 남는다. 실행을 건 뒤에 같은 답을 맞추려면 command 이력과 config 파일과 결과 디렉터리를 각각 열어 봐야 한다. 그래서 command를 던지는 사람이 그 자리에서 적는다. 어느 dataset의 어느 split과 sequence인지, 어느 sensor로 무엇을 받아 무엇을 내는지, ground-truth frame과 alignment는 무엇인지, metric과 threshold와 baseline은 무엇인지. 여기까지가 수치의 조건이고, 같은 command를 다시 던지는 데 드는 것들이 이어진다. command와 config, output path, timeout, 실패 구간을 어떻게 처리했는지다. 결과 파일이 나오면 output path를 마저 채운다. 이 한 벌이 실행 하나의 최소 기록이다.
 
 ## 숫자 읽기 전에 결과물부터
 
-실행이 끝나면 metric 값을 읽기 전에 결과물 자체를 짚는다. 최소 기록에 적은 칸은 실행을 걸 때 정한 조건이다. 그 조건대로 돌았는지는 나온 파일을 열어야 안다. 아래 항목은 output 디렉터리를 처음 여는 사람이 하나씩 본다. 여기 오는 것은 실행 하나만 열어 놓고 답이 나오는 항목이다. `coverage`는 그 실행의 입력 구간과 출력 구간을 서로 대 보면 답이 나오므로 이 표에 선다.
+실행이 끝나면 metric 값을 읽기 전에 결과물 자체를 짚는다. 최소 기록에 적은 것은 실행을 걸 때 정한 조건이다. 그 조건대로 돌았는지는 나온 파일을 열어야 안다. 아래 항목은 output 디렉터리를 처음 여는 사람이 하나씩 본다. 여기 오는 것은 실행 하나만 열어 놓고 답이 나오는 항목이다. `coverage`는 그 실행의 입력 구간과 출력 구간을 서로 대 보면 답이 나오므로 이 표에 선다.
 
 | 항목 | 확인 내용 |
 |---|---|
@@ -74,7 +43,7 @@ dataset과 split, baseline, output path 줄은 여섯 줄에 그대로 답한다
 | metric script | 지난번과 같은 script인지 |
 | output path | 실제로 읽은 결과 파일이 맞는지 |
 
-metric script, baseline, output path는 여섯 줄이 묻던 것이다. 실행할 때 적어 둔 값과 지금 읽는 값이 같으면 두 수치가 한 표에 들어간다.
+metric script와 baseline과 output path는 앞의 물음이 묻던 것이다. 실행할 때 적어 둔 값과 지금 읽는 값이 같으면 두 수치가 한 표에 들어간다.
 
 `metric script` 줄에는 script 이름 말고 그 script가 돌아간 라이브러리 판도 걸린다. 앞의 code execution tool 문서는 이 sandbox의 인터넷이 완전히 막혀 있다고 적었다. 그래서 도는 것은 미리 깔린 패키지뿐이고, 그 목록이 pandas, numpy, scipy, scikit-learn, matplotlib, pyarrow, pypdf 등이다. 문서가 적어 둔 것은 패키지 이름까지다. 같은 물음을 연구실 기계에서 돌린 script에 걸면, 그 판을 적은 줄이 같은 자리에 들어간다.
 
@@ -92,4 +61,4 @@ metric script, baseline, output path는 여섯 줄이 묻던 것이다. 실행�
 
 ## 실패한 실행도 기록할 결과다
 
-최소 기록의 칸은 결과 파일이 나온 실행을 받는다. output path와 metric 칸이 결과 파일에서 채워지기 때문이다. 멈춘 실행에도 남길 것이 있다. timeout과 OOM, sensor dropout과 tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험의 조건을 정하는 자료다. 최소 기록의 failure policy 칸은 집계에서 실패 구간을 어떻게 다뤘는지를 받고, 멈춘 실행에는 그 한 벌을 따로 적어 어디까지 갔는지를 남긴다. 실패 하나가 실행의 어느 지점에서 나왔는지에 따라 다음에 고칠 자리가 갈린다. 어느 단계에서 끊겼는지를 가르는 일은 다음 장이 맡는다.
+최소 기록은 결과 파일이 나온 실행을 받는다. output path와 metric이 결과 파일에서 채워지기 때문이다. 멈춘 실행에도 남길 것이 있다. timeout과 OOM, sensor dropout과 tracking lost, missing sequence, metric script failure, invalid ground truth는 다음 실험의 조건을 정하는 자료다. 최소 기록의 실패 처리 항목은 집계에서 실패 구간을 어떻게 다뤘는지를 받고, 멈춘 실행에는 그 한 벌을 따로 적어 어디까지 갔는지를 남긴다. 실패 하나가 실행의 어느 지점에서 나왔는지에 따라 다음에 고칠 자리가 갈린다. 어느 단계에서 끊겼는지를 가르는 일은 다음 장이 맡는다.

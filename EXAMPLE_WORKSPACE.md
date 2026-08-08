@@ -41,7 +41,7 @@ examples/first-robotics-workspace/
 
 ## 예시에서 확인할 경계
 
-예시는 AI가 시작 지점을 찾는 데 필요한 여섯 줄을 채워 두었다.
+예시는 AI가 시작 지점을 찾는 데 필요한 기록을 채워 두었다.
 
 ```text
 session record to update:
@@ -52,4 +52,4 @@ current evidence forbids:
 next smallest action:
 ```
 
-이 여섯 줄을 남기면 AI는 다음 세션에서도 같은 연구 상태에서 시작한다.
+이 기록을 남기면 AI는 다음 세션에서도 같은 연구 상태에서 시작한다.

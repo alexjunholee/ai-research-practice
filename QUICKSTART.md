@@ -50,16 +50,12 @@ workspace/
 먼저 정한다. 코드 이력, 원시 데이터, 실험 결과물, 비공개 메모는 처음부터
 나눠 둔다.
 
-공개 번들은 이 책의 가이드 묶음이다. 옮길 파일은 그 묶음 안 `templates/` 아래에 모여 있다.
-새 작업 공간을 처음 만들 때는 공개 번들에서 다음 파일을 먼저 복사한다.
-
-| 공개 번들 | 새 작업 공간 |
-|---|---|
-| [`templates/workspace-readme.md`](templates.html#templates-workspace-readme) | `README.md` |
-| [`templates/AGENTS.template.md`](templates.html#templates-agents-template) | `AGENTS.md` |
-| [`templates/project-memory.template.json`](templates.html#templates-project-memory-template-json) | `project-memory.json` |
-| `templates/*.md` | `templates/` |
-| 필요한 연구 루프 템플릿 | `notes/` |
+공개 번들은 이 책의 가이드 묶음이다. 옮길 파일은 그 묶음 안 `templates/`에 셋뿐이다.
+`AGENTS.template.md`를 `AGENTS.md`로, `project-memory.template.json`을
+`project-memory.json`으로 복사하고, 첫 요청에 쓸 `first-ai-session-prompt.md`를
+`notes/`에 둔다. 주장과 근거를 적을 `claim-evidence-map.md`는 원고 작업을 시작할 때
+가져온다. `README.md`와 상태 메모는 서식 없이 직접 짧게 적는다. 무엇을 두는
+공간인지, 공개와 비공개의 경계가 어디인지면 된다.
 
 번들을 내려받아 풀었다면 다음과 같이 시작한다. `GUIDE`는 가이드
 묶음의 루트, `WORKSPACE`는 새 연구 작업 공간의 위치다.
@@ -69,15 +65,9 @@ GUIDE="$PWD"
 WORKSPACE="$HOME/robotics-ai-workspace"
 mkdir -p "$WORKSPACE"/repos "$WORKSPACE"/datasets "$WORKSPACE"/artifacts \
   "$WORKSPACE"/notes "$WORKSPACE"/templates
-cp "$GUIDE/templates/workspace-readme.md" "$WORKSPACE/README.md"
 cp "$GUIDE/templates/AGENTS.template.md" "$WORKSPACE/AGENTS.md"
 cp "$GUIDE/templates/project-memory.template.json" "$WORKSPACE/project-memory.json"
-cp "$GUIDE/templates/"*.md "$WORKSPACE/templates/"
-cp "$GUIDE/templates/first-day-workspace-checklist.md" "$WORKSPACE/notes/"
 cp "$GUIDE/templates/first-ai-session-prompt.md" "$WORKSPACE/notes/"
-cp "$GUIDE/templates/paper-code-experiment-map.md" "$WORKSPACE/notes/"
-cp "$GUIDE/templates/experiment-contract.md" "$WORKSPACE/notes/"
-cp "$GUIDE/templates/weekly-research-ledger.md" "$WORKSPACE/notes/"
 ```
 
 Windows PowerShell에서는 같은 작업을 이렇게 한다.
@@ -149,9 +139,8 @@ Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agen
 
 ## AGENTS.md 작성
 
-루트의 `README.md`와 `AGENTS.md`에도 같은 빈칸이 남아 있다.
-[`templates/workspace-readme.md`](templates.html#templates-workspace-readme)를 `README.md`로
-복사해 프로젝트 이름과 저장소, 데이터셋, 결과물 위치만 채운다. 그다음
+루트의 `README.md`와 `AGENTS.md`에도 같은 빈칸이 남아 있다. `README.md`에는
+프로젝트 이름과 저장소, 데이터셋, 결과물 위치만 직접 적는다. 그다음
 [`templates/AGENTS.template.md`](templates.html#templates-agents-template)에서
 다음 항목만 먼저 채운다.
 
@@ -162,9 +151,8 @@ Anthropic의 [Managed Agents](https://www.anthropic.com/engineering/managed-agen
 - evidence gate
 - durable corrections
 
-이미 `CLAUDE.md`, `.claude/`, Cursor 규칙이 있으면
-[`templates/codex-porting-checklist.md`](templates.html#templates-codex-porting-checklist)로
-옮길 규칙과 버릴 명령을 나눈다. 파일 이름과 플러그인 명령은 도구별 형식이므로
+이미 `CLAUDE.md`, `.claude/`, Cursor 규칙이 있으면 옮길 규칙과 버릴 명령을
+나눈다(따라 할 절차는 `templates/archive/codex-porting-checklist.md`에 있다). 파일 이름과 플러그인 명령은 도구별 형식이므로
 규칙의 의미를 먼저 본다. "가정을 드러내라", "작게 고쳐라", "성공 기준을 검증 가능하게
 만들어라" 같은 규칙은 Codex에서도 그대로 쓴다.
 
@@ -181,18 +169,9 @@ system prompt에 올리고, 2층은 관련 있다고 판단하면 `SKILL.md` 본
 ## 첫 상태 체크리스트를 채운다
 
 `AGENTS.md`의 `project truth`와 `durable corrections`에 채울 내용은 여기서 나온다.
-[`templates/first-day-workspace-checklist.md`](templates.html#templates-first-day-workspace-checklist)에서
-현재 연구 상태의 원본 파일과 실행 결과를 정한다.
-
-```text
-project goal:
-code truth:
-dataset truth:
-experiment truth:
-manuscript truth:
-reviewer risk:
-durable corrections:
-```
+프로젝트의 목표, 지금 참으로 치는 코드 경로와 dataset, 실험과 원고가 어디까지
+왔는지, 심사에서 걸릴 만한 자리, 계속 물고 갈 교정 사항을 원본 파일과 실행
+결과에서 정해 상태 메모에 적는다.
 
 ## 첫 AI 요청을 좁힌다
 
@@ -237,14 +216,10 @@ available.
 작업이 끝나면 `project-memory.json`이나
 `weekly-research-ledger.md`에 세 줄을 남긴다.
 
-```text
-현재 확인한 사실:
-아직 말하면 안 되는 주장:
-다음 행동:
-```
+세션을 닫을 때 세 가지를 적는다. 현재 확인한 사실, 아직 말하면 안 되는 주장, 다음 행동 하나다.
 
-AI가 잘못된 가정을 세웠다면 `templates/`에 함께 복사된 `replay-case.md`에 반복 확인
-사례로 적는다. 적어 두면 다음 세션은 그 사례를 읽고 시작한다.
+AI가 잘못된 가정을 세웠다면 그 사례를 notes에 적어 두고, 같은 가정이 반복되면
+`AGENTS.md`의 규칙 한 줄로 올린다. 적어 두면 다음 세션은 그것을 읽고 시작한다.
 
 세 줄 가운데 아직 말하면 안 되는 주장은 `claim_boundaries`가 받는다.
 첫 세션이 끝난 뒤 `project-memory.json`의 `current_evidence`,

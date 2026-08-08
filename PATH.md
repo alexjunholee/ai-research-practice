@@ -40,14 +40,8 @@ reviewer risk is resolved
 
 다음 AI 세션에서 같은 실험 숫자를 다시 보면 아래 질문부터 묻는다.
 
-```text
-Which dataset?
-Which split?
-Which direction?
-Which metric script?
-Which baseline?
-Which output?
-```
+어느 dataset의 어느 split인지, 방향은 무엇인지, 어느 metric script와 어느
+baseline인지, 실제로 읽은 output이 무엇인지 묻는다.
 
 ## 반복 실패를 다음 작업 전에 잡는다
 
@@ -57,11 +51,7 @@ Which output?
 
 ## 매주 남길 세 줄
 
-```text
-현재 확인한 사실:
-아직 말하면 안 되는 주장:
-다음 행동:
-```
+세션을 닫을 때 세 가지를 적는다. 현재 확인한 사실, 아직 말하면 안 되는 주장, 다음 행동 하나다.
 
 다음 세션에서는 이 세 줄을 읽고 확인한 사실에서 작업을 잇는다. 세 줄이 비어 있으면 연구 상태를 다시 세우는 일부터 한다.
 
