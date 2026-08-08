@@ -78,6 +78,11 @@ Ch.2 자료 확인일: 2026-07-26
 - [*AI for Auto-Research: Roadmap & User Guide*](https://arxiv.org/abs/2605.18661)
 - [METR, *Time Horizon 1.1*](https://metr.org/blog/2026-1-29-time-horizon-1-1/)
 - [Ord, *Is there a half-life for the success rates of AI agents?*](https://arxiv.org/abs/2505.05115)
+- [Huang et al., *Large Language Models Cannot Self-Correct Reasoning Yet* (ICLR 2024)](https://arxiv.org/abs/2310.01798) — 오라클 신호가 있을 때와 없을 때
+- [Kim et al., *From Reproduction to Replication: Evaluating Research Agents with Progressive Code Masking*](https://arxiv.org/abs/2506.19724) — pass@1 대 pass@5, 고정 하네스 대 동적 하네스
+- [Bean et al., *Measuring what Matters: Construct Validity in Large Language Model Benchmarks*](https://arxiv.org/abs/2511.04703)
+- [*When AI Benchmarks Plateau: A Systematic Study of Benchmark Saturation*](https://arxiv.org/abs/2602.16763)
+- [*LLMs Gaming Verifiers: RLVR can Lead to Reward Hacking*](https://arxiv.org/abs/2604.15149)
 
 ## 심사와 출판
 
@@ -102,6 +107,7 @@ Ch.2 자료 확인일: 2026-07-26
 
 - [Szymanski et al., *An autonomous laboratory for the accelerated synthesis of novel materials*, Nature 2023](https://www.nature.com/articles/s41586-023-06734-w)
 - [Chemistry World, *New analysis raises doubts over autonomous lab's materials discoveries*](https://www.chemistryworld.com/news/new-analysis-raises-doubts-over-autonomous-labs-materials-discoveries/4018791.article)
+- [*MatDiffract*, 자동 상 동정·Rietveld refinement 정확도](https://arxiv.org/abs/2607.20880)
 
 위 네 묶음은 2026-08-09에 원문에서 수치를 확인했다. 본문에 적은 수는 각 원문이
 보고한 값이고 이 책이 잰 것이 아니다. 확인하지 못한 수치는 본문에서 뺐다.
