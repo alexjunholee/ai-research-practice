@@ -1,19 +1,19 @@
-# 부록 — 로봇 실험 참조표
+# 부록 F — 로봇 실험 문제 해결 안내서
 
-증상별로 먼저 찍어 볼 명령을 모았다. 3부 끝이 이 표를 쓰는 자리를 다룬다.
+증상마다 가장 먼저 확인할 명령을 모아 두었다. 본문 3부의 「증상에 맞는 첫 확인 명령을 찾는다」 절에서는 이 안내서를 언제 쓰는지 다룬다.
 
-## ROS에서 자주 막히는 지점
+## ROS 2에서 자주 막히는 문제
 
-### QoS 설정
+### QoS 불일치로 토픽이 오지 않을 때
 
-[ROS2의 기본 publisher·subscription profile](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html)은 RELIABLE이다. sensor data profile은 BEST_EFFORT다. 카메라와 LiDAR driver가 sensor data profile을 쓰는데 subscriber가 기본 profile을 쓰면 reliability가 어긋나 메시지가 안 온다. 이 증상을 토픽이나 driver 탓으로 돌리기 전에 실제 QoS부터 짚어 본다.
+[ROS2의 기본 publisher·subscription profile](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html)은 RELIABLE이고, sensor data profile은 BEST_EFFORT다. 카메라와 LiDAR driver는 sensor data profile을 쓰는데 subscriber가 기본 profile을 쓰면 reliability가 맞지 않아 메시지가 오지 않는다. 토픽이나 driver를 의심하기 전에 실제 QoS부터 확인한다.
 
 ```bash
 # 토픽의 QoS 프로파일 확인
 ros2 topic info /camera/image_raw --verbose
 ```
 
-출력에서 `Reliability: BEST_EFFORT`, `Durability: VOLATILE` 같은 줄을 보고 subscriber의 QoS를 맞춘다.
+출력에서 `Reliability: BEST_EFFORT`, `Durability: VOLATILE` 같은 줄을 확인한 뒤 subscriber의 QoS를 맞춘다.
 
 ```python
 from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
@@ -26,13 +26,13 @@ qos = QoSProfile(
 self.subscription = self.create_subscription(Image, '/camera/image_raw', self.callback, qos)
 ```
 
-코드를 요청할 때는 "이 토픽의 QoS는 BEST_EFFORT / SENSOR_DATA다"처럼 눈으로 본 profile을 함께 준다. 생성된 코드에도 그 값이 들어갔는지 다시 본다.
+코드를 요청할 때는 "이 토픽의 QoS는 BEST_EFFORT / SENSOR_DATA다"처럼 직접 확인한 profile을 함께 적는다. 코드를 받은 뒤에도 그 값이 들어갔는지 다시 확인한다.
 
-### use_sim_time과 tf2 타이밍
+### use_sim_time과 tf2의 시간 불일치
 
-rosbag을 재생할 때 `use_sim_time:=true`를 함께 켜야 tf lookup이 그 시각을 찾는다. `tf2 lookup failed`가 보이면 `static_transform_publisher`를 붙이기 전에 clock 설정부터 짚어 본다.
+rosbag을 재생할 때는 `use_sim_time:=true`도 함께 켜야 tf lookup이 그 시각을 찾는다. `tf2 lookup failed`가 나타나면 `static_transform_publisher`를 붙이기 전에 clock 설정부터 확인한다.
 
-원인은 시뮬레이션 clock과 시스템 clock이 서로 어긋난 데 있다. Bag 파일의 timestamp는 기록 시점을 가리키고 노드는 현재 시스템 시간으로 tf를 찾으니, 둘은 서로 다른 시각을 본다. 두 시계를 bag 쪽으로 모으고, 실제로 모였는지 눈으로 본다.
+시뮬레이션 clock과 시스템 clock이 서로 맞지 않기 때문이다. Bag 파일의 timestamp는 기록 시점을 가리키지만 노드는 현재 시스템 시간으로 tf를 찾으므로, 두 쪽의 기준 시각이 서로 다르다. 두 시계를 bag 쪽으로 맞춘 뒤 실제로 맞았는지 확인한다.
 
 ```bash
 # bag clock을 publish하는 재생 예
@@ -45,7 +45,7 @@ ros2 launch my_package my_launch.py use_sim_time:=true
 ros2 param get /my_node use_sim_time
 ```
 
-생성된 tf2 lookup 코드에 timeout과 예외 처리가 들어 있는지 본다.
+tf2 lookup 코드를 받은 뒤에는 timeout과 예외 처리가 포함됐는지 확인한다.
 
 ```python
 from rclpy.duration import Duration
@@ -60,9 +60,9 @@ except tf2_ros.LookupException as e:
     self.get_logger().warn(f'TF lookup failed: {e}')
 ```
 
-### Workspace 소싱 순서
+### ROS 2 작업 공간 소싱 순서
 
-ROS2 workspace에서는 `/opt/ros/humble/setup.bash`를 먼저 source하고 `~/ros2_ws/install/setup.bash`를 이어서 source한다. 생성된 실행 절차에 base와 overlay workspace가 다 들어 있는지, 순서가 맞는지 본다.
+ROS2 workspace에서는 `/opt/ros/humble/setup.bash`를 먼저 source한 다음 `~/ros2_ws/install/setup.bash`를 source한다. 실행 절차를 받으면 그 안에 base와 overlay workspace가 모두 있는지, 불러오는 순서가 맞는지 확인한다.
 
 ```bash
 # base를 먼저, overlay를 나중에 source
@@ -70,13 +70,13 @@ source /opt/ros/humble/setup.bash
 source ~/ros2_ws/install/setup.bash
 ```
 
-`.bashrc`에 경로를 넣었는데 새 terminal에서 package를 찾지 못한다면 다시 깔기 전에 source 상태부터 살핀다. `echo $AMENT_PREFIX_PATH`가 지금 걸린 workspace를 보여 준다.
+`.bashrc`에 경로를 넣었는데 새 terminal에서 package를 찾지 못한다면 다시 설치하기 전에 source 상태부터 살핀다. `echo $AMENT_PREFIX_PATH`는 현재 적용된 workspace를 보여 준다.
 
-### 커스텀 메시지와 빌드
+### 커스텀 메시지 빌드와 반영
 
-`.msg` 파일을 만들 때는 `CMakeLists.txt`와 `package.xml`의 dependency도 함께 고친다. 생성된 변경안에 이 두 파일이 들어 있는지 본다.
+`.msg` 파일을 만들 때는 `CMakeLists.txt`와 `package.xml`의 dependency도 함께 수정한다. 변경안을 받은 뒤에는 두 파일이 모두 포함됐는지 확인한다.
 
-`rosidl_generate_interfaces` 설정이 빠지면 build는 지나가고 Python import에서 걸린다. 이때는 package 설치를 뒤지기보다 interface 생성 설정을 먼저 연다.
+`rosidl_generate_interfaces` 설정이 빠지면 build는 통과하지만 Python import에서 막힌다. 이때는 package 설치를 살피기보다 interface 생성 설정을 먼저 확인한다.
 
 ```cmake
 # CMakeLists.txt에 반드시 추가
@@ -99,7 +99,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 <member_of_group>rosidl_interface_packages</member_of_group>
 ```
 
-`--symlink-install`을 붙여 build해야 Python 코드 수정이 바로 반영된다. 고친 코드가 그대로 돌면 build option을 먼저 읽고, cache는 그다음에 뒤진다.
+`--symlink-install`을 붙여 build해야 Python 코드 수정이 바로 반영된다. 고친 코드가 반영되지 않으면 build option을 먼저 확인하고 cache는 그다음에 살핀다.
 
 ```bash
 # Python 패키지 수정이 바로 반영되려면
@@ -108,7 +108,7 @@ colcon build --symlink-install
 
 ### 네임스페이스와 리매핑
 
-`ros2 topic echo /camera/image_raw`에 아무것도 안 뜨면 namespace가 붙어 실제 topic이 `/robot1/camera/image_raw`로 가 있는지부터 본다. driver를 뜯기 전에 이름을 맞춘다.
+`ros2 topic echo /camera/image_raw`에 아무것도 나타나지 않으면 namespace가 붙어 실제 topic이 `/robot1/camera/image_raw`가 됐는지부터 확인한다. driver를 살피기 전에 이름을 맞춘다.
 
 ```bash
 # 토픽 목록부터 확인하라
@@ -118,18 +118,18 @@ ros2 topic list
 ros2 topic list | grep camera
 ```
 
-디버깅을 요청할 때는 `ros2 topic list`와 `ros2 node list` 출력을 함께 준다. 두 출력이 있어야 namespace 문제와 node 문제가 갈린다.
+디버깅을 요청할 때는 `ros2 topic list`와 `ros2 node list` 출력을 함께 보낸다. 두 출력이 있어야 namespace 문제와 node 문제를 구분할 수 있다.
 
-### Launch 파일
+### ROS 2 launch 파일
 
-생성된 ROS2 Python launch 파일에서는 다음 네 가지를 짚는다.
+생성된 ROS2 Python launch 파일에서는 다음 네 가지를 확인한다.
 
 - ROS1 XML 문법과 ROS2 Python 문법의 혼용
 - 노드 의존성을 놓친 `LaunchDescription` action 순서
 - `ComposableNode`와 일반 `Node`의 혼동
 - multi-robot 구성에서 `PushRosNamespace` 누락
 
-마지막 항목은 이렇게 막는다.
+마지막 항목인 `PushRosNamespace` 누락은 다음 예처럼 피한다.
 
 ```python
 # multi-robot launch 파일에서 네임스페이스 적용
@@ -142,15 +142,15 @@ robot1_group = GroupAction([
 ])
 ```
 
-Launch 파일을 요청할 때는 ROS2 Python 형식인지, multi-robot namespace가 필요한지, `ComposableNode`를 쓸지를 적어 준다.
+에이전트에게 Launch 파일을 요청할 때는 ROS2 Python 형식인지, multi-robot namespace가 필요한지, `ComposableNode`를 쓸지를 적어 준다.
 
 ## Docker에서 자주 빠지는 설정
 
-### GUI/시각화 문제
+### Docker GUI와 디스플레이 권한
 
-Docker 안에서 RViz나 Gazebo 같은 GUI 도구를 X11·XWayland 경로로 띄울 때는 display socket과 인증을 넘겨야 한다. `xhost +local:docker`는 local X server를 로컬 사용자 모두에게 열어 주므로, 필요한 socket만 골라 넘긴다.
+Docker 안에서 RViz나 Gazebo 같은 GUI 도구를 띄울 때 X11이나 XWayland를 쓰려면 display socket과 인증을 넘겨야 한다. `xhost +local:docker`는 local X server를 모든 로컬 사용자에게 열어 주므로, 필요한 socket만 골라 넘긴다.
 
-다음은 X11 socket을 넘기는 최소 예다. X server 인증은 host 설정에 따라 따로 연결한다. 접근 제어는 켜 둔 채로 둔다.
+다음은 X11 socket을 넘기는 최소 예다. X server 인증 정보는 host 설정에 맞춰 따로 넘긴다. 접근 제어는 켠 상태로 둔다.
 
 ```bash
 docker run -it \
@@ -161,13 +161,14 @@ docker run -it \
 ```
 
 각 옵션의 역할은 다음과 같다.
+
 - `QT_X11_NO_MITSHM=1` — Docker 안에서 MIT-SHM(공유 메모리) 확장 때문에 RViz가 죽으면 이 확장을 끈다.
-- `--ipc=host`가 있어야 도는 프로그램도 있지만, 이 옵션은 host의 IPC namespace를 공유한다. 오류를 재현해 눈으로 본 뒤에만 붙인다.
-- Wayland session에서는 X11 socket mount만으로는 모자랄 수 있다. 로그인할 때 Xorg session을 고르거나, host의 XWayland·Wayland 권한 설정에 맞춘다. `XDG_SESSION_TYPE` 환경 변수만 바꿔서는 지금 도는 display server가 안 바뀐다.
+- `--ipc=host`가 있어야 도는 프로그램도 있지만, 이 옵션은 host의 IPC namespace를 공유한다. 오류를 재현해 확인한 뒤에만 붙인다.
+- Wayland session에서는 X11 socket mount만으로 충분하지 않을 수 있다. 로그인할 때 Xorg session을 고르거나 host의 XWayland·Wayland 권한 설정에 맞춘다. `XDG_SESSION_TYPE` 환경 변수만 바꿔서는 현재 실행 중인 display server가 바뀌지 않는다.
 
-### USB 디바이스 패스스루
+### USB 장치 연결
 
-카메라, LiDAR, IMU 같은 USB 장치를 Docker 안에서 쓰려면 device를 하나씩 짚어 매핑해야 한다. Driver를 다시 깔기 전에 container 안에 device가 보이는지 본다.
+카메라, LiDAR, IMU 같은 USB 장치를 Docker 안에서 쓰려면 device를 하나씩 지정해 매핑해야 한다. 드라이버를 다시 설치하기 전에 container 안에 device가 보이는지 확인한다.
 
 ```bash
 # 필요한 디바이스만 매핑
@@ -177,15 +178,15 @@ docker run -it --device=/dev/ttyUSB0 --device=/dev/video0 my_image
 docker run -it --privileged my_image
 ```
 
-[Docker 문서](https://docs.docker.com/engine/containers/run/)에 따르면 `--privileged`는 모든 host device 접근과 확장된 capability를 컨테이너에 준다. 상시 운용할 때는 필요한 device만 `--device`로 매핑한다.
+[Docker 문서](https://docs.docker.com/engine/containers/run/)에 따르면 `--privileged`는 모든 host device 접근과 확장된 capability를 컨테이너에 부여한다. 상시 운용에서는 필요한 device만 `--device`로 매핑한다.
 
-Container를 띄운 뒤에 USB 장치를 꽂으면 기존 device mapping에는 안 잡힌다. 이때는 container를 다시 띄우거나, 디버깅할 때만 `--privileged`와 `-v /dev:/dev` 조합을 쓴다.
+container를 띄운 뒤 USB 장치를 꽂으면 기존 device mapping에는 잡히지 않는다. 이때는 container를 다시 띄우거나, 디버깅할 때만 `--privileged`와 `-v /dev:/dev` 조합을 사용한다.
 
-### ROS 네트워킹
+### Docker의 ROS 네트워크
 
-Docker 컨테이너 간 ROS2 통신에서 `--network=host`는 설정이 단순하지만 [host의 network namespace를 공유해 network isolation을 없앤다](https://docs.docker.com/engine/network/drivers/host/). 포트 충돌과 어디까지 열리는지를 함께 본다.
+Docker 컨테이너 간 ROS2 통신에서 `--network=host`는 설정이 단순하지만 [host의 network namespace를 공유해 network isolation을 없앤다](https://docs.docker.com/engine/network/drivers/host/). 포트 충돌 여부와 네트워크가 열리는 범위를 함께 확인한다.
 
-ROS2 노드들이 bridge network에서 서로를 못 찾으면 DDS(Data Distribution Service) discovery에 쓰이는 multicast가 container 경계를 넘는지 본다. Docker bridge 설정에 따라 discovery packet이 밖으로 안 나갈 수 있다.
+ROS2 노드들이 bridge network에서 서로를 찾지 못하면 DDS(Data Distribution Service) discovery에 쓰이는 multicast가 container 경계를 넘는지 확인한다. Docker bridge 설정에 따라 discovery packet이 밖으로 나가지 않을 수 있다.
 
 ```bash
 # 가장 간단한 방법 (개발 환경에서)
@@ -197,7 +198,7 @@ docker run -it --network=host -e ROS_DOMAIN_ID=42 my_ros2_image
 
 같은 네트워크에서 `ROS_DOMAIN_ID`가 겹치면 다른 시스템의 ROS2 graph와 연결된다. 연구실에서 여러 명이 동시에 ROS2를 쓰면 서로의 토픽이 보인다.
 
-DDS를 더 잘게 손봐야 할 때는 Cyclone DDS config XML로 정해 둔 네트워크 인터페이스 하나만 쓰게 묶는다:
+DDS를 더 세밀하게 조정해야 할 때는 Cyclone DDS config XML에서 사용할 네트워크 인터페이스를 하나로 지정한다.
 
 ```xml
 <!-- cyclone_dds.xml -->
@@ -210,22 +211,22 @@ DDS를 더 잘게 손봐야 할 때는 Cyclone DDS config XML로 정해 둔 네�
 </CycloneDDS>
 ```
 
-쓸 config 파일은 환경 변수로 가리킨다.
+사용할 config 파일은 환경 변수로 지정한다.
 
 ```bash
 export CYCLONEDDS_URI=file:///path/to/cyclone_dds.xml
 ```
 
-### 파일 권한 문제
+### Docker 안팎의 파일 소유권
 
-Docker 안에서 만든 파일은 host에서 root 소유로 남아, 고치거나 지울 때 `sudo`를 불러야 한다. 호스트 사용자의 uid·gid로 container를 띄우면 소유자가 그대로 따라온다.
+Docker 안에서 만든 파일은 host에서 root 소유로 남아 고치거나 지우려면 `sudo`를 써야 한다. 호스트 사용자의 uid·gid로 container를 띄우면 소유권이 그대로 따라온다.
 
 ```bash
 # 호스트 사용자 권한으로 실행
 docker run -it --user $(id -u):$(id -g) my_image
 ```
 
-Device나 directory 권한 때문에 `--user` 옵션을 건 뒤 ROS package가 안 도는 일도 있다. 이때는 `chmod 777`로 다 열기보다 Dockerfile에 non-root user를 만들고 필요한 group과 directory 권한만 준다.
+`--user` 옵션으로 호스트 사용자 권한을 적용해도 장치나 directory 권한 때문에 ROS package가 동작하지 않을 수 있다. 이때는 `chmod 777`로 모두 열기보다 Dockerfile에 non-root user를 만들고 필요한 group과 directory 권한만 부여한다.
 
 ```dockerfile
 # Dockerfile에서 non-root 유저 설정
@@ -234,13 +235,13 @@ RUN useradd -m -s /bin/bash rosuser && \
 USER rosuser
 ```
 
-## 하드웨어와 드라이버 신호
+## 센서·하드웨어·실시간 조건
 
 ### 시리얼 포트 권한
 
-`/dev/ttyUSB0`에 붙을 때 `Permission denied`가 뜨면 `sudo chmod 666 /dev/ttyUSB0`으로 그 자리는 넘어간다. 다만 이 권한은 재부팅하거나 장치를 다시 꽂으면 사라진다.
+`/dev/ttyUSB0`에 연결할 때 `Permission denied`가 나타나면 `sudo chmod 666 /dev/ttyUSB0`으로 일시적으로 접근할 수 있다. 다만 이 권한은 재부팅하거나 장치를 다시 연결하면 사라진다.
 
-다시 꽂아도 남을 설정은 udev rule로 만든다.
+다시 연결해도 남는 설정은 udev rule로 만든다.
 
 ```bash
 # 벤더/프로덕트 ID 확인
@@ -258,24 +259,24 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 sudo usermod -aG dialout "$USER"  # 다시 로그인한 뒤 group 적용
 ```
 
-이렇게 하면 그 USB 장치가 `/dev/gps`라는 고정 이름으로 붙고 권한도 따라붙는다. 같은 모델을 여러 개 쓸 때는 시리얼 번호를 규칙에 넣어 서로 가른다.
+이렇게 하면 해당 USB 장치는 `/dev/gps`라는 고정 이름으로 연결되고 권한도 함께 적용된다. 같은 모델을 여러 개 쓸 때는 시리얼 번호를 규칙에 넣어 서로 구분한다.
 
 ### USB 대역폭
 
-USB3 카메라 여러 대를 같은 허브에 물렸을 때 프레임이 끊기면 driver와 함께 USB 컨트롤러의 대역폭도 본다.
+USB3 카메라 여러 대를 같은 허브에 연결했을 때 프레임이 끊기면 driver와 함께 USB 컨트롤러의 대역폭도 확인한다.
 
 ```bash
 # 어떤 카메라가 어떤 USB 컨트롤러에 붙어있는지 확인
 lsusb -t
 ```
 
-컨트롤러의 대역폭이 걸린 것이라면 설정보다 배선을 바꾼다. `lsusb -t`의 Bus 번호를 보고 카메라를 서로 다른 USB 컨트롤러에 나누어 꽂는다. 데스크톱 PC에서는 앞면과 뒷면 포트가 서로 다른 컨트롤러에 붙어 있기도 하다.
+컨트롤러 대역폭이 원인이라면 설정보다 배선을 바꾼다. `lsusb -t`의 Bus 번호를 보고 카메라를 서로 다른 USB 컨트롤러에 나누어 연결한다. 데스크톱 PC에서는 앞면과 뒷면 포트가 서로 다른 컨트롤러에 연결돼 있기도 하다.
 
-### LiDAR 연결 (IP 설정)
+### LiDAR의 IP와 UDP 연결
 
-Velodyne이나 Ouster LiDAR에서 데이터가 안 들어올 때는 드라이버를 다시 깔기 전에 네트워크 설정부터 본다. 고정 IP와 subnet이 어긋나면 같은 증상이 난다.
+Velodyne이나 Ouster LiDAR에서 데이터가 들어오지 않을 때는 드라이버를 다시 설치하기 전에 네트워크 설정부터 확인한다. 고정 IP와 subnet이 맞지 않아도 같은 증상이 난다.
 
-많은 Ethernet LiDAR는 고정 IP나 지정된 subnet 설정을 쓴다. 장치가 예를 들어 `192.168.1.201/24`라면 host interface도 겹치지 않는 `192.168.1.x/24` 주소로 맞춘다. 실제 주소와 UDP port는 장치 설정과 제조사 문서를 따른다.
+많은 Ethernet LiDAR는 고정 IP나 지정된 subnet 설정을 사용한다. 장치가 예를 들어 `192.168.1.201/24`라면 host interface도 겹치지 않는 `192.168.1.x/24` 주소로 맞춘다. 실제 주소와 UDP port는 장치 설정과 제조사 문서를 따른다.
 
 ```bash
 # 1단계: LiDAR에 ping이 되는지 확인
@@ -289,11 +290,11 @@ sudo ip link set eth0 up
 sudo tcpdump -i eth0 udp port 2368 -c 10
 ```
 
-장치가 ICMP에 응답한다면 `ping`으로 연결을 짚고, 응답이 없어도 Wireshark나 `tcpdump`로 지정된 UDP port에 패킷이 들어오는지 살핀다. 패킷은 들어오는데 ROS 토픽에 안 뜨면 드라이버와 ROS 설정으로 볼 데를 좁힌다.
+장치가 ICMP에 응답한다면 `ping`으로 연결을 확인하고, 응답하지 않더라도 Wireshark나 `tcpdump`로 지정된 UDP port에 패킷이 들어오는지 살핀다. 패킷은 들어오는데 ROS 토픽에 나타나지 않으면 드라이버와 ROS 설정으로 확인 범위를 좁힌다.
 
-### 카메라 드라이버 (v4l2)
+### 카메라 드라이버와 v4l2
 
-간단한 예제는 `cv2.VideoCapture(0)`만 보여 준다. 그런데 USB 카메라 하나가 영상과 메타데이터용으로 `/dev/video0`, `/dev/video1`을 함께 만들기도 하므로 장치 번호를 먼저 짚어야 한다.
+간단한 예제는 `cv2.VideoCapture(0)`만 보여 준다. 그러나 USB 카메라 하나가 영상과 메타데이터용으로 `/dev/video0`, `/dev/video1`을 함께 만들기도 하므로 장치 번호를 먼저 확인해야 한다.
 
 ```bash
 # 카메라 디바이스 매핑 확인
@@ -306,7 +307,7 @@ v4l2-ctl -d /dev/video0 --list-formats-ext
 v4l2-ctl -d /dev/video0 --list-ctrls
 ```
 
-자동 노출(auto exposure)과 자동 화이트밸런스가 frame 사이의 밝기를 크게 바꾸면 특징점 추출과 추적이 흔들린다. 지원하는 control 이름과 값의 폭은 driver마다 다르니 먼저 읽는다.
+자동 노출(auto exposure)과 자동 화이트밸런스가 frame 사이의 밝기를 크게 바꾸면 특징점 추출과 추적이 흔들린다. 지원하는 control 이름과 값의 허용 범위는 driver마다 다르므로 먼저 확인한다.
 
 ```bash
 # 수동 노출 설정 (SLAM용)
@@ -317,18 +318,19 @@ v4l2-ctl -d /dev/video0 --set-ctrl=exposure_absolute=100
 v4l2-ctl -d /dev/video0 --set-ctrl=white_balance_automatic=0
 ```
 
-SLAM이 흔들리면 알고리즘 매개변수를 만지기 전에 자동 노출과 화이트밸런스를 고정해 본다. 그 상태에서 영상 밝기와 특징점 추출이 안정되는지 함께 본다.
+SLAM이 흔들리면 알고리즘 매개변수를 만지기 전에 자동 노출과 화이트밸런스를 고정해 본다. 그 상태에서 영상 밝기와 특징점 추출이 안정되는지 함께 확인한다.
 
-### Jetson (ARM) 환경
+### Jetson의 ARM·JetPack 환경
 
-생성된 코드나 Docker 설정에는 x86을 전제로 한 의존성이 섞여 들어온다. NVIDIA Jetson에서는 ARM64와 JetPack의 버전 제약을 함께 본다.
+코드나 Docker 설정을 생성하면 x86을 전제로 한 의존성이 섞일 수 있다. NVIDIA Jetson에서는 ARM64와 JetPack의 버전 제약을 함께 확인한다.
 
-주의해야 할 점:
-- package와 version 조합에 따라 ARM64 wheel이 없을 수 있다. 이때는 source build로 가기 앞서 JetPack package, NVIDIA container, 배포판 package 중 맞는 배포물이 있는지 찾아본다.
-- JetPack 버전이 CUDA, cuDNN, TensorRT를 어디까지 받아 주는지 정한다. 개별 패키지를 최신 버전으로 올리기 전에 JetPack 호환표를 읽는다.
-- Docker image는 장치의 L4T·JetPack release와 호환되는 ARM64 image를 고른다. [NVIDIA JetPack release notes](https://docs.nvidia.com/jetson/jetpack/release-notes/index.html)에서 현재 조합을 먼저 본다.
+주의할 점:
 
-장치에 실린 조합은 이렇게 읽는다.
+- package와 version의 조합에 따라 ARM64 wheel이 없을 수 있다. 이때는 source build로 가기 전에 JetPack package, NVIDIA container, 배포판 package 가운데 맞는 배포물이 있는지 찾아본다.
+- JetPack 버전은 CUDA, cuDNN, TensorRT의 호환 범위를 정한다. 개별 패키지를 최신 버전으로 올리기 전에 JetPack 호환표를 읽는다.
+- Docker image는 장치의 L4T·JetPack release와 호환되는 ARM64 image를 고른다. [NVIDIA JetPack release notes](https://docs.nvidia.com/jetson/jetpack/release-notes/index.html)에서 현재 조합을 먼저 확인한다.
+
+장치에 설치된 조합은 이렇게 확인한다.
 
 ```bash
 # JetPack 버전 확인
@@ -338,11 +340,11 @@ cat /etc/nv_tegra_release
 docker pull nvcr.io/nvidia/l4t-jetpack:r36.3.0
 ```
 
-코드를 요청할 때는 "Jetson Orin, JetPack 5.1.2, CUDA 11.4 환경이다"처럼 장치에서 눈으로 본 조합을 적는다. 이 숫자는 적는 형식을 보이려고 든 예다.
+코드를 요청할 때는 "Jetson Orin, JetPack 5.1.2, CUDA 11.4 환경이다"처럼 장치에서 직접 확인한 조합을 적는다. 이 숫자는 적는 형식을 보이기 위해 든 예다.
 
-### 실시간 제어와 타이밍
+### 실시간 제어 주기
 
-`time.sleep(0.01)`은 최소 대기 시간을 줄 뿐이고, 루프가 다시 도는 시점은 계산 시간과 운영체제 스케줄링이 정한다. 100 Hz는 코드에 적은 목표 숫자다.
+`time.sleep(0.01)`은 최소 대기 시간만 줄 뿐이며, 루프가 다시 도는 시점은 계산 시간과 운영체제 스케줄링이 정한다. 100 Hz는 코드에 적은 목표 숫자다.
 
 ```python
 # 주기 검증이 필요한 단순한 구현
@@ -359,24 +361,24 @@ Python의 GIL(Global Interpreter Lock)과 운영체제 스케줄링도 멀티스
 ros2 topic hz /cmd_vel
 ```
 
-코드에 적은 주파수는 목표다. `ros2 topic hz`가 찍는 숫자가 실제 주기다. 두 숫자가 벌어지면 계산 시간, 스케줄링, 통신 지연을 차례로 짚는다.
+코드에 적은 주파수는 목표다. `ros2 topic hz`가 출력하는 숫자가 실제 주기다. 두 숫자가 벌어지면 계산 시간, 스케줄링, 통신 지연을 차례로 확인한다.
 
-## 반복해서 막히는 패턴
+## 반복 실패의 원인을 좁히는 법
 
-### "It works in simulation"
+### 시뮬레이션에서만 동작하는 경우
 
-Gazebo에서 돌아간 코드가 실제 로봇에서는 실패한다. 이때는 시뮬레이션과 현실이 갈리는 자리를 짚는다.
+Gazebo에서 동작한 코드가 실제 로봇에서 실패한다면 시뮬레이션과 현실이 다른 지점을 확인한다.
 
 - **센서 노이즈**: 시뮬레이터에 넣은 노이즈 모델이 실제 센서의 분포와 어긋난다
 - **통신 지연**: 시뮬레이션과 실제 시스템의 transport·queue·network 지연이 다르다
 - **타이밍 불일치**: 시뮬레이터의 clock·timestamp 조건과 실제 센서 간 동기화 오차가 다르다
 - **좌표계 불일치**: URDF와 실제 로봇의 센서 위치/각도가 미세하게 다르면 tf가 틀어진다
 
-에이전트에게 질문할 때도 "시뮬레이션에서는 되지만 실제 로봇에서는 실패한다. 센서 노이즈 수준은 X이고, 통신 지연은 Y ms이며, 좌표계는 Z 방법으로 보정했다"처럼 재 본 차이를 숫자로 적어 준다.
+에이전트에게 질문할 때도 "시뮬레이션에서는 되지만 실제 로봇에서는 실패한다. 센서 노이즈 수준은 X이고, 통신 지연은 Y ms이며, 좌표계는 Z 방법으로 보정했다"처럼 측정한 차이를 숫자로 적어 준다.
 
-### 하드웨어 문제를 소프트웨어로 고치려 함
+### 소프트웨어를 고치기 전에 하드웨어부터 확인한다
 
-케이블 불량, 접촉 불량, 전원 부족은 로그와 장치 상태를 눈으로 봐야 갈린다. 센서 데이터가 끊겼다 이어졌다 할 때는 버퍼 크기, 타임아웃, QoS와 함께 케이블과 USB 허브의 전원도 짚는다.
+케이블 불량, 접촉 불량, 전원 부족은 로그와 장치 상태를 직접 확인해야 구분할 수 있다. 센서 데이터가 간헐적으로 끊길 때는 버퍼 크기, 타임아웃, QoS와 함께 케이블과 USB 허브의 전원도 확인한다.
 
 ```bash
 # 커널 로그에서 하드웨어 문제 단서 찾기
@@ -386,20 +388,20 @@ dmesg | tail -20
 dmesg | grep -i usb | tail -20
 ```
 
-`dmesg`에 `USB disconnect`, `device descriptor read/64, error -71` 같은 줄이 보이면 꽂힌 자리와 전원부터 본다. 케이블을 바꾸고, 유전원 USB 허브를 물리고, 다른 포트에 꽂아 증상이 달라지는지 견준다.
+`dmesg`에 `USB disconnect`, `device descriptor read/64, error -71` 같은 줄이 보이면 연결 상태와 전원부터 확인한다. 케이블을 바꾸고, 유전원 USB 허브를 연결하고, 다른 포트에 꽂아 증상이 달라지는지 비교한다.
 
-### 재설치 전에 충돌 범위 좁히기
+### OpenCV 재설치 전 패키지·ABI 충돌 확인
 
-라이브러리 버전 충돌은 환경 전체를 다시 깔기 전에 `pip show package_name`으로 버전을 보고 어느 패키지끼리 부딪히는지부터 좁힌다.
+라이브러리 버전이 충돌한다면 환경 전체를 다시 설치하기 전에 `pip show package_name`으로 버전을 확인하고, 어느 패키지끼리 충돌하는지부터 좁힌다.
 
-OpenCV에서는 다음 패키지가 한 환경에 섞이면서 충돌한다.
+OpenCV에서는 다음 패키지가 한 환경에 섞이면 충돌할 수 있다.
 
 - `opencv-python` (기본)
 - `opencv-python-headless` (GUI 없는 서버용)
 - `opencv-contrib-python` (추가 모듈이 든 것)
 - `cv_bridge` (ROS 패키지, 자체 OpenCV를 참조)
 
-세 PyPI package는 같은 `cv2` namespace를 차지하므로 한 환경에 하나만 둔다. `cv_bridge`는 system OpenCV와 연결될 수 있어 pip OpenCV를 섞으면 version·ABI 충돌이 생길 수 있다. 지금 걸린 ROS package와 Python import 경로를 본 뒤 한 배포 경로를 고른다.
+세 PyPI package는 같은 `cv2` namespace를 차지하므로 한 환경에는 하나만 둔다. `cv_bridge`는 system OpenCV와 연결될 수 있어 pip OpenCV를 섞으면 version·ABI 충돌이 생길 수 있다. 현재 적용된 ROS package와 Python import 경로를 확인한 뒤 한 배포 경로를 고른다.
 
 ```bash
 # 현재 설치된 OpenCV 확인
@@ -410,13 +412,13 @@ apt policy ros-humble-cv-bridge
 python3 -c 'import cv2; print(cv2.__version__, cv2.__file__)'
 ```
 
-ROS Humble의 system OpenCV와 `ros-humble-cv-bridge`를 쓰기로 했다면 import 경로가 그쪽을 먼저 가리키게 둔다. Package를 지우기 전에는 그 package에 기대는 project가 있는지 본다.
+ROS Humble의 system OpenCV와 `ros-humble-cv-bridge`를 쓰기로 했다면 import 경로가 그쪽을 먼저 가리키게 둔다. package를 지우기 전에는 그 package에 의존하는 프로젝트가 있는지 확인한다.
 
-### 반복 시도에서 원인 추적으로 넘어가기
+### 반복 처방을 멈추고 원인을 추적한다
 
-같은 처방을 되풀이해도 증상이 그대로면 한 층 아래에서 관측한다. 시스템 로그를 찍어 보고, `strace`로 호출을 따라가고, 필요하면 패킷을 잡는다.
+같은 처방을 되풀이해도 증상이 그대로라면 한 층 아래에서 원인을 관측한다. 시스템 로그를 확인하고, `strace`로 호출을 따라가며, 필요하면 패킷을 잡는다.
 
-더 나은 답을 얻으려면 에러 메시지뿐 아니라 low-level 정보를 함께 줘야 한다:
+에이전트에게 물을 때는 에러 메시지뿐 아니라 다음과 같은 저수준 정보도 함께 제공한다.
 
 ```bash
 # 시스템 로그
@@ -430,5 +432,4 @@ strace -f -e trace=open,read,write ros2 run my_pkg my_node 2>&1 | head -100
 sudo tcpdump -i eth0 -w capture.pcap
 ```
 
-이 정보를 함께 주면 에이전트의 답이 어디에나 붙는 재설치 처방 대신 지금 이 시스템의 증거를 가리킨다.
-
+이 정보를 함께 주면 어디에나 적용되는 재설치 처방을 반복하지 않고 현재 시스템에서 얻은 증거로 원인을 좁힐 수 있다.

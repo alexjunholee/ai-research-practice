@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the public guide from the 10 chapters and five appendices.
+"""Build the public guide from four parts and seven appendices.
 
 ``guide.template.html`` contains only the hand-maintained page shell.  The
 legacy static guide can be converted once with ``--bootstrap-template``;

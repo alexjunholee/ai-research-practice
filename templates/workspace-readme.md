@@ -79,16 +79,19 @@ workspace/
 
 ```text
 session record to update:
-harness rule:
-sandbox action:
+harness rule that controls this action:
+sandbox action allowed now:
+sandbox action not allowed now:
+object under truth control:
 current evidence permits:
 current evidence forbids:
-next smallest action:
+smallest next action:
 verification:
-ledger update:
 ```
 
 Fill these lines before asking for a broad answer.
 
-After the first session, copy the same boundary back into `project-memory.json`
-under `current_evidence` and `next_smallest_actions`.
+At the end of the session, write the currently confirmed fact, the claim that is
+not yet safe to make, and one next action in the weekly ledger. Reflect the same
+boundary under `current_evidence` and `next_smallest_actions` in
+`project-memory.json`.

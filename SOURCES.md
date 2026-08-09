@@ -1,4 +1,4 @@
-# 부록 E — 출처
+# 부록 E — 공개 출처와 참고 자료
 
 기존 목록 확인일: 2026-06-18
 로보틱스 실행 환경 자료 확인일: 2026-07-17
@@ -6,9 +6,9 @@ Ch.2 자료 확인일: 2026-07-26
 맥락 관리·에이전트 운영 자료 확인일: 2026-07-26
 
 이 목록에는 공개 가이드에서 언급한 외부 저장소와 이론 자료의 공개 링크를 모았다.
-링크 접근성, 제목·저자·저장소 역할, 본문에서 인용한 최소 주장만 확인했다.
+각 링크에서는 접근 가능 여부와 제목·저자·저장소의 역할, 본문에서 인용한 최소 주장만 확인했다.
 
-## 외부 에이전트·스킬 저장소
+## 외부 에이전트와 스킬 저장소
 
 - [`multica-ai/andrej-karpathy-skills`](https://github.com/multica-ai/andrej-karpathy-skills)
 - [`datawhalechina/hello-agents`](https://github.com/datawhalechina/hello-agents)
@@ -20,7 +20,7 @@ Ch.2 자료 확인일: 2026-07-26
 - [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/)
 - [`alexjunholee/robotics-research-agent`](https://github.com/alexjunholee/robotics-research-agent)
 
-## 인간-AI 행동 이론
+## 인간과 AI의 행동 이론
 
 - [Bainbridge, *Ironies of Automation*](https://doi.org/10.1016/0005-1098(83)90046-8)
 - [Parasuraman & Riley, *Humans and Automation: Use, Misuse, Disuse, Abuse*](https://doi.org/10.1518/001872097778543886)
@@ -29,7 +29,7 @@ Ch.2 자료 확인일: 2026-07-26
 - [Suchman, *Plans and Situated Actions* / Lancaster profile](https://www.lancaster.ac.uk/humanities-arts-and-social-sciences/people/lucy-suchman)
 - [Hutchins, *Cognition in the Wild*](https://mitpress.mit.edu/9780262581462/cognition-in-the-wild/)
 
-## LLM 에이전트와 근거 확인
+## LLM 에이전트와 검색·근거 검증
 
 - [Yao et al., *ReAct: Synergizing Reasoning and Acting in Language Models*](https://arxiv.org/abs/2210.03629)
 - [Schick et al., *Toolformer: Language Models Can Teach Themselves to Use Tools*](https://arxiv.org/abs/2302.04761)
@@ -45,7 +45,7 @@ Ch.2 자료 확인일: 2026-07-26
 - [Borgeaud et al., *Improving language models by retrieving from trillions of tokens*](https://arxiv.org/abs/2112.04426)
 - [Izacard et al., *Atlas: Few-shot Learning with Retrieval Augmented Language Models*](https://arxiv.org/abs/2208.03299)
 
-## 모델 서빙과 제품 계층
+## 모델 버전·품질과 서비스 조건
 
 - [Anthropic, *Models overview*](https://platform.claude.com/docs/en/about-claude/models/overview)
 - [Anthropic, *Model IDs and versioning*](https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions)
@@ -63,7 +63,7 @@ Ch.2 자료 확인일: 2026-07-26
 - [*Benchmarking the Benchmarks: A Validity Audit of Tool-Calling Evaluation*](https://arxiv.org/abs/2607.02577)
 - [*Beyond pass@1: A Reliability Science Framework for Long-Horizon LLM Agents*](https://arxiv.org/abs/2603.29231)
 
-## 하네스와 자동 연구
+## 연구 하네스와 자동 연구
 
 확인일: 2026-08-09
 
@@ -109,8 +109,9 @@ Ch.2 자료 확인일: 2026-07-26
 - [Chemistry World, *New analysis raises doubts over autonomous lab's materials discoveries*](https://www.chemistryworld.com/news/new-analysis-raises-doubts-over-autonomous-labs-materials-discoveries/4018791.article)
 - [*MatDiffract*, 자동 상 동정·Rietveld refinement 정확도](https://arxiv.org/abs/2607.20880)
 
-위 네 묶음은 2026-08-09에 원문에서 수치를 확인했다. 본문에 적은 수는 각 원문이
-보고한 값이고 이 책이 잰 것이 아니다. 확인하지 못한 수치는 본문에서 뺐다.
+`연구 하네스와 자동 연구`, `심사와 출판`, `로봇 정책 평가`, `자율 실험실` 자료의 수치는
+2026-08-09에 원문에서 확인했다. 본문에 제시한 수치는 각 원문이 보고한 값이며,
+이 책이 직접 측정한 값이 아니다. 확인할 수 없었던 수치는 본문에서 제외했다.
 
 ## 로보틱스 실행 환경
 
@@ -133,12 +134,12 @@ Ch.2 자료 확인일: 2026-07-26
 - [Claude Code, *Hooks*](https://code.claude.com/docs/en/hooks)
 - [Model Context Protocol, *Architecture*](https://modelcontextprotocol.io/docs/learn/architecture)
 
-이 묶음에서는 본문이 인용한 정의와 수치를 원문에서 확인했다. cookbook 문서의 측정값
+이 묶음에서는 본문이 인용한 정의와 수치를 원문으로 확인했다. cookbook 문서의 측정값
 (최대 맥락 335,279 토큰, 파일 읽기 결과 96.3%, 메모리 사용 세션 5K 대 미사용 332K)은
-그 문서가 돌린 실행의 값이고 이 책이 잰 것이 아니다.
+해당 문서의 실행에서 나온 값이며, 이 책이 측정한 값이 아니다.
 
-## 논증과 원고 작성
+## 주장과 근거의 논증 구조
 
 - [Toulmin, *The Uses of Argument*](https://www.cambridge.org/core/books/uses-of-argument/26CF801BC12004587B66778297D5567C)
 
-로컬 근거 자료와 대화 로그, 내부 작업 경로는 로컬 기록에만 둔다.
+로컬 근거 자료, 대화 로그, 내부 작업 경로는 공개하지 않고 로컬 기록에만 보관한다.

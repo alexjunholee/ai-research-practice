@@ -55,15 +55,17 @@ notes/first-ai-session-prompt.md
 
 ```text
 session record to update:
-harness rule:
-sandbox action:
+harness rule that controls this action:
+sandbox action allowed now:
+sandbox action not allowed now:
+object under truth control:
 current evidence permits:
 current evidence forbids:
-next action:
+smallest next action:
 verification:
-record update:
 ```
 
-이 다섯 줄이 채워지면 AI는 일반 조언 대신 연구 상태 안에서 움직인다.
-세션이 끝나면 같은 경계를 `project-memory.json`의 `current_evidence`와
-`next_smallest_actions`에 다시 남긴다.
+이 아홉 항목을 확인하면 AI는 일반 조언 대신 연구 상태 안에서 움직인다.
+세션이 끝나면 현재 확인한 사실, 아직 말하면 안 되는 주장, 다음 행동 하나를
+기록에 남기고, 같은 경계를 `project-memory.json`의 `current_evidence`와
+`next_smallest_actions`에 다시 반영한다.
