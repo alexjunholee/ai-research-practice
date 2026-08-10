@@ -24,6 +24,7 @@ part_00_intro.md
 part_01_records.md
 part_02_experiment_to_manuscript.md
 part_03_rules.md
+part_04_afterword.md
 templates.html
 templates/AGENTS.template.md
 templates/claim-evidence-map.md
