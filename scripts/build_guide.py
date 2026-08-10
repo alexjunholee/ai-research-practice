@@ -30,6 +30,7 @@ CHAPTERS = [
     (ROOT / "part_01_records.md", "1부"),
     (ROOT / "part_02_experiment_to_manuscript.md", "2부"),
     (ROOT / "part_03_rules.md", "3부"),
+    (ROOT / "part_04_afterword.md", "후기"),
 ]
 APPENDICES = [
     ROOT / "TERMS.md",

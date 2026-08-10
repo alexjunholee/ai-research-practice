@@ -42,3 +42,5 @@ templates/stage-local-debugging.md
 templates/user-reaction-prior.md
 templates/weekly-research-ledger.md
 templates/workspace-readme.md
+scripts/build_guide.py
+scripts/requirements.txt
