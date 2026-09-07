@@ -48,8 +48,8 @@ workspace/
 `AGENTS.template.md`를 `AGENTS.md`로, `project-memory.template.json`을
 `project-memory.json`으로 복사하고, 첫 요청에 쓸 `first-ai-session-prompt.md`를
 `notes/`에 둔다. 주장과 근거를 적을 `claim-evidence-map.md`는 원고 작업을 시작할 때
-가져온다. `README.md`는 복사한 서식의 빈칸만 짧게 채우고, 상태 메모는 별도 서식 없이
-직접 쓴다. 이 공간에 무엇을 두는지, 공개·비공개 경계를 어디에 두는지만 밝히면 된다.
+가져온다. `README.md`는 복사한 서식의 빈칸만 짧게 채우고, 상태 메모는 복사한
+`project-memory.json`의 항목에 맞춰 쓴다. 이 공간에 무엇을 두는지, 공개·비공개 경계를 어디에 두는지만 밝히면 된다.
 
 번들을 내려받아 풀었다면 다음과 같이 시작한다. 아래 명령은 첫날 점검과 논문·실험
 기록에 필요한 파일까지 한 번에 설치한다. `GUIDE`는 가이드 묶음의 루트이고,
@@ -151,9 +151,9 @@ session·harness·sandbox의 뜻과 파일 대응은 부록 A의 「세션·하�
 ## AGENTS.md에 프로젝트 규칙을 적는다
 
 루트의 `README.md`와 `AGENTS.md`에도 같은 빈칸이 남아 있다. `README.md`에는
-프로젝트 이름과 저장소, 데이터셋, 결과물 위치만 직접 적는다. 그다음
-[`templates/AGENTS.template.md`](templates.html#templates-agents-template)에서
-다음 항목만 먼저 채운다.
+프로젝트 이름과 저장소, 데이터셋, 결과물 위치만 직접 적는다. 그다음 루트의 `AGENTS.md`에서
+다음 항목만 먼저 채운다. 원 서식은
+[`templates/AGENTS.template.md`](templates.html#templates-agents-template)에서 확인할 수 있다.
 
 - project truth
 - public/private boundary

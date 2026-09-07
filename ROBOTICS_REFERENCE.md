@@ -219,7 +219,7 @@ export CYCLONEDDS_URI=file:///path/to/cyclone_dds.xml
 
 ### Docker 안팎의 파일 소유권
 
-Docker 안에서 만든 파일은 host에서 root 소유로 남아 고치거나 지우려면 `sudo`를 써야 한다. 호스트 사용자의 uid·gid로 container를 띄우면 소유권이 그대로 따라온다.
+root 사용자로 실행한 Docker 컨테이너에서 만든 파일은 host에서 root 소유로 남아 고치거나 지우려면 `sudo`를 써야 한다. 호스트 사용자의 uid·gid로 container를 띄우면 소유권이 그대로 따라온다.
 
 ```bash
 # 호스트 사용자 권한으로 실행
@@ -361,7 +361,7 @@ Python의 GIL(Global Interpreter Lock)과 운영체제 스케줄링도 멀티스
 ros2 topic hz /cmd_vel
 ```
 
-코드에 적은 주파수는 목표다. `ros2 topic hz`가 출력하는 숫자가 실제 주기다. 두 숫자가 벌어지면 계산 시간, 스케줄링, 통신 지연을 차례로 확인한다.
+코드에 적은 주파수는 목표다. `ros2 topic hz`가 출력하는 숫자는 관측된 수신 주파수다. 두 숫자가 벌어지면 계산 시간, 스케줄링, 통신 지연을 차례로 확인한다.
 
 ## 반복 실패의 원인을 좁히는 법
 
