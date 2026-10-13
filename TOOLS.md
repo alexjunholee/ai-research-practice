@@ -6,9 +6,9 @@ Claude 문서에 나온 버전과 수치를 정리해 둔다. 아래 항목의 �
 
 이전에는 답변 전에 모델이 사용할 thinking 분량을 `budget_tokens`로 직접 지정했다. Claude 4.7 이상에서는 이 방식이 400 오류로 거부된다.
 
-이제는 `thinking: {"type": "adaptive"}`를 사용한다. 모델은 요청마다 thinking을 쓸지, 쓴다면 얼마나 쓸지 스스로 정한다. 실제 사용량은 응답의 `output_tokens_details.thinking_tokens`에서 확인할 수 있다.
+이제는 `thinking: {"type": "adaptive"}`를 사용한다. 모델은 요청마다 thinking을 쓸지, 쓴다면 얼마나 쓸지 스스로 정한다. 실제 사용량은 응답의 `usage.output_tokens_details.thinking_tokens`에서 확인할 수 있다.
 
-생각한 내용을 다음 턴까지 이어 가는 방식은 모델에 따라 다르다. [extended thinking 문서](https://platform.claude.com/docs/en/build-with-claude/extended-thinking)에 따르면 Claude Opus 4.5와 Claude 4.6 이상 모델은 이전 턴의 thinking block을 보존하며, 그 토큰은 입력 토큰으로 청구된다. 여기서 4.6 이상에는 Opus뿐 아니라 Sonnet도 포함된다. Sonnet 4.5와 Haiku 4.5 및 그 이전 모델은 이전 턴의 thinking block을 지운다.
+생각한 내용을 다음 턴까지 이어 가는 방식은 모델에 따라 다르다. [thinking과 캐시 문서](https://platform.claude.com/docs/en/build-with-claude/prompt-caching#caching-with-thinking-blocks)에 따르면 Opus 4.5 이상과 Sonnet 4.6 이상은 새 사용자 메시지가 들어와도 이전 thinking block을 기본적으로 보존하며, 다시 입력되는 토큰은 입력 토큰으로 청구된다. Sonnet 4.5와 Haiku 4.5 및 그 이전 모델은 도구 결과가 아닌 새 사용자 메시지가 들어오면 이전 thinking block을 지운다.
 
 따라서 호출 코드가 같아도 어떤 모델을 고르느냐에 따라 두 가지가 달라진다. 모델이 이어받는 이전 맥락과 입력 토큰으로 청구되는 양이다.
 
