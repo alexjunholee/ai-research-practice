@@ -1,6 +1,6 @@
 # 부록 C — 예시 작업 공간
 
-`examples/first-robotics-workspace/`는 빠른 시작 절차를 따라 구성한 작은 공개 예시다. 공개해도 되는 파일과 기록 단위만 담았으므로, 처음 사용하는 사람은 자신의 작업 공간에 맞춰 이름과 경로를 바꾸면 된다. 이 예시는 다음 세션에서도 연구 상태를 다시 확인할 수 있도록 그 상태를 파일에 남기고, 세션·하네스·샌드박스의 경계도 나누어 둔다.
+`examples/first-robotics-workspace/`는 빠른 시작 절차를 따라 구성한 작은 공개 예시다. 공개해도 되는 파일과 기록 단위만 담았으므로, 처음 쓰는 사람은 자신의 작업 공간에 맞춰 이름과 경로를 바꾸면 된다. 이 예시는 다음 세션에서도 연구 상태를 다시 확인할 수 있도록 그 상태를 파일에 남기고, 세션·하네스·샌드박스의 경계도 나누어 둔다.
 
 ## 예시 작업 공간의 파일 구조
 
@@ -27,7 +27,7 @@ examples/first-robotics-workspace/
 | [`AGENTS.md`](templates.html#examples-first-robotics-workspace-agents) | AI가 가장 먼저 읽는 프로젝트 작업 규칙 |
 | [`README.md`](templates.html#examples-first-robotics-workspace-readme) | 예시 폴더만 열었을 때 따를 시작 순서 |
 | [`project-memory.json`](templates.html#examples-first-robotics-workspace-project-memory-json) | 현재 확인한 사실, 원본 파일, 근거 범위, 연구 루프, 다음 행동 |
-| [`first-ai-session-message.txt`](templates.html#examples-first-robotics-workspace-notes-first-ai-session-message-txt) | AI 세션에 바로 입력하는 메시지 |
+| [`first-ai-session-message.txt`](templates.html#examples-first-robotics-workspace-notes-first-ai-session-message-txt) | AI 세션에 바로 입력하는 메시지. 예시에서는 채운 결과를 보이려고 `notes/`에 두었다. 자기 작업 공간에서는 부록 B대로 `artifacts/first-ai-session-message.txt`에 저장한다 |
 | [`codex-porting-checklist.md`](templates.html#examples-first-robotics-workspace-notes-codex-porting-checklist) | Claude/Cursor 중심 규칙을 Codex 중심 규칙으로 옮기는 방법 |
 | [`first-ai-session-prompt.md`](templates.html#examples-first-robotics-workspace-notes-first-ai-session-prompt) | AI 세션에서 지킬 읽기 순서와 확인 기준 |
 | [`first-day-workspace-checklist.md`](templates.html#examples-first-robotics-workspace-notes-first-day-workspace-checklist) | 원본 파일과 작은 행동이 다루는 범위 |
@@ -38,7 +38,7 @@ examples/first-robotics-workspace/
 
 ## 답변 전 점검과 세션 종료 기록
 
-예시에는 AI가 첫 답변을 하기 전에 확인할 아홉 가지 항목이 들어 있다.
+예시에는 AI가 첫 답변을 하기 전에 확인할 항목이 들어 있다.
 
 ```text
 session record to update:
@@ -52,4 +52,4 @@ smallest next action:
 verification:
 ```
 
-이 아홉 항목은 AI의 일반적인 조언을 현재 연구 상태에 맞는 행동으로 좁힌다. 세션을 마칠 때에는 현재 확인한 사실, 아직 말해서는 안 되는 주장, 다음 행동 하나를 기록한다.
+이 항목들은 AI의 일반적인 조언을 현재 연구 상태에 맞는 행동으로 좁힌다. 세션을 마칠 때는 현재 확인한 사실, 아직 말하면 안 되는 주장, 다음 행동 하나를 기록한다.

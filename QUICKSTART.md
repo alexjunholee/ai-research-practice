@@ -5,8 +5,8 @@
 
 ## 도구의 역할부터 나눈다
 
-처음에는 연구의 현재 상태와 도구의 역할을 함께 정한다. 모델명은 그다음에 다룰
-문제다. 역할을 먼저 정해 두면 그 역할을 맡을 제품은 나중에 바꿔 끼울 수 있다.
+처음에는 연구가 지금 어디까지 왔는지와 도구마다 맡길 역할을 정한다. 어떤 모델을
+쓸지는 그다음에 정한다. 역할을 먼저 정해 두면 그 역할을 맡는 제품은 나중에 바꿔도 된다.
 
 | 연구 장면 | 먼저 열 도구 | 첫 확인 |
 |---|---|---|
@@ -43,16 +43,16 @@ workspace/
 쓴다면 Git 메타데이터와 데이터셋을 어디에 저장할지 먼저 정한다. 코드 이력, 원시
 데이터, 실험 결과물, 비공개 메모는 처음부터 나누어 둔다.
 
-이 책의 공개 가이드 묶음에서는 `templates/`의 시작 파일을 정해진 자리로 옮긴다.
+가이드 묶음의 `templates/`에 있는 시작 파일은 아래 자리로 복사한다.
 `workspace-readme.md`를 `README.md`로,
 `AGENTS.template.md`를 `AGENTS.md`로, `project-memory.template.json`을
 `project-memory.json`으로 복사하고, 첫 요청에 쓸 `first-ai-session-prompt.md`를
 `notes/`에 둔다. 주장과 근거를 적을 `claim-evidence-map.md`는 원고 작업을 시작할 때
-가져온다. `README.md`는 복사한 서식의 빈칸만 짧게 채우고, 상태 메모는 복사한
-`project-memory.json`의 항목에 맞춰 쓴다. 이 공간에 무엇을 두는지, 공개·비공개 경계를 어디에 두는지만 밝히면 된다.
+가져온다. `README.md`에는 이 공간에 무엇을 두는지와 공개·비공개 경계를 어디에 긋는지만
+짧게 채운다. 상태 메모는 `project-memory.json`의 항목에 맞춰 쓴다.
 
 번들을 내려받아 풀었다면 다음과 같이 시작한다. 아래 명령은 첫날 점검과 논문·실험
-기록에 필요한 파일까지 한 번에 설치한다. `GUIDE`는 가이드 묶음의 루트이고,
+기록에 필요한 파일까지 한 번에 복사한다. `GUIDE`는 가이드 묶음의 루트,
 `WORKSPACE`는 새 연구 작업 공간의 위치다.
 
 ```bash
@@ -135,25 +135,25 @@ Get-Content .\project-memory.json | ConvertFrom-Json | Out-Null
 New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
 ```
 
-복사만 마친 파일에는 아직 빈칸이 남아 있다. `project-memory.json`에서는 먼저 다섯
-묶음을 채운다. `source_of_truth`에는 AI가 다시 읽을 파일을, `tool_surface_map`에는
+복사만 마친 파일에는 아직 빈칸이 남아 있다. `project-memory.json`에서는 먼저 다음
+항목을 채운다. `source_of_truth`에는 AI가 다시 읽을 파일을, `tool_surface_map`에는
 연구 장면별 도구 역할을 적는다. 지금 쓸 수 있는 말과 보류할 말은
 `current_evidence`에서 가른다. 처음 시작할 연구 루프 하나는
-`first_research_loop`에 고정하고, 다음 세션의 첫 행동은
+`first_research_loop`에 고정한다. 다음 세션의 첫 행동은
 `next_smallest_actions`에 남긴다.
 
 session·harness·sandbox의 뜻과 파일 대응은 부록 A의 「세션·하네스·샌드박스」에서 확인한다.
 
-`notes/first-ai-session-prompt.md`의 `Prompt To Send` 블록에 이 세 경계를 적는다.
+`notes/first-ai-session-prompt.md`의 `Prompt To Send` 블록에 세션·하네스·샌드박스 경계를 적는다.
 빈칸을 모두 채운 뒤 `artifacts/first-ai-session-message.txt`에 저장하고, 첫 AI
 세션에는 이 파일의 내용을 그대로 입력한다.
 
 ## AGENTS.md에 프로젝트 규칙을 적는다
 
 루트의 `README.md`와 `AGENTS.md`에도 같은 빈칸이 남아 있다. `README.md`에는
-프로젝트 이름과 저장소, 데이터셋, 결과물 위치만 직접 적는다. 그다음 루트의 `AGENTS.md`에서
-다음 항목만 먼저 채운다. 원 서식은
-[`templates/AGENTS.template.md`](templates.html#templates-agents-template)에서 확인할 수 있다.
+프로젝트 이름과 저장소, 데이터셋, 결과물 위치만 직접 적는다. 이어서 루트의 `AGENTS.md`에서
+다음 항목만 먼저 채운다. 원래 서식은
+[`templates/AGENTS.template.md`](templates.html#templates-agents-template)에 있다.
 
 - project truth
 - public/private boundary
@@ -172,14 +172,14 @@ session·harness·sandbox의 뜻과 파일 대응은 부록 A의 「세션·하�
 ## 현재 상태를 먼저 기록한다
 
 `AGENTS.md`의 `project truth`와 `durable corrections`에 채울 내용은 여기에서 나온다.
-프로젝트의 목표, 현재 정본으로 삼는 코드 경로와 dataset, 실험과 원고가 어디까지
-왔는지, 심사에서 문제가 될 만한 부분, 계속 적용할 교정 사항을 원본 파일과 실행 결과로
-확인해 상태 메모에 적는다.
+프로젝트 목표, 지금 정본으로 삼는 코드 경로와 dataset, 실험과 원고의 진행 정도,
+심사에서 문제가 될 만한 부분, 계속 적용할 교정 사항을 원본 파일과 실행 결과로
+확인한다. 확인한 내용은 상태 메모에 적는다.
 
 ## 첫 AI 요청은 한 작업으로 좁힌다
 
-첫 요청에는 적어도 다음 다섯 항목을 넣는다. 답변 전 전체 점검은 부록 C의 아홉
-항목으로 따로 한다. 첫 요청은
+첫 요청에는 적어도 아래 항목을 넣는다. 답하기 전에 하는 전체 점검은 부록 C의
+점검 항목으로 따로 한다. 첫 요청은
 [`templates/first-ai-session-prompt.md`](templates.html#templates-first-ai-session-prompt)를
 채워 보낸다. 가장 작은 형태는 이렇다.
 
@@ -195,7 +195,7 @@ Do not infer project truth from summaries when source files or artifacts are
 available.
 ```
 
-AI의 답변을 연구 작업에 반영하기 전에 근거 상태부터 확인한다.
+AI의 답을 연구 작업에 쓰기 전에 그 근거부터 확인한다.
 첫 메시지는 `artifacts/first-ai-session-message.txt`처럼 파일로 남겨 두고,
 다음 세션도 같은 읽기 순서로 시작한다.
 
@@ -212,13 +212,13 @@ AI의 답변을 연구 작업에 반영하기 전에 근거 상태부터 확인�
 | 원고 문장을 고친다 | [`claim-evidence-map.md`](templates.html#templates-claim-evidence-map) |
 
 한 번에 여러 루프를 열면 요청이 다시 넓어지므로 첫 요청의 성공 기준은 하나만
-둔다. 표의 첫 줄을 골랐다면 이렇게 요청한다. "이 논문의 핵심 주장, 실제로 호출되는 코드
+둔다. 표에서 「논문 한 편을 읽는다」 줄을 골랐다면 이렇게 요청한다. "이 논문의 핵심 주장, 실제로 호출되는 코드
 경로를 확인할 대상, 실험 절차의 빈칸을 분리하라."
 
 ## 세션을 닫기 전에 결과를 기록한다
 
 작업이 끝나면 `project-memory.json`이나 `weekly-research-ledger.md`에 현재 확인한
-사실, 아직 말하면 안 되는 주장, 다음 행동 하나를 적는다. 이 세 줄을 어느 기록에 이어 적을지는
+사실, 아직 말하면 안 되는 주장, 다음 행동 하나를 적는다. 다음 세션이 이 세 줄을 어떻게 읽고 이어 가는지는
 부록 D에서 다룬다.
 
 AI가 잘못된 가정을 세웠다면 그 사례를 notes에 적어 두고, 같은 가정이 반복되면
@@ -227,4 +227,4 @@ AI가 잘못된 가정을 세웠다면 그 사례를 notes에 적어 두고, 같
 세 줄 가운데 아직 말하면 안 되는 주장은 `claim_boundaries`에 옮긴다.
 첫 세션이 끝난 뒤 `project-memory.json`의 `current_evidence`,
 `first_research_loop`, `claim_boundaries`, `next_smallest_actions`를 함께 고친다.
-이 기록을 갱신하면 다음 AI 세션이 같은 근거 범위를 이어받는다.
+이렇게 고쳐 두면 다음 AI 세션이 같은 근거 범위를 이어받는다.

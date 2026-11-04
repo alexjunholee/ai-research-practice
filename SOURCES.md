@@ -67,7 +67,7 @@ Ch.2 자료 확인일: 2026-07-26
 
 확인일: 2026-08-09
 
-- [*From Question Answering to Task Completion: A Survey on Agent System and Harness Design*](https://arxiv.org/abs/2606.20683) — 실행 하네스의 여섯 자리
+- [*From Question Answering to Task Completion: A Survey on Agent System and Harness Design*](https://arxiv.org/abs/2606.20683) — 실행 하네스의 여섯 요소
 - [Si et al., *Can LLMs Generate Novel Research Ideas?*](https://arxiv.org/abs/2409.04109)
 - [Si et al., *The Ideation-Execution Gap* (ICLR 2026)](https://arxiv.org/abs/2506.20803)
 - [*PaperBench*](https://arxiv.org/abs/2504.01848)
@@ -75,6 +75,11 @@ Ch.2 자료 확인일: 2026-07-26
 - [*ResearchCodeBench*](https://arxiv.org/abs/2506.02314)
 - [*ResearchGym*](https://arxiv.org/abs/2602.15112)
 - [*Kosmos: An AI Scientist for Autonomous Discovery*](https://arxiv.org/abs/2511.02824)
+- [Lu et al., *The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery*](https://arxiv.org/abs/2408.06292) — 편당 약 15달러, 본문 계산 10~15달러 (확인일 2026-10-23)
+- [Yamada et al., *The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search*](https://arxiv.org/abs/2504.08066) — ICLR 2025 워크숍 제출 세 편, 평균 6.33점, 한계 절 (확인일 2026-10-23)
+- [Sakana AI, *The AI Scientist Generates its First Peer-Reviewed Scientific Publication*](https://sakana.ai/ai-scientist-first-publication/) — 내부 검토의 본 트랙 미달 판단, 메타 리뷰 전 철회, 인용 오류 사례 (확인일 2026-10-23)
+- [Beel et al., *Evaluating Sakana's AI Scientist*](https://arxiv.org/abs/2502.14297) — 새로움 오분류, 실험 42% 코드 오류 실패 (확인일 2026-10-23)
+- [Intology, *Zochi Publishes A* Paper*](https://intology.ai/blog/zochi-acl) — ACL 2025 본 학술대회 채택, 사람이 맡은 부분 (확인일 2026-10-23)
 - [*AI for Auto-Research: Roadmap & User Guide*](https://arxiv.org/abs/2605.18661)
 - [METR, *Time Horizon 1.1*](https://metr.org/blog/2026-1-29-time-horizon-1-1/)
 - [Ord, *Is there a half-life for the success rates of AI agents?*](https://arxiv.org/abs/2505.05115)
@@ -88,7 +93,7 @@ Ch.2 자료 확인일: 2026-07-26
 
 확인일: 2026-08-09
 
-- [Pangram Labs, *21% of ICLR 2026 reviews are AI-generated*](https://www.pangram.com/blog/pangram-predicts-21-of-iclr-reviews-are-ai-generated)
+- [Pangram Labs, *Pangram Predicts 21% of ICLR Reviews are AI-Generated*](https://www.pangram.com/blog/pangram-predicts-21-of-iclr-reviews-are-ai-generated) — 심사평 약 7만 건 중 15,899건(21%), 2025-11-18 (확인일 2026-10-23)
 - [NeurIPS, *AI-Generated Papers in the NeurIPS 2026 Position Paper Track*](https://blog.neurips.cc/2026/06/02/ai-generated-papers-in-the-neurips-2026-position-paper-track/)
 - [*Fabricated citations: an audit across 2·5 million biomedical papers*, The Lancet, 2026-05-07](https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(26)00603-3/fulltext)
 - [*Review the Code, Not the Story: A Vision and Protocol for Code-First Peer Review*](https://arxiv.org/abs/2606.07683)
@@ -105,13 +110,13 @@ Ch.2 자료 확인일: 2026-07-26
 
 확인일: 2026-08-09
 
-- [Szymanski et al., *An autonomous laboratory for the accelerated synthesis of novel materials*, Nature 2023](https://www.nature.com/articles/s41586-023-06734-w)
+- [Szymanski et al., *An autonomous laboratory for the accelerated synthesis of inorganic materials*, Nature 2023](https://www.nature.com/articles/s41586-023-06734-w)
+- [Szymanski et al., *Author Correction: An autonomous laboratory for the accelerated synthesis of inorganic materials*, Nature 2026](https://www.nature.com/articles/s41586-025-09992-y)
 - [Chemistry World, *New analysis raises doubts over autonomous lab's materials discoveries*](https://www.chemistryworld.com/news/new-analysis-raises-doubts-over-autonomous-labs-materials-discoveries/4018791.article)
 - [*MatDiffract*, 자동 상 동정·Rietveld refinement 정확도](https://arxiv.org/abs/2607.20880)
 
 `연구 하네스와 자동 연구`, `심사와 출판`, `로봇 정책 평가`, `자율 실험실` 자료의 수치는
-2026-08-09에 원문에서 확인했다. 본문에 제시한 수치는 각 원문이 보고한 값이며,
-이 책이 직접 측정한 값이 아니다. 확인할 수 없었던 수치는 본문에서 제외했다.
+2026-08-09에 원문에서 확인했다. 본문의 수치는 모두 각 원문이 보고한 값이다. 확인할 수 없었던 수치는 본문에서 제외했다.
 
 ## 로보틱스 실행 환경
 
@@ -123,23 +128,26 @@ Ch.2 자료 확인일: 2026-07-26
 ## 맥락 관리와 에이전트 운영
 
 - [Anthropic, *Effective context engineering for AI agents*](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
+- [Chroma, *Context Rot: How Increasing Input Tokens Impacts LLM Performance*](https://research.trychroma.com/context-rot) — 모델 18종, 입력 길이에 따른 성능 (확인일 2026-10-23)
 - [Anthropic, *Context engineering: memory, compaction, and tool clearing*](https://platform.claude.com/cookbook/tool-use-context-engineering-context-engineering-tools)
 - [Anthropic, *Equipping agents for the real world with Agent Skills*](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
 - [Anthropic, *How we built our multi-agent research system*](https://www.anthropic.com/engineering/multi-agent-research-system)
 - [Anthropic, *Writing tools for agents*](https://www.anthropic.com/engineering/writing-tools-for-agents)
 - [Anthropic, *Code execution tool*](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool)
 - [Anthropic, *Extended thinking*](https://platform.claude.com/docs/en/build-with-claude/extended-thinking)
+- [Anthropic, *Thinking*](https://platform.claude.com/docs/en/build-with-claude/thinking) — 턴 사이 thinking block 보존 규칙 (확인일 2026-10-23)
+- [Anthropic, *Compaction at a token threshold*](https://platform.claude.com/docs/en/build-with-claude/compaction-threshold) — 기본 150,000 토큰, 최소 50,000 토큰 (확인일 2026-10-23)
 - [Anthropic, *Prompt caching*](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)
 - [Anthropic, *Structured outputs*](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)
 - [Claude Code, *Hooks*](https://code.claude.com/docs/en/hooks)
 - [Model Context Protocol, *Architecture*](https://modelcontextprotocol.io/docs/learn/architecture)
 
 이 묶음에서는 본문이 인용한 정의와 수치를 원문으로 확인했다. cookbook 문서의 측정값
-(최대 맥락 335,279 토큰, 파일 읽기 결과 96.3%, 메모리 사용 세션 5K 대 미사용 332K)은
-해당 문서의 실행에서 나온 값이며, 이 책이 측정한 값이 아니다.
+(최대 맥락 335,279 토큰, 파일 읽기 결과 96.3%, memory를 쓴 둘째 세션 172,623 토큰, 쓰지 않은 둘째 세션 333,977 토큰)은
+그 문서의 실행에서 나온 값이다.
 
 ## 주장과 근거의 논증 구조
 
 - [Toulmin, *The Uses of Argument*](https://www.cambridge.org/core/books/uses-of-argument/26CF801BC12004587B66778297D5567C)
 
-로컬 근거 자료, 대화 로그, 내부 작업 경로는 공개하지 않고 로컬 기록에만 보관한다.
+로컬 근거 자료, 대화 로그, 내부 작업 경로는 로컬 기록에만 보관한다.

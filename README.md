@@ -13,7 +13,7 @@
 
 - 논문을 코드와 실험으로 읽을 때: [paper-code-experiment-map](templates.html#templates-paper-code-experiment-map)
 - 실험 숫자를 원고에 올릴 때: [experiment-contract](templates.html#templates-experiment-contract)
-- runtime 문제를 좁힐 때: [stage-local-debugging](templates.html#templates-stage-local-debugging)
+- 실행 중 문제를 좁힐 때: [stage-local-debugging](templates.html#templates-stage-local-debugging)
 - ROS2, Docker, 센서, Jetson 문제를 AI와 디버깅할 때: [부록 F의 로봇 실험 문제 해결 안내서](guide.html#부록-f-로봇-실험-문제-해결-안내서)
 - reviewer 답변을 쓸 때: [주장·근거 표](templates.html#templates-claim-evidence-map)
 - workspace를 처음 만들 때만: [첫 연구 작업 공간 만들기](guide.html#부록-b-첫-연구-작업-공간-만들기)

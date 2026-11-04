@@ -1,12 +1,12 @@
 # 부록 F — 로봇 실험 문제 해결 안내서
 
-증상마다 가장 먼저 확인할 명령을 모아 두었다. 본문 3부의 「증상에 맞는 첫 확인 명령을 찾는다」 절에서는 이 안내서를 언제 쓰는지 다룬다.
+증상마다 가장 먼저 확인할 명령을 모아 두었다. 이 안내서를 언제 펴 보면 좋은지는 본문 3부 「증상에 맞는 첫 확인 명령을 찾는다」 절에 적었다.
 
 ## ROS 2에서 자주 막히는 문제
 
 ### QoS 불일치로 토픽이 오지 않을 때
 
-[ROS2의 기본 publisher·subscription profile](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html)은 RELIABLE이고, sensor data profile은 BEST_EFFORT다. 카메라와 LiDAR driver는 sensor data profile을 쓰는데 subscriber가 기본 profile을 쓰면 reliability가 맞지 않아 메시지가 오지 않는다. 토픽이나 driver를 의심하기 전에 실제 QoS부터 확인한다.
+[ROS2의 기본 publisher·subscription profile](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html)의 reliability는 RELIABLE이고, sensor data profile의 reliability는 BEST_EFFORT다. 카메라나 LiDAR driver가 sensor data profile로 보내는데 subscriber가 기본 profile로 받으려 하면 reliability가 맞지 않아 둘은 처음부터 연결되지 않는다. 토픽이나 driver를 의심하기 전에 실제 QoS부터 확인한다.
 
 ```bash
 # 토픽의 QoS 프로파일 확인
@@ -30,9 +30,9 @@ self.subscription = self.create_subscription(Image, '/camera/image_raw', self.ca
 
 ### use_sim_time과 tf2의 시간 불일치
 
-rosbag을 재생할 때는 `use_sim_time:=true`도 함께 켜야 tf lookup이 그 시각을 찾는다. `tf2 lookup failed`가 나타나면 `static_transform_publisher`를 붙이기 전에 clock 설정부터 확인한다.
+rosbag을 `--clock`으로 재생할 때는 노드의 `use_sim_time:=true`도 함께 켜야 tf lookup이 bag의 시각을 찾는다. `tf2 lookup failed`가 나타나면 `static_transform_publisher`를 붙이기 전에 clock 설정부터 확인한다.
 
-시뮬레이션 clock과 시스템 clock이 서로 맞지 않기 때문이다. Bag 파일의 timestamp는 기록 시점을 가리키지만 노드는 현재 시스템 시간으로 tf를 찾으므로, 두 쪽의 기준 시각이 서로 다르다. 두 시계를 bag 쪽으로 맞춘 뒤 실제로 맞았는지 확인한다.
+bag 파일의 timestamp는 기록한 시각인데, `use_sim_time`을 켜지 않은 노드는 현재 시스템 시간으로 tf를 찾는다. bag은 `--clock`으로 재생해 `/clock`을 내보내고, 노드에는 `use_sim_time`을 켠 뒤 실제로 적용됐는지 확인한다.
 
 ```bash
 # bag clock을 publish하는 재생 예
@@ -70,7 +70,7 @@ source /opt/ros/humble/setup.bash
 source ~/ros2_ws/install/setup.bash
 ```
 
-`.bashrc`에 경로를 넣었는데 새 terminal에서 package를 찾지 못한다면 다시 설치하기 전에 source 상태부터 살핀다. `echo $AMENT_PREFIX_PATH`는 현재 적용된 workspace를 보여 준다.
+`.bashrc`에 경로를 넣었는데 새 terminal에서 package가 안 보이면 다시 설치하기 전에 source 상태부터 살핀다. `echo $AMENT_PREFIX_PATH`는 현재 적용된 workspace를 보여 준다.
 
 ### 커스텀 메시지 빌드와 반영
 
@@ -99,7 +99,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 <member_of_group>rosidl_interface_packages</member_of_group>
 ```
 
-`--symlink-install`을 붙여 build해야 Python 코드 수정이 바로 반영된다. 고친 코드가 반영되지 않으면 build option을 먼저 확인하고 cache는 그다음에 살핀다.
+`--symlink-install`을 붙여 build해야 Python 코드 수정이 바로 반영된다. 고친 코드가 그대로 옛 동작을 보이면 build option을 먼저 확인한다. cache는 그 뒤에 살핀다.
 
 ```bash
 # Python 패키지 수정이 바로 반영되려면
@@ -108,7 +108,7 @@ colcon build --symlink-install
 
 ### 네임스페이스와 리매핑
 
-`ros2 topic echo /camera/image_raw`에 아무것도 나타나지 않으면 namespace가 붙어 실제 topic이 `/robot1/camera/image_raw`가 됐는지부터 확인한다. driver를 살피기 전에 이름을 맞춘다.
+`ros2 topic echo /camera/image_raw`가 빈 화면이면 namespace가 붙어 실제 topic이 `/robot1/camera/image_raw`가 됐는지부터 확인한다. driver를 살피기 전에 이름을 맞춘다.
 
 ```bash
 # 토픽 목록부터 확인하라
@@ -122,14 +122,14 @@ ros2 topic list | grep camera
 
 ### ROS 2 launch 파일
 
-생성된 ROS2 Python launch 파일에서는 다음 네 가지를 확인한다.
+에이전트가 만든 ROS2 Python launch 파일에서는 다음을 확인한다.
 
 - ROS1 XML 문법과 ROS2 Python 문법의 혼용
 - 노드 의존성을 놓친 `LaunchDescription` action 순서
 - `ComposableNode`와 일반 `Node`의 혼동
 - multi-robot 구성에서 `PushRosNamespace` 누락
 
-마지막 항목인 `PushRosNamespace` 누락은 다음 예처럼 피한다.
+multi-robot 구성에서는 `GroupAction` 안에 `PushRosNamespace`를 넣어 노드마다 namespace를 붙인다.
 
 ```python
 # multi-robot launch 파일에서 네임스페이스 적용
@@ -142,7 +142,7 @@ robot1_group = GroupAction([
 ])
 ```
 
-에이전트에게 Launch 파일을 요청할 때는 ROS2 Python 형식인지, multi-robot namespace가 필요한지, `ComposableNode`를 쓸지를 적어 준다.
+에이전트에게 launch 파일을 요청할 때는 ROS2 Python 형식인지, multi-robot namespace가 필요한지, `ComposableNode`를 쓸지를 적어 준다.
 
 ## Docker에서 자주 빠지는 설정
 
@@ -160,11 +160,11 @@ docker run -it \
   my_image
 ```
 
-각 옵션의 역할은 다음과 같다.
+위 옵션과 함께 볼 설정은 다음과 같다.
 
 - `QT_X11_NO_MITSHM=1` — Docker 안에서 MIT-SHM(공유 메모리) 확장 때문에 RViz가 죽으면 이 확장을 끈다.
 - `--ipc=host`가 있어야 도는 프로그램도 있지만, 이 옵션은 host의 IPC namespace를 공유한다. 오류를 재현해 확인한 뒤에만 붙인다.
-- Wayland session에서는 X11 socket mount만으로 충분하지 않을 수 있다. 로그인할 때 Xorg session을 고르거나 host의 XWayland·Wayland 권한 설정에 맞춘다. `XDG_SESSION_TYPE` 환경 변수만 바꿔서는 현재 실행 중인 display server가 바뀌지 않는다.
+- Wayland session에서는 X11 socket mount 외에 추가 설정이 필요할 수 있다. 로그인할 때 Xorg session을 고르거나 host의 XWayland·Wayland 권한 설정에 맞춘다. `XDG_SESSION_TYPE` 환경 변수를 바꿔도 현재 실행 중인 display server는 그대로다.
 
 ### USB 장치 연결
 
@@ -180,13 +180,13 @@ docker run -it --privileged my_image
 
 [Docker 문서](https://docs.docker.com/engine/containers/run/)에 따르면 `--privileged`는 모든 host device 접근과 확장된 capability를 컨테이너에 부여한다. 상시 운용에서는 필요한 device만 `--device`로 매핑한다.
 
-container를 띄운 뒤 USB 장치를 꽂으면 기존 device mapping에는 잡히지 않는다. 이때는 container를 다시 띄우거나, 디버깅할 때만 `--privileged`와 `-v /dev:/dev` 조합을 사용한다.
+container를 띄운 뒤 꽂은 USB 장치는 기존 device mapping 밖에 있다. 이때는 container를 다시 띄우거나, 디버깅할 때만 `--privileged`와 `-v /dev:/dev`를 함께 쓴다.
 
 ### Docker의 ROS 네트워크
 
 Docker 컨테이너 간 ROS2 통신에서 `--network=host`는 설정이 단순하지만 [host의 network namespace를 공유해 network isolation을 없앤다](https://docs.docker.com/engine/network/drivers/host/). 포트 충돌 여부와 네트워크가 열리는 범위를 함께 확인한다.
 
-ROS2 노드들이 bridge network에서 서로를 찾지 못하면 DDS(Data Distribution Service) discovery에 쓰이는 multicast가 container 경계를 넘는지 확인한다. Docker bridge 설정에 따라 discovery packet이 밖으로 나가지 않을 수 있다.
+bridge network에 있는 ROS2 노드들이 서로를 찾지 못하면 DDS(Data Distribution Service) discovery에 쓰이는 multicast가 container 경계를 넘는지 확인한다. Docker bridge 설정에 따라 discovery packet이 container 안에 갇힐 수 있다.
 
 ```bash
 # 가장 간단한 방법 (개발 환경에서)
@@ -198,14 +198,16 @@ docker run -it --network=host -e ROS_DOMAIN_ID=42 my_ros2_image
 
 같은 네트워크에서 `ROS_DOMAIN_ID`가 겹치면 다른 시스템의 ROS2 graph와 연결된다. 연구실에서 여러 명이 동시에 ROS2를 쓰면 서로의 토픽이 보인다.
 
-DDS를 더 세밀하게 조정해야 할 때는 Cyclone DDS config XML에서 사용할 네트워크 인터페이스를 하나로 지정한다.
+DDS를 더 세밀하게 조정해야 할 때는 Cyclone DDS config XML에 쓸 네트워크 인터페이스를 하나만 적는다. [현재 Cyclone DDS 설정 문서](https://github.com/eclipse-cyclonedds/cyclonedds/blob/master/docs/manual/options.md)는 인터페이스를 `General/Interfaces` 아래 `NetworkInterface`로 적는다.
 
 ```xml
 <!-- cyclone_dds.xml -->
 <CycloneDDS>
-  <Domain>
+  <Domain id="any">
     <General>
-      <NetworkInterfaceAddress>eth0</NetworkInterfaceAddress>
+      <Interfaces>
+        <NetworkInterface name="eth0"/>
+      </Interfaces>
     </General>
   </Domain>
 </CycloneDDS>
@@ -226,7 +228,7 @@ root 사용자로 실행한 Docker 컨테이너에서 만든 파일은 host에�
 docker run -it --user $(id -u):$(id -g) my_image
 ```
 
-`--user` 옵션으로 호스트 사용자 권한을 적용해도 장치나 directory 권한 때문에 ROS package가 동작하지 않을 수 있다. 이때는 `chmod 777`로 모두 열기보다 Dockerfile에 non-root user를 만들고 필요한 group과 directory 권한만 부여한다.
+`--user` 옵션으로 호스트 사용자 권한을 적용해도 장치나 directory 권한 때문에 ROS package가 동작하지 않을 수 있다. 이때는 `chmod 777`로 모두 열기보다 Dockerfile에 non-root user를 만들고 필요한 group과 directory 권한만 준다.
 
 ```dockerfile
 # Dockerfile에서 non-root 유저 설정
@@ -286,15 +288,15 @@ ping 192.168.1.201
 sudo ip addr add 192.168.1.100/24 dev eth0
 sudo ip link set eth0 up
 
-# 3단계: UDP 패킷이 오는지 Wireshark로 확인
+# 3단계: UDP 패킷이 오는지 tcpdump로 확인
 sudo tcpdump -i eth0 udp port 2368 -c 10
 ```
 
-장치가 ICMP에 응답한다면 `ping`으로 연결을 확인하고, 응답하지 않더라도 Wireshark나 `tcpdump`로 지정된 UDP port에 패킷이 들어오는지 살핀다. 패킷은 들어오는데 ROS 토픽에 나타나지 않으면 드라이버와 ROS 설정으로 확인 범위를 좁힌다.
+장치가 ICMP에 응답하면 `ping`으로 연결을 확인한다. ICMP를 막아 둔 장치라도 Wireshark나 `tcpdump`로 지정된 UDP port에 패킷이 들어오는지 살핀다. 패킷은 들어오는데 ROS 토픽이 비어 있으면 드라이버와 ROS 설정으로 확인 범위를 좁힌다.
 
 ### 카메라 드라이버와 v4l2
 
-간단한 예제는 `cv2.VideoCapture(0)`만 보여 준다. 그러나 USB 카메라 하나가 영상과 메타데이터용으로 `/dev/video0`, `/dev/video1`을 함께 만들기도 하므로 장치 번호를 먼저 확인해야 한다.
+간단한 예제는 `cv2.VideoCapture(0)`만 보여 준다. 하지만 USB 카메라 하나가 영상과 메타데이터용으로 `/dev/video0`, `/dev/video1`을 함께 만들기도 하므로 장치 번호를 먼저 확인해야 한다.
 
 ```bash
 # 카메라 디바이스 매핑 확인
@@ -307,12 +309,12 @@ v4l2-ctl -d /dev/video0 --list-formats-ext
 v4l2-ctl -d /dev/video0 --list-ctrls
 ```
 
-자동 노출(auto exposure)과 자동 화이트밸런스가 frame 사이의 밝기를 크게 바꾸면 특징점 추출과 추적이 흔들린다. 지원하는 control 이름과 값의 허용 범위는 driver마다 다르므로 먼저 확인한다.
+자동 노출(auto exposure)과 자동 화이트밸런스가 frame 사이의 밝기를 크게 바꾸면 특징점 추출과 추적이 흔들린다. control 이름과 값의 허용 범위는 driver와 kernel 버전마다 다르므로 `--list-ctrls` 출력에서 먼저 확인한다. 아래 예는 현재 Linux kernel의 이름이고, 예전 kernel에서는 `exposure_auto`, `exposure_absolute`처럼 다른 이름으로 나온다.
 
 ```bash
 # 수동 노출 설정 (SLAM용)
-v4l2-ctl -d /dev/video0 --set-ctrl=exposure_auto=1
-v4l2-ctl -d /dev/video0 --set-ctrl=exposure_absolute=100
+v4l2-ctl -d /dev/video0 --set-ctrl=auto_exposure=1
+v4l2-ctl -d /dev/video0 --set-ctrl=exposure_time_absolute=100
 
 # 화이트밸런스 고정
 v4l2-ctl -d /dev/video0 --set-ctrl=white_balance_automatic=0
@@ -322,7 +324,7 @@ SLAM이 흔들리면 알고리즘 매개변수를 만지기 전에 자동 노출
 
 ### Jetson의 ARM·JetPack 환경
 
-코드나 Docker 설정을 생성하면 x86을 전제로 한 의존성이 섞일 수 있다. NVIDIA Jetson에서는 ARM64와 JetPack의 버전 제약을 함께 확인한다.
+에이전트가 만든 코드나 Docker 설정에는 x86을 전제로 한 의존성이 섞이기도 한다. NVIDIA Jetson에서는 ARM64와 JetPack의 버전 제약을 함께 확인한다.
 
 주의할 점:
 
@@ -333,7 +335,7 @@ SLAM이 흔들리면 알고리즘 매개변수를 만지기 전에 자동 노출
 장치에 설치된 조합은 이렇게 확인한다.
 
 ```bash
-# JetPack 버전 확인
+# L4T release 확인 (JetPack 버전은 이 L4T 번호로 NVIDIA 표에서 찾는다)
 cat /etc/nv_tegra_release
 
 # NVIDIA 문서의 r36.3 예시. 실제 장치에서는 확인한 L4T와 맞는 tag를 선택
@@ -344,7 +346,7 @@ docker pull nvcr.io/nvidia/l4t-jetpack:r36.3.0
 
 ### 실시간 제어 주기
 
-`time.sleep(0.01)`은 최소 대기 시간만 줄 뿐이며, 루프가 다시 도는 시점은 계산 시간과 운영체제 스케줄링이 정한다. 100 Hz는 코드에 적은 목표 숫자다.
+`time.sleep(0.01)`은 최소 대기 시간을 준다. 루프가 다시 도는 시점은 계산 시간과 운영체제 스케줄링이 정한다.
 
 ```python
 # 주기 검증이 필요한 단순한 구현
@@ -374,7 +376,7 @@ Gazebo에서 동작한 코드가 실제 로봇에서 실패한다면 시뮬레�
 - **타이밍 불일치**: 시뮬레이터의 clock·timestamp 조건과 실제 센서 간 동기화 오차가 다르다
 - **좌표계 불일치**: URDF와 실제 로봇의 센서 위치/각도가 미세하게 다르면 tf가 틀어진다
 
-에이전트에게 질문할 때도 "시뮬레이션에서는 되지만 실제 로봇에서는 실패한다. 센서 노이즈 수준은 X이고, 통신 지연은 Y ms이며, 좌표계는 Z 방법으로 보정했다"처럼 측정한 차이를 숫자로 적어 준다.
+에이전트에게 질문할 때도 "시뮬레이션에서 성공한 동작이 실제 로봇에서 실패한다. 센서 노이즈 수준은 X다. 통신 지연은 Y ms다. 좌표계는 Z 방법으로 보정했다"처럼 측정한 차이를 숫자로 적어 준다.
 
 ### 소프트웨어를 고치기 전에 하드웨어부터 확인한다
 
@@ -388,7 +390,7 @@ dmesg | tail -20
 dmesg | grep -i usb | tail -20
 ```
 
-`dmesg`에 `USB disconnect`, `device descriptor read/64, error -71` 같은 줄이 보이면 연결 상태와 전원부터 확인한다. 케이블을 바꾸고, 유전원 USB 허브를 연결하고, 다른 포트에 꽂아 증상이 달라지는지 비교한다.
+`dmesg`에 `USB disconnect`, `device descriptor read/64, error -71` 같은 줄이 보이면 연결 상태와 전원부터 확인한다. 케이블을 바꾸고, 전원을 따로 받는 USB 허브를 연결하고, 다른 포트에 꽂아 증상이 달라지는지 비교한다.
 
 ### OpenCV 재설치 전 패키지·ABI 충돌 확인
 
@@ -418,7 +420,7 @@ ROS Humble의 system OpenCV와 `ros-humble-cv-bridge`를 쓰기로 했다면 imp
 
 같은 처방을 되풀이해도 증상이 그대로라면 한 층 아래에서 원인을 관측한다. 시스템 로그를 확인하고, `strace`로 호출을 따라가며, 필요하면 패킷을 잡는다.
 
-에이전트에게 물을 때는 에러 메시지뿐 아니라 다음과 같은 저수준 정보도 함께 제공한다.
+에이전트에게 물을 때는 에러 메시지뿐 아니라 다음과 같은 저수준 정보도 함께 보낸다.
 
 ```bash
 # 시스템 로그
@@ -426,10 +428,10 @@ dmesg | tail -30
 journalctl -u my_service --since "5 minutes ago"
 
 # 프로세스 추적
-strace -f -e trace=open,read,write ros2 run my_pkg my_node 2>&1 | head -100
+strace -f -e trace=open,openat,read,write ros2 run my_pkg my_node 2>&1 | head -100
 
 # 네트워크 패킷 캡처
 sudo tcpdump -i eth0 -w capture.pcap
 ```
 
-이 정보를 함께 주면 어디에나 적용되는 재설치 처방을 반복하지 않고 현재 시스템에서 얻은 증거로 원인을 좁힐 수 있다.
+이 정보를 함께 주면 에이전트가 현재 시스템에서 얻은 증거로 원인을 좁힐 수 있다.
