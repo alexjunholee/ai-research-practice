@@ -1,6 +1,7 @@
 # First AI Session Prompt
 
-This example starts one paper-code-experiment loop for a localization project.
+Use this example prompt to kick off a single paper-code-experiment loop for a
+localization project.
 
 ## Session Target
 
@@ -12,7 +13,7 @@ This example starts one paper-code-experiment loop for a localization project.
 
 ## Read Order
 
-Read these files before answering.
+Read these files in order before answering:
 
 1. `AGENTS.md`
 2. `project-memory.json`
@@ -23,7 +24,7 @@ Read these files before answering.
 
 ## Before Answering
 
-State these fields first.
+State these fields before giving any advice:
 
 ```text
 Session record to update:
@@ -40,17 +41,17 @@ Verification:
 ## Allowed First Action
 
 - Inspect the paper-code-experiment map.
-- Identify central claim and active code path candidates.
-- Mark missing dataset, split, metric, baseline, command, and artifact fields.
-- Choose one file or command output to inspect next.
-- Leave a session record, harness rule, sandbox action, and verification record.
+- Identify the paper's central claim and candidate code paths.
+- Flag any missing dataset, split, metric, baseline, command, and artifact fields.
+- Choose a single file or command output to inspect next.
+- Record the session update, controlling harness rule, sandbox action, and verification step.
 
 ## Blocked Claims
 
-- Do not claim method performance.
-- Do not state reviewer readiness.
-- Do not treat a file name as active implementation proof.
-- Do not turn missing protocol fields into manuscript claims.
+- Do not claim any method performance gains yet.
+- Do not declare reviewer readiness.
+- Do not treat a filename alone as proof of an active implementation.
+- Do not extrapolate manuscript claims from missing protocol fields.
 
 ## Promotion Requires
 
@@ -71,8 +72,8 @@ Read AGENTS.md, project-memory.json, notes/first-day-workspace-checklist.md,
 notes/weekly-research-ledger.md, notes/paper-code-experiment-map.md, and
 notes/experiment-contract.md before answering.
 
-My current task is to connect one localization paper's central claim to code path
-candidates and missing experiment protocol fields.
+My current task is to connect one localization paper's central claim to
+candidate code paths and identify any missing experiment protocol fields.
 First research loop target: notes/paper-code-experiment-map.md
 Expected artifact: filled sections in notes/paper-code-experiment-map.md
 
@@ -87,8 +88,8 @@ Before giving advice, state:
 - Smallest next action
 - Verification
 
-Use source files, artifacts, and command output as primary evidence. Treat
-summaries as orientation only. If evidence is missing, say what is missing and
-choose the smallest inspection that would promote the claim.
-Do not open a second research loop in the first answer.
+Use source files, artifacts, and command outputs as your primary evidence, and
+treat summaries as orientation only. If required evidence is missing, state
+explicitly what is missing and propose the smallest inspection needed to verify
+the claim. Do not open a second research loop in your first response.
 ```

@@ -40,15 +40,15 @@
 
 Current evidence permits:
 
-- The experiment can be planned.
+- The experiment setup can be planned.
 
 Current evidence forbids:
 
-- Any performance or method claim.
+- Any performance or method-comparison claim.
 
 Promotion requires:
 
-- dataset split, metric script, baseline, command, and artifact.
+- Verified dataset split, metric script, baseline, command, and output artifact.
 
 ## Interpretation
 

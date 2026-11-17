@@ -1,7 +1,8 @@
 # First AI Session Prompt
 
-Use this as the first message in a new robotics/CV research workspace. Fill the
-brackets before sending it to an AI agent.
+Use this template to draft your opening message in a new robotics or computer
+vision research workspace. Replace every bracketed placeholder before sending
+it to an AI agent.
 
 ## Session Target
 
@@ -13,7 +14,7 @@ brackets before sending it to an AI agent.
 
 ## Read Order
 
-Read these files before answering.
+Have the agent read these files in order before answering:
 
 1. `AGENTS.md`
 2. `project-memory.json`
@@ -24,8 +25,8 @@ Read these files before answering.
 
 ## First Research Loop Target
 
-Choose exactly one target note before the first session. The first message should
-name that target note and the expected artifact.
+Pick one—and only one—target note before starting the first session, and name
+both that note and the expected artifact in your opening message.
 
 Common first targets:
 
@@ -36,7 +37,7 @@ Common first targets:
 
 ## Before Answering
 
-Map the workspace into session, harness, and sandbox first.
+Start by mapping the workspace into its session, harness, and sandbox layers:
 
 ```text
 Session record to update:
@@ -52,27 +53,27 @@ Verification:
 
 ## Allowed First Action
 
-- Inspect source files and named artifacts.
-- Separate source truth from summary truth.
-- Name missing evidence before proposing a claim.
-- Choose one stage-local action.
-- Leave a session record, harness rule, sandbox action, and verification record.
+- Inspect primary source files and explicitly named artifacts.
+- Separate primary source truth from secondary summaries.
+- Call out any missing evidence before proposing a claim.
+- Select a single, stage-local next action.
+- Record the session update, controlling harness rule, sandbox action, and verification step.
 
 ## Blocked Claims
 
-- Do not infer project truth from summaries when source files or artifacts are
-  available.
-- Do not claim experiment improvement before dataset, split, metric, baseline,
-  command, and artifact are known.
-- Do not rewrite manuscript claims before allowed wording and forbidden wording
-  are separated.
-- Do not publish raw notes, reviewer material, secret material, or machine-specific
-  storage names.
+- Do not infer project truth from summaries when primary source files or
+  artifacts are available.
+- Do not claim experimental improvement until the dataset, split, metric,
+  baseline, command, and artifact are all verified.
+- Do not rewrite manuscript claims until you have clearly separated allowed
+  wording from forbidden wording.
+- Do not publish raw notes, reviewer material, credentials or secrets, or
+  machine-specific storage paths.
 
 ## Promotion Requires
 
-The session can move from orientation to research action only after these fields
-are filled.
+Move from initial orientation to active research only after filling in all of
+the following fields:
 
 ```text
 object under truth control:
@@ -87,7 +88,7 @@ ledger update:
 ## Prompt To Send
 
 ```text
-Read AGENTS.md, project-memory.json, notes/first-day-workspace-checklist.md, and
+Read AGENTS.md, project-memory.json, notes/first-day-workspace-checklist.md,
 notes/weekly-research-ledger.md, [target note], and [supporting note] before
 answering.
 
@@ -106,8 +107,8 @@ Before giving advice, state:
 - Smallest next action
 - Verification
 
-Use source files, artifacts, and command output as primary evidence. Treat
-summaries as orientation only. If evidence is missing, say what is missing and
-choose the smallest inspection that would promote the claim.
-Do not open a second research loop in the first answer.
+Use source files, artifacts, and command outputs as your primary evidence, and
+treat summaries as orientation only. If required evidence is missing, state
+explicitly what is missing and propose the smallest inspection needed to verify
+the claim. Do not open a second research loop in your first response.
 ```

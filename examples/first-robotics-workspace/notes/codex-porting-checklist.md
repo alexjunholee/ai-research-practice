@@ -1,7 +1,7 @@
 # Codex Porting Checklist
 
-This is a sanitized example of moving older Claude/Cursor-oriented project
-rules into a Codex-first robotics research workspace.
+This sanitized example walks through migrating older Claude- or Cursor-oriented
+project rules into a Codex-first robotics research workspace.
 
 ## Source Files
 
@@ -11,7 +11,7 @@ Discovery sweep:
 find . -maxdepth 4 \( -name 'CLAUDE.md' -o -path './.claude/*' -o -path './.cursor/*' -o -name '*command*' -o -name '*commands*' \) -print
 ```
 
-- Discovery command: ran against the old workspace root before copying rules
+- Discovery command: run against the legacy workspace root before copying rules
 - Sources found: `CLAUDE.md`, `.claude/settings.local.json`, `.claude/skills`,
   slash commands, project memory
 - Sources intentionally ignored: local plugin install notes, private machine
@@ -35,7 +35,7 @@ find . -maxdepth 4 \( -name 'CLAUDE.md' -o -path './.claude/*' -o -path './.curs
 - Project goal: maintain a localization research workspace with clear claim/evidence gates
 - Public/private boundary: publish sanitized notes only
 - Source-of-truth read order: AGENTS, memory, first-day checklist, target note, named artifacts
-- Stage pipeline: resume, choose one loop, run stage-local check, update ledger
+- Stage pipeline: resume context, choose one loop, run stage-local checks, and update the ledger
 - Allowed commands: read files, inspect JSON, run documented verification checks
 - Forbidden commands: delete datasets, publish raw logs, infer result quality from filenames
 - Evidence gate: current evidence permits, forbids, and promotion requires
@@ -75,36 +75,37 @@ find . -maxdepth 4 \( -name 'CLAUDE.md' -o -path './.claude/*' -o -path './.curs
 
 Current evidence permits:
 
-- Claude/Cursor-era operating rules can be reused as Codex project rules.
-- Tool-specific commands have portable meanings that can become scripts or templates.
+- Existing Claude/Cursor operating rules can be adapted into Codex project rules.
+- Tool-specific commands can be translated into portable scripts or checklist templates.
 
 Current evidence forbids:
 
 - Treating Claude-only settings as Codex permissions.
 - Publishing local plugin install notes or private workspace paths.
-- Claiming the workspace is experimentally validated.
+- Claiming that the workspace or pipeline has been experimentally validated.
 
 Promotion requires:
 
-- Run the first chosen research loop.
-- Update `project-memory.json` with any durable correction.
-- Add a replay case if the same mistaken assumption recurs.
+- Completing the first chosen research loop.
+- Updating `project-memory.json` with any durable corrections.
+- Adding a replay case if any mistaken assumption recurs.
 
 ## Acceptance Gate
 
-- `AGENTS.md` contains the moved project goal, boundary, read order, evidence
-  gate, durable corrections, and verification commands.
-- Discovery sweep was run and every found Claude/Cursor/slash-command/plugin
-  source has a keep/drop/destination decision.
-- tool-specific commands have portable replacements in the command conversion
-  table.
-- Claude-only, editor-only, or local-only settings are recorded as local notes, not public
-  project rules.
-- Robotics research gates were added for dataset, metric, artifact, claim,
-  reviewer risk, and replay.
-- `project-memory.json` contains any durable correction discovered during
+- `AGENTS.md` includes the migrated project goal, public/private boundary, read
+  order, evidence gate, durable corrections, and verification commands.
+- The discovery sweep has been run, and every discovered Claude, Cursor,
+  slash-command, or plugin file has an explicit keep/drop/destination decision.
+- All tool-specific commands have portable replacements recorded in the command
+  conversion table.
+- Claude-only, editor-only, or machine-local settings are kept in local notes
+  rather than shared project rules.
+- Robotics research gates are in place for datasets, metrics, artifacts, claims,
+  reviewer risk, and replay cases.
+- `project-memory.json` records any durable corrections uncovered during
   porting.
-- First AI session prompt names `AGENTS.md`, `project-memory.json`, first-day
-  checklist, and the first target note.
+- The first AI session prompt explicitly references `AGENTS.md`,
+  `project-memory.json`, the first-day checklist, and the initial target note.
 
-If one item is missing, the first AI session remains orientation only.
+If any item above is missing, keep the first AI session limited to orientation
+rather than starting active research.

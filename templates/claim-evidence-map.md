@@ -33,7 +33,7 @@
 
 ## Falsification Check
 
-What result or counterexample would make the claim false?
+What experimental result or counterexample would falsify this claim?
 
 ## Reviewer Risk
 

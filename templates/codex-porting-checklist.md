@@ -1,12 +1,12 @@
 # Codex Porting Checklist
 
-Use this when a project already has `CLAUDE.md`, `.claude/`, Cursor rules, or
-tool-specific agent instructions.
+Use this checklist when migrating a project that already has `CLAUDE.md`,
+`.claude/`, Cursor rules, or other tool-specific agent instructions.
 
 ## Source Files
 
-Run a discovery sweep before filling the table. Do not rely on memory or on the
-files already visible in the editor.
+Run a discovery sweep before filling in the table—do not rely on memory or only
+on the files currently open in your editor.
 
 ```bash
 find . -maxdepth 4 \( -name 'CLAUDE.md' -o -path './.claude/*' -o -path './.cursor/*' -o -name '*command*' -o -name '*commands*' \) -print
@@ -59,8 +59,8 @@ Examples:
 
 ## Research Gates To Add
 
-Claude or coding-agent rules often stop at test pass. Robotics research needs
-more gates.
+Rules written for general coding agents often stop at passing unit tests.
+Robotics research requires stricter gates:
 
 - Dataset provenance:
 - Metric protocol:
@@ -88,21 +88,22 @@ Promotion requires:
 
 ## Acceptance Gate
 
-Porting is complete only when these artifacts agree.
+Porting is complete only when all of the following conditions hold:
 
-- `AGENTS.md` contains the moved project goal, boundary, read order, evidence
-  gate, durable corrections, and verification commands.
-- Discovery sweep was run and every found Claude/Cursor/slash-command/plugin
-  source has a keep/drop/destination decision.
-- tool-specific commands have portable replacements in the command conversion
-  table.
-- Claude-only, editor-only, or local-only settings are recorded as local notes, not public
-  project rules.
-- Robotics research gates were added for dataset, metric, artifact, claim,
-  reviewer risk, and replay.
-- `project-memory.json` contains any durable correction discovered during
+- `AGENTS.md` includes the migrated project goal, public/private boundary, read
+  order, evidence gate, durable corrections, and verification commands.
+- The discovery sweep has been run, and every discovered Claude, Cursor,
+  slash-command, or plugin file has an explicit keep/drop/destination decision.
+- All tool-specific commands have portable replacements recorded in the command
+  conversion table.
+- Claude-only, editor-only, or machine-local settings are kept in local notes
+  rather than shared project rules.
+- Robotics research gates are in place for datasets, metrics, artifacts, claims,
+  reviewer risk, and replay cases.
+- `project-memory.json` records any durable corrections uncovered during
   porting.
-- First AI session prompt names `AGENTS.md`, `project-memory.json`, first-day
-  checklist, and the first target note.
+- The first AI session prompt explicitly references `AGENTS.md`,
+  `project-memory.json`, the first-day checklist, and the initial target note.
 
-If one item is missing, the first AI session remains orientation only.
+If any item above is missing, keep the first AI session limited to orientation
+rather than starting active research.

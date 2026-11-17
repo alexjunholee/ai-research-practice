@@ -1,7 +1,8 @@
 # First-Day Workspace Checklist
 
-This file is filled enough for a first AI-assisted research loop. Replace every
-example name before using it in a real project.
+This checklist is filled out just enough to launch an initial AI-assisted
+research loop. Replace every example name and path before adapting it to a real
+project.
 
 ## Workspace Shape
 

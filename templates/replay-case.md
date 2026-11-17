@@ -31,6 +31,6 @@ Use this prompt to test the next AI session:
 
 ```text
 Given the same trigger, state the required gate before making a claim.
-Do not infer from filenames, summaries, or memory when artifact evidence is
-required.
+Do not infer results from filenames, summaries, or memory when primary
+artifact evidence is required.
 ```

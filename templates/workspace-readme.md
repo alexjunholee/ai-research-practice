@@ -1,18 +1,17 @@
 # [PROJECT_NAME] Research Workspace
 
-이 파일은 새 로보틱스/CV 연구 프로젝트의 첫 화면이다. 프로젝트 이름, 주요
-repo, dataset 위치, 첫 AI 세션 경계만 채운 뒤 시작한다.
+이 파일은 새 로보틱스·CV 연구 프로젝트 작업 공간을 열었을 때 가장 먼저 확인하는 안내 화면이다. 프로젝트 이름과 주요 저장소·데이터셋 위치, 그리고 첫 AI 세션을 시작하기 위한 최소 경계만 채워 둔 뒤 작업을 시작한다.
 
 ## Start Here
 
-1. `AGENTS.md`를 먼저 읽는다.
-2. `project-memory.json`에서 현재 truth, source_of_truth, current_evidence,
-   first_research_loop, next_smallest_actions를 확인한다.
-3. `notes/first-day-workspace-checklist.md`로 source of truth를 잠근다.
-4. 기존 `CLAUDE.md`, `.claude/`, Cursor rule이 있으면
-   `notes/codex-porting-checklist.md`로 행동 원칙만 옮긴다.
-5. session, harness, sandbox 경계를 먼저 쓴다.
-6. 첫 AI 세션에는 `notes/first-ai-session-prompt.md`를 채워 보낸다.
+새 작업 공간에서 첫 세션을 열기 전에 아래 여섯 단계를 순서대로 밟아 기본 규칙과 작업 맥락을 고정한다.
+
+1. 루트의 `AGENTS.md`를 가장 먼저 읽어 프로젝트 규칙과 경계를 확인한다.
+2. `project-memory.json`을 열어 현재 확인한 사실과 `source_of_truth`, `current_evidence`, `first_research_loop`, `next_smallest_actions` 항목을 확인한다.
+3. `notes/first-day-workspace-checklist.md`를 따라 정본으로 삼을 파일(`source of truth`)을 잠근다.
+4. 기존 `CLAUDE.md`, `.claude/`, Cursor 규칙이 남아 있다면 `notes/codex-porting-checklist.md`를 참고해 행동 원칙만 추려 옮긴다.
+5. 요청을 보내기 전에 session, harness, sandbox의 경계를 먼저 적는다.
+6. 위 준비가 끝나면 `notes/first-ai-session-prompt.md`의 빈칸을 채워 첫 AI 세션을 시작한다.
 
 ## First Run Check
 

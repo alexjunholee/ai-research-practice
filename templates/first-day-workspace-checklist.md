@@ -1,7 +1,7 @@
 # First-Day Workspace Checklist
 
-Use this before asking an AI agent to work inside a robotics/CV research
-workspace.
+Complete this checklist before asking an AI agent to work inside a robotics or
+computer vision research workspace.
 
 ## Workspace Shape
 

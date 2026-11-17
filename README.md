@@ -4,12 +4,12 @@
 
 ## 가이드 목차와 작업별 바로가기
 
-- [들어가며 — AI의 답을 연구의 근거로 바꾸려면](guide.html#들어가며-ai의-답을-연구의-근거로-바꾸려면)
-- [1부 검증 가능한 연구 기록](guide.html#1부-검증-가능한-연구-기록)
+- [들어가며](guide.html#들어가며)
+- [1부 연구 기록](guide.html#1부-연구-기록)
 - [2부 실험 결과에서 논문의 주장까지](guide.html#2부-실험-결과에서-논문의-주장까지)
-- [3부 연구 절차를 에이전트 규칙으로](guide.html#3부-연구-절차를-에이전트-규칙으로)
+- [3부 에이전트 규칙](guide.html#3부-에이전트-규칙)
 
-부록은 상황별 참고 문서로 둔다. 필요한 항목만 본다.
+부록은 필요한 상황이 생겼을 때 골라 보는 참고 문서다. 지금 당장 막힌 일에 맞는 항목만 바로 찾아보면 된다.
 
 - 논문을 코드와 실험으로 읽을 때: [paper-code-experiment-map](templates.html#templates-paper-code-experiment-map)
 - 실험 숫자를 원고에 올릴 때: [experiment-contract](templates.html#templates-experiment-contract)

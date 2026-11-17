@@ -7,7 +7,7 @@
 
 ## Research Progress
 
-- Claim/evidence advanced: workspace boundary and first protocol created
+- Claim/evidence advanced: workspace boundaries and initial protocol drafted
 - Experiment protocol verified: none
 - Paper or code artifact improved: paper-code-experiment map started
 
@@ -25,10 +25,10 @@
 
 ## Open Risks
 
-- Evidence risk: dataset split and metric definition not verified
-- Runtime risk: ROS2 communication issue not yet inspected
-- Manuscript risk: no claim/evidence map yet
-- Reviewer risk: no paper claim should be made
+- Evidence risk: dataset split and metric definition are not yet verified
+- Runtime risk: ROS2 communication issue has not been inspected yet
+- Manuscript risk: no claim-evidence map has been created yet
+- Reviewer risk: no paper claims can be supported yet
 
 ## Next Smallest Action
 

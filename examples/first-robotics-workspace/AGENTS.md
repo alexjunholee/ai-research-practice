@@ -1,7 +1,7 @@
 # Example Robotics Workspace AGENTS.md
 
-This is a sanitized example. Replace names, paths, datasets, and commands with
-your own project state before using it.
+This is a sanitized example file. Before using it in a real project, replace all
+example names, paths, datasets, and commands with your own project details.
 
 ## Project Truth
 
@@ -35,8 +35,8 @@ Private:
 - Harness: AGENTS.md, evidence gate, work modes, and durable corrections.
 - Sandbox: repos/localization-stack, dataset inventory, commands, and generated outputs.
 
-Before starting work, state the session record to update, the harness rule that
-controls the action, and the sandbox action currently allowed.
+Before starting work, state which session record you will update, which harness
+rule governs the action, and which sandbox actions are currently allowed.
 
 ## Work Modes
 
@@ -58,7 +58,7 @@ Required before any performance claim:
 
 - dataset
 - split or sequence
-- query/database direction if retrieval
+- query/database direction (for retrieval tasks)
 - metric definition
 - baseline
 - artifact path
@@ -66,8 +66,9 @@ Required before any performance claim:
 
 ### Debugging
 
-Use stage-local debugging. State the stage, expected signal, observed signal,
-candidate causes, and lowest-risk check before naming a root cause.
+Follow stage-local debugging: identify the pipeline stage, expected signal,
+observed signal, candidate causes, and lowest-risk diagnostic check before
+naming a root cause.
 
 ## Evidence Gate
 
@@ -81,15 +82,16 @@ promotion requires:
 
 ## Durable Corrections
 
-If a user corrects an assumption, update project-memory.json before continuing.
+Whenever a user corrects an assumption, update project-memory.json before
+continuing.
 
 ## Porting Acceptance
 
 This example workspace includes a completed `notes/codex-porting-checklist.md`.
-Research action starts after the checklist confirms:
+Active research begins only after the checklist confirms that:
 
-- tool-specific commands have portable replacements;
-- local-only settings are not treated as project rules;
-- dataset, metric, artifact, claim, reviewer risk, and replay gates exist;
-- first AI session prompt reads this `AGENTS.md`, project memory, first-day
-  checklist, and the chosen target note.
+- all tool-specific commands have portable replacements;
+- local-only settings are kept separate from shared project rules;
+- dataset, metric, artifact, claim, reviewer-risk, and replay gates are in place;
+- the first AI session prompt points to this `AGENTS.md`, project memory, the
+  first-day checklist, and the chosen target note.

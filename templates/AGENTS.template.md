@@ -1,8 +1,8 @@
 # Project AGENTS.md Template
 
-This project is operated Codex-first. If older `CLAUDE.md`, `.claude/`, or
-Cursor rules exist, treat them as source material. Move durable project rules
-into this `AGENTS.md` and keep tool-specific install commands separate.
+This project follows a Codex-first workflow. If older `CLAUDE.md`, `.claude/`, or
+Cursor rules still exist, treat them as reference material: move durable project
+rules into this `AGENTS.md`, and keep tool-specific install commands separate.
 
 ## Project Truth
 
@@ -25,25 +25,25 @@ Public:
 
 Private:
 
-- 비공개 대화 원문
-- 심사 원문
-- 인증 정보
+- raw private conversation logs
+- raw reviewer material
+- credentials and API keys
 - unpublished results
-- 개인 경로
-- raw dataset paths if they reveal private storage
+- personal or machine-specific paths
+- raw dataset paths that expose private storage locations
 
 ## Managed Agent Boundary
 
-This workspace follows the managed-agent pattern at the project level.
+This workspace applies the managed-agent pattern at the project level:
 
 - Session: `project-memory.json`, weekly ledger, replay cases, and artifacts.
 - Harness: this `AGENTS.md`, evidence gate, work modes, and durable corrections.
 - Sandbox: code repos, datasets, commands, tools, and generated outputs.
 
-Before starting work, state which session record will be updated, which harness
-rule controls the action, and which sandbox action is currently allowed. Leave a
-command result, file diff, or artifact path before promoting an observation into
-a research claim.
+Before starting work, state which session record you will update, which harness
+rule governs the action, and which sandbox actions are currently allowed. Always
+record a command output, file diff, or artifact path before promoting an
+observation into a research claim.
 
 ## Work Modes
 
@@ -60,7 +60,7 @@ Not allowed:
 
 - edit files
 - run destructive commands
-- make paper claims from weak evidence
+- make paper claims based on weak or incomplete evidence
 
 ### Code execution
 
@@ -83,13 +83,13 @@ Required:
 Allowed:
 
 - inspect configs, logs, tables, and metric scripts
-- compare numbers only inside a locked protocol
+- compare numbers only within a locked evaluation protocol
 
 Required:
 
 - dataset
 - split or sequence
-- query/database direction if retrieval
+- query/database direction (for retrieval tasks)
 - ground-truth frame
 - metric definition
 - baseline
@@ -100,7 +100,7 @@ Required:
 Allowed:
 
 - edit claim/evidence structure
-- improve prose after argument is correct
+- refine prose once the underlying argument is sound
 
 Required:
 
@@ -121,7 +121,8 @@ promotion requires:
 
 ## Durable Corrections
 
-When the user corrects an assumption, add it to project memory.
+Whenever a user corrects an assumption, log the correction in project memory
+before moving on.
 
 Record:
 
@@ -133,12 +134,12 @@ Record:
 
 ## Porting Acceptance
 
-If this file was created from `CLAUDE.md`, `.claude/`, Cursor rules, or another
-tool-specific instruction set, do not start research action until the porting
-checklist has confirmed:
+If this file was ported from `CLAUDE.md`, `.claude/`, Cursor rules, or another
+tool-specific instruction set, hold off on research tasks until the porting
+checklist confirms that:
 
-- tool-specific commands have portable replacements;
-- local-only settings are not treated as project rules;
-- dataset, metric, artifact, claim, reviewer risk, and replay gates exist;
-- first AI session prompt reads this `AGENTS.md`, project memory, first-day
-  checklist, and the chosen target note.
+- all tool-specific commands have portable replacements;
+- local-only settings are kept separate from shared project rules;
+- dataset, metric, artifact, claim, reviewer-risk, and replay gates are in place;
+- the first AI session prompt points to this `AGENTS.md`, project memory, the
+  first-day checklist, and the chosen target note.

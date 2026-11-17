@@ -9,9 +9,9 @@
 
 ## Central Claim
 
-- What the paper claims: A representation improves place recognition under a defined evaluation.
-- What problem pressure it responds to: visual change and cross-condition retrieval.
-- What assumption it repairs or introduces: feature space should preserve place identity under appearance change.
+- What the paper claims: The proposed representation improves visual place recognition under a defined evaluation protocol.
+- What problem pressure it responds to: appearance changes and cross-condition retrieval.
+- What assumption it repairs or introduces: the learned feature space should preserve place identity despite appearance changes.
 
 ## Method Map
 
@@ -49,7 +49,7 @@ cited.
 
 ## Reusable Research Output
 
-- Comparison I can reuse: blocked until protocol is verified.
-- Claim this paper supports: candidate representation family for VPR.
-- Claim this paper does not support: performance improvement in this workspace.
+- Comparison I can reuse: blocked until the evaluation protocol is verified.
+- Claim this paper supports: candidate representation family for visual place recognition (VPR).
+- Claim this paper does not support: performance improvements within this workspace.
 - Next artifact to inspect: evaluation script and dataset split file.
